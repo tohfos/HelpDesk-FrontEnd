@@ -8,7 +8,32 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ['lofi', 'black'],
+    themes: [
+      "dark", // first one will be the default theme
+      "light",
+      {
+        customTheme: {
+
+          "primary": "#ffffff",
+
+          "secondary": "#ffffff",
+
+          "accent": "#ffffff",
+
+          "neutral": "#ffffff",
+
+          "base-100": "#000000",
+
+          "info": "#00ffff",
+
+          "success": "#ffffff",
+
+          "warning": "#ffff00",
+
+          "error": "#ffffff",
+        },
+      }
+    ],
   },
 }
 
