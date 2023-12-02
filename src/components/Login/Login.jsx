@@ -1,5 +1,8 @@
 import React from 'react'
 import Cookies from 'js-cookie'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Login = () => {
 
     const [username, setUsername] = React.useState('')
@@ -7,27 +10,18 @@ const Login = () => {
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
-        console.log(username)
     }
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
-        console.log(password)
     }
 
     const handleLogin = async (e) => {
         e.preventDefault()
-
-        console.log('login button clicked')
-        console.log(process.env.REACT_APP_EXPRESS_URL)
-
         const input = {
             UserName: username,
             Password: password
         }
-
-        console.log(input)
-
         try {
             const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/`, {
                 method: 'POST',
@@ -44,14 +38,42 @@ const Login = () => {
                 Cookies.set('token', data.accessToken)
                 window.location.href = '/dashboard'
             } else {
-                return (<>
-                    <div className="alert alert-error">Error: {data.message}</div>
-                </>)
+                fail(data.message)
+
             }
         } catch (error) {
             console.log(error)
+            fail(error)
         }
     }
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    const confirm = () => {
+        toast.success(
+            'Your account has been created succesfully you will be redirected to the login page',
+            {
+                position: 'top-center',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            }
+        );
+    };
 
     return (
         <>
@@ -101,6 +123,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     )
 }
