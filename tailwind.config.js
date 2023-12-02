@@ -11,28 +11,36 @@ module.exports = {
     themes: [
       "lofi", // first one will be the default theme
       "black",
-      {
-        customTheme: {
-
-          "primary": "#ffffff",
-
-          "secondary": "#ffffff",
-
-          "accent": "#ffffff",
-
-          "neutral": "#ffffff",
-
-          "base-100": "#000000",
-
-          "info": "#00ffff",
-
-          "success": "#ffffff",
-
-          "warning": "#ffff00",
-
-          "error": "#ffffff",
-        },
-      }
+      "light",
+      "dark",
+      "cupcake",
+      "bumblebee",
+      "emerald",
+      "corporate",
+      "synthwave",
+      "retro",
+      "cyberpunk",
+      "valentine",
+      "halloween",
+      "garden",
+      "forest",
+      "aqua",
+      "pastel",
+      "fantasy",
+      "wireframe",
+      "luxury",
+      "dracula",
+      "cmyk",
+      "autumn",
+      "business",
+      "acid",
+      "lemonade",
+      "night",
+      "coffee",
+      "winter",
+      "dim",
+      "nord",
+      "sunset",
     ],
   },
 }
