@@ -1,4 +1,5 @@
 import React from 'react'
+import Cookies from 'js-cookie'
 const Login = () => {
 
     const [username, setUsername] = React.useState('')
@@ -19,7 +20,13 @@ const Login = () => {
 
         console.log('login button clicked')
         console.log(process.env.REACT_APP_EXPRESS_URL)
-        let input = { username, password }
+
+        const input = {
+            UserName: username,
+            Password: password
+        }
+
+        console.log(input)
 
         try {
             const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/`, {
@@ -32,8 +39,15 @@ const Login = () => {
             })
             const data = await response.json()
             console.log(data)
-            localStorage.setItem('token', data.token)
 
+            if (response.ok) {
+                Cookies.set('token', data.accessToken)
+                window.location.href = '/dashboard'
+            } else {
+                return (<>
+                    <div className="alert alert-error">Error: {data.message}</div>
+                </>)
+            }
         } catch (error) {
             console.log(error)
         }
