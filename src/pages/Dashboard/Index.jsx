@@ -7,9 +7,9 @@ import SecondarySliderbar from '../../components/SecondarySliderbar'
 const Index = () => {
     return (
         <>
-            <div class=" h-full flex flex-col rounded-xl overflow-hidden shadow-xl"  >
+            <div class=" h-full flex flex-col rounded-xl overflow-hidden shadow-xl mb-16"  >
                 {/* <!-- navbar --> */}
-                <div class=" border-b px-5 py-1 flex justify-between items-center">
+                <div class=" border-b border-base-200 px-5 py-1 flex justify-between items-center">
                     <span>
                         <img src={Logo} class="h-12" alt="" />
                     </span>
@@ -27,10 +27,7 @@ const Index = () => {
                     <MainSliderbar />
 
                     {/* <!-- sidebar 2 --> */}
-
                     <SecondarySliderbar />
-
-
 
                     <MessageSection />
                 </div>

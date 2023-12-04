@@ -5,8 +5,8 @@ const MainSliderbar = () => {
     return (
         <>
             {/* <!-- slidebar 1 --> */}
-            < div class="h-full w-64 border-r pt-10 px-5" >
-                <p class="text-xs font-medium text-gray-400">Dashboard</p>
+            < div class="h-full w-64 border-r border-base-200 pt-10 px-5" >
+                <p class="text-xs font-medium">Dashboard</p>
 
                 <SliderbarItem itemName="My Tickets" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 
