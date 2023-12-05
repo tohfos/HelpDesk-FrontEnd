@@ -5,7 +5,7 @@ const SecondarySliderbar = () => {
     return (
         <div class="h-full w-96 border-r flex flex-col">
             <div class="h-16 border-b border-base-200 px-4 flex items-center justify-center space-x-4">
-                <div class="px-4 py-4 border-b-4 ">All</div>
+                Messages
             </div>
             <div class="h-screen overflow-auto">
 

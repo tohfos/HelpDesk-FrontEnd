@@ -1,5 +1,7 @@
 import React from 'react'
 import SliderbarItem from './SliderbarItem'
+import ThemeSelector from './ThemeSelector'
+import Themes from '../constants/Themes'
 
 const MainSliderbar = () => {
     return (
@@ -15,6 +17,20 @@ const MainSliderbar = () => {
                 <SliderbarItem itemName="Reports" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 
                 <SliderbarItem itemName="Knowledge Base" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+
+                <ul tabIndex={0} className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52 h-64 overflow-auto">
+                    {
+                        // map through the Themes array and return a ThemeSelector component for each theme
+                        Themes.map((theme, index) => {
+                            return (
+                                <ThemeSelector
+                                    key={index}
+                                    ThemeTitle={theme}
+                                />
+                            )
+                        })
+                    }
+                </ul>
 
             </div >
         </>

@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar'
-import MessageSection from '../../components/MessageSection'
+import Chat from '../../components/Chat'
 import SecondarySliderbar from '../../components/SecondarySliderbar'
 
 const Index = () => {
@@ -29,7 +29,7 @@ const Index = () => {
                     {/* <!-- sidebar 2 --> */}
                     <SecondarySliderbar />
 
-                    <MessageSection />
+                    <Chat />
                 </div>
             </div>
         </>
