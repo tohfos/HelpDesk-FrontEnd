@@ -3,7 +3,7 @@ import Contact from './Contact'
 
 const SecondarySliderbar = () => {
     return (
-        <div class="h-full w-96 border-r flex flex-col">
+        <div class="h-full w-96 border-r border-base-200 flex flex-col">
             <div class="h-16 border-b border-base-200 px-4 flex items-center justify-center space-x-4">
                 Messages
             </div>
