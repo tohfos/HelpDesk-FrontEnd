@@ -3,12 +3,14 @@ import { useState } from 'react'
 import logo from '../logo.svg'
 import ThemeSelector from './ThemeSelector'
 import Themes from '../constants/Themes'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Navbar = () => {
 
     const [theme, setTheme] = useState(localStorage.getItem('theme'))
     const isChecked = theme === 'lofi' ? false : true
     const [progress, setProgress] = useState(0)
+    const isDashboard = window.location.pathname === '/dashboard' ? true : false
 
     //set the progress bar value as the user scrolls
     useEffect(() => {
@@ -37,7 +39,8 @@ const Navbar = () => {
         document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'))
     }, [theme])
 
-    return (
+    return isDashboard ? null : (
+
         <>
             <div className="drawer">
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
