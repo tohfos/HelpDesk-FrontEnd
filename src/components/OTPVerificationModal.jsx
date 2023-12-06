@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
+
+function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userName, userPassword }) {
     const [verificationStatus, setVerificationStatus] = useState('');
 
     const handleDigitChange = (event, nextField) => {
@@ -35,11 +38,10 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
             console.log(enteredOTP);
 
             // Send the concatenated OTP to the server for validation
-            const response = await fetch('http://localhost:8000/api/users/verifyOTP/', {
-                method: 'PUT',
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/verifyotp/${userId}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Cookies.get('token')}`
                 },
                 body: JSON.stringify({ otp: enteredOTP }),
             });
@@ -48,7 +50,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
             console.log("men gowa handle verify", data);
 
             //wait for data to be returned
-            if (data['message'] === 'Email is Activated') {
+            if (data['message'] !== 'Wrong OTP' || data['message'] !== 'OTP expired') {
                 setVerificationStatus('OTP verified successfully');
 
                 //save the updated user info in local storage
@@ -58,8 +60,8 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
 
                 //close the modal
                 onRequestClose();
-
-                window.location.href = "/dashboard";
+                if (user)
+                    window.location.href = "/resetpassword";
             } else {
                 //keep the modal open and show the error message
                 setVerificationStatus('OTP verification failed');
@@ -80,25 +82,59 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
         }
     };
 
-    const sendOTP = async () => {
+
+    const resendOTP = async (e) => {
+        e.preventDefault()
+        const input = {
+            UserName: userName,
+            Password: userPassword
+        }
+
+        console.log(input)
+
         try {
-            console.log("Sending OTP");
-
-            console.log(Cookies.get('token'));
-
-            const response = await fetch('http://localhost:8000/api/users/activate/', {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Cookies.get('token')}`// Include the token in the custom "SID" header
+                    'Content-Type': 'application/json'
                 },
-            });
-            const data = await response.json();
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+                body: JSON.stringify(input),
+                credentials: 'include'
+            })
+            const data = await response.json()
+            console.log(data)
 
+
+            //reset the input fields
+            document.getElementById('Digit_1').value = "";
+            document.getElementById('Digit_2').value = "";
+            document.getElementById('Digit_3').value = "";
+            document.getElementById('Digit_4').value = "";
+
+
+            if (response.ok) {
+                console.log("OTP sent successfully")
+            } else {
+                fail(data.message)
+
+            }
+        } catch (error) {
+            console.log(error)
+            fail(error)
+        }
+    }
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
     return (
         <Modal className={'overflow-hidden'} isOpen={isOpen} onRequestClose={onRequestClose}>
@@ -163,7 +199,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail }) {
                                     <div className="flex flex-col space-y-5">
                                         <p className='self-center'>{verificationStatus}</p>
                                         <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-base-content">
-                                            <p>Didn't recieve code?</p> <button className="flex flex-row items-center text-info" onClick={sendOTP}>Resend</button>
+                                            <p>Didn't recieve code?</p> <button className="flex flex-row items-center text-info" onClick={resendOTP} >Resend</button>
                                         </div>
                                     </div>
                                 </div>
