@@ -5,6 +5,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
+// TODO, nadaf el otp, add timer, redirect to dashboard
+
 function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userName, userPassword }) {
     const [verificationStatus, setVerificationStatus] = useState('');
 

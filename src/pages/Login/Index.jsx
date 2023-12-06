@@ -8,6 +8,8 @@ import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
 
+    // TODO: first time user handle
+
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [isOpen, setIsOpen] = React.useState(false);
