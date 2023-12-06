@@ -46,7 +46,7 @@ const Navbar = () => {
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col">
                     {/* Navbar */}
-                    <div class="sticky w-full z-20 top-0 start-0 bg-base-200">
+                    <div class="sticky w-full top-0 start-0 bg-base-200">
                         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                                 <img src={logo} class="w-1/2" alt="Logo" />
