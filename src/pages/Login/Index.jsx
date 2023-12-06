@@ -2,11 +2,18 @@ import React from 'react'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import OTPVerificationModal from '../../components/OTPVerificationModal';
+import { jwtDecode } from "jwt-decode";
+
 
 const Login = () => {
 
+    // TODO: first time user handle
+
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [userId, setUserId] = React.useState('');
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
@@ -18,6 +25,9 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+
+        console.log(username, password)
+
         const input = {
             UserName: username,
             Password: password
@@ -35,8 +45,18 @@ const Login = () => {
             console.log(data)
 
             if (response.ok) {
-                Cookies.set('token', data.accessToken)
-                window.location.href = '/dashboard'
+
+                //check law first time user, y2ba send user to reset passwrord page
+                //else law user mesh first time, y2ba send user to otp modal
+                if (data.resetPassword === true) {
+                    window.location.href = '/resetpassword'
+                    //send access token to reset password page
+                }
+                else if (data.resetPassword === false) {
+                    setIsOpen(true);
+                    setUserId(data.user_id);
+                    //hena we will get the access token ba3d ma ne3mel verify
+                }
             } else {
                 fail(data.message)
 
@@ -124,6 +144,8 @@ const Login = () => {
                 </div>
             </div>
             <ToastContainer />
+
+            <OTPVerificationModal isOpen={isOpen} userId={userId} userName={username} userPassword={password} />
         </>
     )
 }
