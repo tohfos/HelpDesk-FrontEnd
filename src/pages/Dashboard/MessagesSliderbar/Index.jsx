@@ -2,7 +2,7 @@ import React from 'react'
 import Contact from '../../../components/Messages/Contact'
 import { NavLink } from 'react-router-dom'
 
-const SecondarySliderbar = () => {
+const Index = () => {
 
     // 
 
@@ -24,4 +24,4 @@ const SecondarySliderbar = () => {
     )
 }
 
-export default SecondarySliderbar
+export default Index

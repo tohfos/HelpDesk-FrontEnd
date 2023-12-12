@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
 import Chat from '../../components/Messages/Chat'
-import SecondarySliderbar from './MessagesSliderbar/MessagesSliderbar'
+import SecondarySliderbar from './MessagesSliderbar/Index'
 import { Outlet } from 'react-router-dom'
 
 const Index = () => {
