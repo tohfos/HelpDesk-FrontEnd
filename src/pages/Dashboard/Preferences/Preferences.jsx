@@ -1,6 +1,6 @@
 import React from 'react'
 import Themes from '../../../constants/Themes'
-import ThemeSelector from '../../../components/ThemeSelector'
+import ThemeSelector from '../../../components/Preferences/ThemeSelector'
 
 
 const Index = () => {

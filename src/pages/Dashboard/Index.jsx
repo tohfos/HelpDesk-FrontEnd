@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import Logo from '../../logo.svg'
-import MainSliderbar from '../../components/MainSliderbar'
-import Chat from '../../components/Chat'
+import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
+import Chat from '../../components/Messages/Chat'
 import SecondarySliderbar from './MessagesSliderbar/MessagesSliderbar'
 import { Outlet } from 'react-router-dom'
 
@@ -31,20 +31,16 @@ const Index = () => {
                 {/* <!-- body --> */}
                 <div class="h-full flex">
 
+                    {/* <!-- Main Sliderbar --> */}
                     <MainSliderbar />
 
-                    {/* <!-- sidebar 2 --> */}
-                    {/* <SecondarySliderbar /> */}
-
-                    {/* <Chat /> */}
-
-
-                    { /* load the outlet component depending on the state*/}
+                    {/* <!-- Main Content --> */}
                     {loading ? (
                         <div className="w-full h-full flex justify-center items-center">
                             <h1 className="text-3xl font-semibold text-primary">Loading...</h1>
                         </div>
                     ) : (
+                        // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
                         <Outlet />
                     )}
 

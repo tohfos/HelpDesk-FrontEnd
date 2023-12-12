@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import logo from '../logo.svg'
-import ThemeSelector from './ThemeSelector'
-import Themes from '../constants/Themes'
+import logo from '../../logo.svg'
+import ThemeSelector from '../Preferences/ThemeSelector'
+import Themes from '../../constants/Themes'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Navbar = () => {
