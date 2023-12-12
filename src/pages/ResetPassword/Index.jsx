@@ -48,7 +48,7 @@ const Index = () => {
             if (response.ok) {
                 // redirect to the dashboard page
                 success(data.message)
-                window.location.href = '/dashboard'
+                window.location.href = '/dashboard/mytickets'
             } else {
                 console.log(data.message + " dasdadd")
                 fail(data.message)
