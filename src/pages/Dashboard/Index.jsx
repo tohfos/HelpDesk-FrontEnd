@@ -1,13 +1,20 @@
 import React from 'react'
+import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar'
 import Chat from '../../components/Chat'
 import SecondarySliderbar from '../../components/SecondarySliderbar'
+import { Outlet } from 'react-router-dom'
 
 const Index = () => {
+
+    // loading state of the outlet component
+    const [loading, setLoading] = useState(false)
+
+
     return (
         <>
-            <div class=" h-full flex flex-col rounded-xl overflow-hidden shadow-xl mb-16"  >
+            <div class=" h-screen flex flex-col rounded-xl overflow-hidden shadow-xl mb-16"  >
                 {/* <!-- navbar --> */}
                 <div class=" border-b border-base-200 px-5 py-1 flex justify-between items-center">
                     <span>
@@ -27,9 +34,22 @@ const Index = () => {
                     <MainSliderbar />
 
                     {/* <!-- sidebar 2 --> */}
-                    <SecondarySliderbar />
+                    {/* <SecondarySliderbar /> */}
 
-                    <Chat />
+                    {/* <Chat /> */}
+
+
+                    { /* load the outlet component depending on the state*/}
+                    {loading ? (
+                        <div className="w-full h-full flex justify-center items-center">
+                            <h1 className="text-3xl font-semibold text-primary">Loading...</h1>
+                        </div>
+                    ) : (
+                        <Outlet />
+                    )}
+
+
+
                 </div>
             </div>
         </>

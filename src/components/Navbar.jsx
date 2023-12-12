@@ -10,7 +10,9 @@ const Navbar = () => {
     const [theme, setTheme] = useState(localStorage.getItem('theme'))
     const isChecked = theme === 'lofi' ? false : true
     const [progress, setProgress] = useState(0)
-    const isDashboard = window.location.pathname === '/dashboard' ? true : false
+
+    //check if the user is on the dashboard page or any dashboard subpage
+    const isDashboard = window.location.pathname.includes('/dashboard')
 
     //set the progress bar value as the user scrolls
     useEffect(() => {
