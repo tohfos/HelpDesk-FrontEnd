@@ -1,70 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+const socket = io.connect('http://localhost:3000');
 
-const Chat = ({ ticketId, userId }) => {
-    const [messages, setMessages] = useState([]);
+const Chat = () => {
+
     const [message, setMessage] = useState('');
 
-    // Initialize Socket.io client
-    const socket = io('http://localhost:3000/');
 
-    // connect to socket.io server
-    socket.on('connect', () => {
-        console.log('connected to socket.io server');
-    });
-
-    // Fetch chat history on component mount
     useEffect(() => {
-        fetch(`http://localhost:3000/chat/${ticketId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMessages(data.messages);
-                // Join chat room
-                socket.emit('joinRoom', `${1234}`);
-            });
+
+        socket.emit('joinRoom', { UserId: socket.id, RoomId: 1234 });
+
+        socket.on('Welcome', (message) => {
+            console.log(message);
+        });
+
+        socket.on('message', (message) => {
+            console.log(message);
+        });
+
+        socket.on('newMessage', (message) => {
+            console.log(message);
+        });
+
+
+
     }, []);
 
-
-
-
-    // Send new message
     const sendMessage = () => {
-        fetch(`http://localhost:3000/api/chats/${ticketId}`, {
+
+        socket.emit('newMessage', { message, UserId: socket.id, RoomId: 1234 });
+
+        fetch('http://localhost:3000/api/chats/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ messages: message }),
+            body: JSON.stringify({ message, UserId: socket.id, RoomId: 1234 }),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                // Update local state and emit message to server
-                setMessages((messages) => [...messages, data.message]);
-                socket.emit('newMessage', data.message);
-                setMessage(''); // Clear input field after sending message
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res);
             });
     };
 
-    // Render chat messages
-    const renderMessages = () => {
-        messages && messages.map((message) => (
-            <div key={message._id}>
-                <b>{message.sender.UserName}:</b> {message.message}
-            </div>
-        ))
-    };
+
+
 
     return (
         <div>
-            <h2>Chat</h2>
-            <div className="chat-messages">{renderMessages()}</div>
-            <input
-                type="text"
-                placeholder="Enter message..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <button onClick={() => sendMessage()}>Send</button>
+            <h1>Chat</h1>
+            <input type="text" onChange={(e) => setMessage(e.target.value)} />
+            <button onClick={sendMessage}>Send</button>
+
         </div>
     );
 };
