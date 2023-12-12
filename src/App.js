@@ -6,7 +6,9 @@ import ResetPassword from './pages/ResetPassword/Index';
 import Dashboard from './pages/Dashboard/Index';
 import NotFound from './pages/404/Index';
 import Test from './pages/Test/Index';
-import Preferences from './pages/Dashboard/Preferences/Index';
+import Preferences from './pages/Dashboard/Preferences/Preferences';
+import MessagesSliderbar from './pages/Dashboard/MessagesSliderbar/MessagesSliderbar';
+
 
 function App() {
   return (
@@ -19,10 +21,10 @@ function App() {
 
           {/* dashboard will have nested routes to my tickets, messages, reports (only for manegers), knowledge base, and prefrenes (only for admins) */}
           {/* <Route path="/mytickets" element={<MyTickets />} />
-          <Route path="/messages" element={<Messages />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/knowledgebase" element={<KnowledgeBase />} /> */}
           <Route path="preferences" element={<Preferences />} />
+          <Route path="messages" element={<MessagesSliderbar />} />
 
 
         </Route>
