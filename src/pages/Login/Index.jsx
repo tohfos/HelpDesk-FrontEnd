@@ -2,7 +2,7 @@ import React from 'react'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import OTPVerificationModal from '../../components/OTPVerificationModal';
+import OTPVerificationModal from '../../components/Login/OTPVerificationModal';
 import { jwtDecode } from "jwt-decode";
 import ReCAPTCHA from "react-google-recaptcha";
 
