@@ -11,7 +11,6 @@ const Index = () => {
     // loading state of the outlet component
     const [loading, setLoading] = useState(false)
 
-
     return (
         <>
             <div class=" h-screen flex flex-col rounded-xl overflow-hidden shadow-xl mb-16"  >
@@ -20,13 +19,6 @@ const Index = () => {
                     <span>
                         <img src={Logo} class="h-12" alt="" />
                     </span>
-
-                    {/* <!-- profile --> */}
-                    <div class="flex space-x-4 items-center">
-                        <img src="https://source.unsplash.com/random/500x500/?face" class="h-10 w-10 rounded-full" alt="" />
-
-                    </div>
-
                 </div>
                 {/* <!-- body --> */}
                 <div class="h-full flex">
@@ -43,9 +35,6 @@ const Index = () => {
                         // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
                         <Outlet />
                     )}
-
-
-
                 </div>
             </div>
         </>
