@@ -38,7 +38,7 @@ const Home = () => {
 
 
     {/* Home page Card*/}
-    <div className="bg-base-200 flex-col justify-center"> 
+    <div className="bg-base-200 flex-col justify-center mb-10"> 
         <div className='w-full  py-16 px-4'>
             <div className='max-w-[1240px] mx-auto grid md:grid-cols-2'>
                 <img className='w-[500px] mx-auto my-4' src={Img} alt='/' />
@@ -58,7 +58,6 @@ const Home = () => {
         </div>
     </div>
     {/*----------------------- */}
-
 
     </>
   );
