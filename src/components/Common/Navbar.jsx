@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import logo from '../logo.svg'
-import ThemeSelector from './ThemeSelector'
-import Themes from '../constants/Themes'
+import logo from '../../logo.svg'
+import ThemeSelector from '../Preferences/ThemeSelector'
+import Themes from '../../constants/Themes'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Navbar = () => {
@@ -10,7 +10,9 @@ const Navbar = () => {
     const [theme, setTheme] = useState(localStorage.getItem('theme'))
     const isChecked = theme === 'lofi' ? false : true
     const [progress, setProgress] = useState(0)
-    const isDashboard = window.location.pathname === '/dashboard' ? true : false
+
+    //check if the user is on the dashboard page or any dashboard subpage
+    const isDashboard = window.location.pathname.includes('/dashboard')
 
     //set the progress bar value as the user scrolls
     useEffect(() => {
