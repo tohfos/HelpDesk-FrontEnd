@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import ThemeSelector from '../../../components/Preferences/ThemeSelector'; // Updated import path
+import { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Index = () => {
     const [mainTheme, setMainTheme] = useState('');
@@ -13,11 +16,71 @@ const Index = () => {
         setSecondaryTheme(theme);
     };
 
-    const handleSave = () => {
-        console.log('Main Theme:', mainTheme);
-        console.log('Secondary Theme:', secondaryTheme);
 
+    const handleSave = async () => {
+
+        console.log(mainTheme, secondaryTheme)
+
+        if (mainTheme === '' || secondaryTheme === '') {
+            fail('Please select a theme')
+            return
+        }
+
+        const input = {
+            mainTheme: mainTheme,
+            secondaryTheme: secondaryTheme
+        }
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/changeTheme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input),
+                credentials: 'include'
+            })
+
+            const data = await response.json()
+            console.log(data)
+            if (response.ok) {
+                success('Theme changed successfully')
+            }
+            else {
+                fail(data.message)
+            }
+        }
+        catch (err) {
+            fail('Something went wrong')
+            console.log(err)
+        }
+    }
+
+
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
+
+    const success = (alert) => {
+        toast.success(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
+
 
     return (
         <>
