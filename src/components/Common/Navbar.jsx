@@ -44,11 +44,11 @@ const Navbar = () => {
     return isDashboard ? null : (
 
         <>
-            <div className="drawer">
+            <div className="sticky top-0 start-0 z-40 drawer">
                 <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col">
                     {/* Navbar */}
-                    <div class="sticky w-full top-0 start-0 bg-base-200">
+                    <div class="w-full bg-base-200">
                         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                                 <img src={logo} class="w-1/2" alt="Logo" />
@@ -94,7 +94,7 @@ const Navbar = () => {
                                 </ul>
                             </div>
                         </div>
-                        <progress className="progress h-[1px]" value={progress} max="100"></progress>
+                        <progress className="sticky top-0 progress h-[1px]" value={progress} max="100"></progress>
 
                     </div>
                 </div>
