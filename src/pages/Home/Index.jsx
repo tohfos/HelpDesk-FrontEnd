@@ -7,10 +7,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 AOS.init();
 
-
-
-
-
 const Home = () => {
     return (
         <div className="space-y-16">
@@ -44,16 +40,16 @@ const Home = () => {
                         <TypeAnimation
                             cursor={true}
                             sequence={[
-                                ' Software',
+                                'Software',
                                 2000,
-                                ' Hardware',
+                                'Hardware',
                                 2000,
-                                ' Network',
+                                'Network',
                                 2000,
                             ]}
                             repeat={Infinity}
                             wrapper='p'
-                            className='text-8xl font-bold underline decoration-3'
+                            className='text-8xl p-6 font-bold underline decoration-3'
                         />
                     </p>
                     <p

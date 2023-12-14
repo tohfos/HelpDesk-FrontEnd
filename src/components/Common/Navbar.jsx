@@ -110,27 +110,6 @@ const Navbar = () => {
                             <svg className="col-start-2 row-start-1 stroke-base-content fill-primary" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                         </label>
                         </li>
-                        <li>
-                            <div className="dropdown dropdown-right mb-72">
-                                <div tabIndex={0} role="button" className="btn m-1">
-                                    Theme
-                                    <svg width="12px" height="12px" className="h-2 w-2 fill-current opacity-60 inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048"><path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path></svg>
-                                </div>
-                                <ul tabIndex={0} className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52 h-64 overflow-auto">
-                                    {
-                                        // map through the Themes array and return a ThemeSelector component for each theme
-                                        Themes.map((theme, index) => {
-                                            return (
-                                                <ThemeSelector
-                                                    key={index}
-                                                    ThemeTitle={theme}
-                                                />
-                                            )
-                                        })
-                                    }
-                                </ul>
-                            </div>
-                        </li>
                     </ul>
                 </div>
             </div>
