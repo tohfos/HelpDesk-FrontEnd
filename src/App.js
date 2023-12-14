@@ -11,6 +11,7 @@ import MessagesSliderbar from './pages/Dashboard/MessagesSliderbar/Index';
 import MyTickets from './pages/Dashboard/MyTickets/Index';
 import Reports from './pages/Dashboard/Reports/Index';
 import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
+import Contact from './pages/Contact';
 
 
 
@@ -21,8 +22,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />}>
-
+        
           <Route path="mytickets" element={<MyTickets />} />
           <Route path="reports" element={<Reports />} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
