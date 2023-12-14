@@ -53,7 +53,7 @@ const Home = () => {
                             ]}
                             repeat={Infinity}
                             wrapper='p'
-                            className='text-8xl font-bold underline'
+                            className='text-8xl font-bold underline decoration-3'
                         />
                     </p>
                     <p
@@ -73,7 +73,7 @@ const Home = () => {
                             <h1 className='text-3xl font-bold my-2'>Effortless IT Solutions with Dedicated Agents</h1>
                             <p data-aos="fade-left" data-aos-duration="2500">
                                 Simplify your IT challenges with our HelpDesk support.
-                                Our dedicated team of expert agents is here to efficiently manage and resolve your <span className="underline decoration-2"> software</span>, hardware, and network issues.
+                                Our dedicated team of expert agents is here to efficiently manage and resolve your software, hardware, and network issues.
                                 Experience personalized assistance and real-time chat for immediate support and satisfaction.
                             </p>
                             <button className='btn btn-primary w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
