@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-// TODO, nadaf el otp, add timer, redirect to dashboard
-
 function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userName, userPassword }) {
-    const [verificationStatus, setVerificationStatus] = useState('');
 
     const handleDigitChange = (event, nextField) => {
         const input = event.target;
@@ -52,23 +49,15 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
             console.log("men gowa handle verify", data);
 
             //wait for data to be returned
-            if (data['message'] !== 'Wrong OTP' || data['message'] !== 'OTP expired') {
-                setVerificationStatus('OTP verified successfully');
+            if (data.accessToken) {
 
-                //save the updated user info in local storage
-                const user = JSON.parse(localStorage.getItem('user'));
-                user.isActivated = true;
-                localStorage.setItem('user', JSON.stringify(user));
+                //show the success message
+                success(data.message);
 
-                //close the modal
-                onRequestClose();
-                if (user)
-                    window.location.href = "/resetpassword";
+                //save token in cookie
+                Cookies.set('token', data.accessToken, { expires: 0.01 });
+                window.location.href = "/dashboard/mytickets";
             } else {
-                //keep the modal open and show the error message
-                setVerificationStatus('OTP verification failed');
-                localStorage.setItem('modalIsOpen', true);
-
                 //reset the input fields
                 document.getElementById('Digit_1').value = "";
                 document.getElementById('Digit_2').value = "";
@@ -78,9 +67,13 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
                 //set focus on the first input field
                 document.getElementById('Digit_1').focus();
 
+                //show the error message
+                fail(data.message);
+
             }
         } catch (error) {
             console.error('Error verifying OTP', error);
+            fail(error)
         }
     };
 
@@ -116,6 +109,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
 
             if (response.ok) {
                 console.log("OTP sent successfully")
+                success(data.message)
             } else {
                 fail(data.message)
 
@@ -138,6 +132,19 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
         });
     };
 
+    const success = (alert) => {
+        toast.success(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+
+        });
+    };
+
     return (
         <Modal className={'overflow-hidden'} isOpen={isOpen} onRequestClose={onRequestClose}>
             <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-base-100 py-12">
@@ -145,7 +152,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
                     <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
                         <div className="flex flex-col items-center justify-center text-center space-y-2">
                             <div className="font-semibold text-3xl">
-                                <p>Email Verification</p>
+                                <p>Login Verification</p>
                             </div>
                             <div className="flex flex-row text-sm font-medium text-base-content">
                                 <p>We have sent a code to your email {userEmail}</p>
@@ -199,7 +206,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
                                         </div>
                                     </div>
                                     <div className="flex flex-col space-y-5">
-                                        <p className='self-center'>{verificationStatus}</p>
+                                        <ToastContainer />
                                         <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-base-content">
                                             <p>Didn't recieve code?</p> <button className="flex flex-row items-center text-info" onClick={resendOTP} >Resend</button>
                                         </div>

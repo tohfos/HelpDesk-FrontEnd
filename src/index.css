@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.active {
+    @apply text-secondary font-bold border-b-2 border-secondary;
+}

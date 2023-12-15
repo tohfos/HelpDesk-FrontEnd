@@ -2,18 +2,20 @@ import React from 'react'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import OTPVerificationModal from '../../components/OTPVerificationModal';
+import OTPVerificationModal from '../../components/Login/OTPVerificationModal';
 import { jwtDecode } from "jwt-decode";
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 const Login = () => {
 
-    // TODO: first time user handle
+    // TODO ask for notifcations permission after login, and get theme from the user settings
 
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [isOpen, setIsOpen] = React.useState(false);
     const [userId, setUserId] = React.useState('');
+    const [userEmail, setUserEmail] = React.useState('');
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
@@ -23,8 +25,20 @@ const Login = () => {
         setPassword(e.target.value)
     }
 
+    // TODO enable captcha when deploying
+    // const [captchaValue, setCaptchaValue] = React.useState(null);
+
+    // const handleCaptchaResponseChange = (response) => {
+    //     setCaptchaValue(response);
+    // }
+
     const handleLogin = async (e) => {
         e.preventDefault()
+
+        // if (captchaValue === null) {
+        //     // Show an error message to the user
+        //     return;
+        // }
 
         console.log(username, password)
 
@@ -46,15 +60,21 @@ const Login = () => {
 
             if (response.ok) {
 
+                // save the token in the cookies that will expire in 15 minutes
+                Cookies.set('token', data.accessToken, { expires: 0.01 });
+
                 //check law first time user, y2ba send user to reset passwrord page
                 //else law user mesh first time, y2ba send user to otp modal
                 if (data.resetPassword === true) {
                     window.location.href = '/resetpassword'
-                    //send access token to reset password page
                 }
                 else if (data.resetPassword === false) {
                     setIsOpen(true);
+
+                    //TODO change to use the access token
                     setUserId(data.user_id);
+                    let user = jwtDecode(Cookies.get('token'));
+                    setUserEmail(data.UserInfo.email);
                     //hena we will get the access token ba3d ma ne3mel verify
                 }
             } else {
@@ -97,6 +117,7 @@ const Login = () => {
 
     return (
         <>
+            <script src="https://www.google.com/recaptcha/api.js"></script>
             <div className="hero min-h-screen bg-base-200">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
@@ -139,13 +160,17 @@ const Login = () => {
                             <div className="form-control mt-6">
                                 <button onClick={handleLogin} className="btn btn-primary">Login</button>
                             </div>
+                            <div className="form-control">
+                                {/* TODO sha8alo when deploying */}
+                                {/* <ReCAPTCHA sitekey={process.env.REACT_APP_CAPTCHA_SITEKEY} onChange={handleCaptchaResponseChange} /> */}
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
             <ToastContainer />
 
-            <OTPVerificationModal isOpen={isOpen} userId={userId} userName={username} userPassword={password} />
+            <OTPVerificationModal isOpen={isOpen} userId={userId} userEmail={userEmail} userName={username} userPassword={password} />
         </>
     )
 }
