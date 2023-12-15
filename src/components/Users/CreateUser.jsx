@@ -72,28 +72,28 @@ const CreateUser = () => {
         }
     }
 
-    const fail = (alert) => {
-        toast.error(alert, {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-    };
+    // const fail = (alert) => {
+    //     toast.error(alert, {
+    //         position: 'top-center',
+    //         autoClose: 3000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //     });
+    // };
 
-    const success = (alert) => {
-        toast.success(alert, {
-            position: 'top-center',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
-    }
+    // const success = (alert) => {
+    //     toast.success(alert, {
+    //         position: 'top-center',
+    //         autoClose: 3000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //     });
+    // }
     
 
     return (
