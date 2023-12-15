@@ -8,6 +8,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 
 const Login = () => {
+
+    // TODO ask for notifcations permission after login, and get theme from the user settings
+
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [isOpen, setIsOpen] = React.useState(false);
@@ -22,6 +25,7 @@ const Login = () => {
         setPassword(e.target.value)
     }
 
+    // TODO enable captcha when deploying
     // const [captchaValue, setCaptchaValue] = React.useState(null);
 
     // const handleCaptchaResponseChange = (response) => {
