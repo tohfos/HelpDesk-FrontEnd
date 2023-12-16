@@ -86,7 +86,7 @@ const Index = () => {
         <>
             <div className="h-full w-full border-r border-base-200 flex flex-col">
                 <div className="h-16 border-b border-base-200 px-4 flex items-center justify-center space-x-4">
-                    Preferences
+                    <h2 className="font-bold text-xl">Preferences</h2>
                 </div>
                 <div className="h-screen overflow-auto">
 
