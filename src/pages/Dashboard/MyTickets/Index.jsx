@@ -9,6 +9,8 @@ const Index = () => {
                 <div class="h-16 border-b border-base-200 px-4 flex items-center justify-center space-x-6 shadow-lg">
                     <h2 class="font-bold text-xl">My Tickets</h2>
                 </div>
+                <div className="h-screen overflow-auto">
+
 
 
                 <div className="h-screen overflow-auto">

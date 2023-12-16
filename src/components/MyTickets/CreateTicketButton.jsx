@@ -13,6 +13,7 @@ const CreateTicketButton = () => {
         setModalIsOpen(false)
     }
 
+
     const [ticket, setTicket] = useState({
         subject: '',
         message: '',
