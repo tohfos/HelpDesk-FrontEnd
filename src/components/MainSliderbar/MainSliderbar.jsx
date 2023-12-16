@@ -1,9 +1,68 @@
 import React, { useState } from 'react'
 import SliderbarItem from './SliderbarItem'
 import { NavLink } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 
 const MainSliderbar = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(true);
+
+    const handleLogout = () => {
+
+        try {
+            const res = fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get('token')}`
+                }
+
+            }).then(res => {
+                if (res.status === 204) {
+                    success('Logged out successfully')
+                    Cookies.remove('token')
+                    //delays the redirect to give the user time to see the success message
+                    setTimeout(() => {
+                        window.location.href = '/'
+                    }
+                        , 2000)
+                }
+                else {
+                    fail('Something went wrong')
+                }
+            })
+        }
+        catch (err) {
+            fail(err)
+            console.log(err)
+        }
+    }
+
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+
+        });
+    }
+
+    const success = (alert) => {
+        toast.success(alert, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+
+        });
+    }
 
     return (
         <>
@@ -24,7 +83,7 @@ const MainSliderbar = () => {
 
                 {isSidebarOpen && (
                     <>
-                        <p class="text-md font-medium">Dashboard  <button onClick={() => setSidebarOpen(!isSidebarOpen)}>
+                        <p class="text-md font-medium"><button onClick={() => setSidebarOpen(!isSidebarOpen)}>
                             {isSidebarOpen ? 'Collapse' : 'Expand'}
                         </button></p>
                         <NavLink to="/dashboard/mytickets" activeClassName="active" className="flex items-center space-x-2 mt-5">
@@ -51,9 +110,17 @@ const MainSliderbar = () => {
                             <SliderbarItem itemName='Preferences' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
                         </NavLink>
 
+
+
+                        {/* logout button */}
+                        <div className="absolute bottom-0 mb-5 left-auto">
+                            <button onClick={handleLogout} className="btn btn-primary">Logout</button>
+                        </div>
                     </>
                 )}
             </div >
+
+
         </>
     )
 }
