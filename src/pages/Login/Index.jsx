@@ -44,9 +44,6 @@ const Login = () => {
         // }
 
         console.log(username, password)
-
-        console.log(process.env.REACT_APP_EXPRESS_URL)
-
         const input = {
             UserName: username,
             Password: password
@@ -80,7 +77,6 @@ const Login = () => {
 
                     //TODO change to use the access token
                     setUserId(data.user_id);
-                    let user = jwtDecode(Cookies.get('token'));
                     setUserEmail(data.UserInfo.email);
                 }
             } else {
