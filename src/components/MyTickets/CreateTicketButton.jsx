@@ -170,7 +170,8 @@ const CreateTicketButton = () => {
 
                                 <div className="flex flex-col space-y-1">
                                     <label htmlFor="category" className="text-sm font-medium text-base-content">Category</label>
-                                    <select defaultValue={"Software"} onChange={handleTicketChange} name="category" id="category" className="select select-bordered w-full">
+                                    <select required onChange={handleTicketChange} name="category" id="category" className="select select-bordered w-full">
+                                        <option selected disabled value="Select">Select</option>
                                         <option value="Software">Software Issue</option>
                                         <option value="Hardware">Hardware Issue</option>
                                         <option value="Network">Network Issue</option>
@@ -180,7 +181,8 @@ const CreateTicketButton = () => {
                                 {ticket.category === 'Software' && (
                                     <div className="flex flex-col space-y-1">
                                         <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
-                                        <select defaultValue={"Operating System"} onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                        <select required onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                            <option selected disabled value="Select">Select</option>
                                             <option value="Operating System">Operating System</option>
                                             <option value="Application Software">Application Software</option>
                                             <option value="Custom Software">Custom Software</option>
@@ -192,7 +194,8 @@ const CreateTicketButton = () => {
                                 {ticket.category === 'Hardware' && (
                                     <div className="flex flex-col space-y-1">
                                         <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
-                                        <select defaultValue={"Desktop"} onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                        <select required onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                            <option selected disabled value="Select">Select</option>
                                             <option value="Desktop">Desktop</option>
                                             <option value="Laptops">Laptops</option>
                                             <option value="Printers">Printers</option>
@@ -205,7 +208,8 @@ const CreateTicketButton = () => {
                                 {ticket.category === 'Network' && (
                                     <div className="flex flex-col space-y-1">
                                         <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
-                                        <select defaultValue={"Email Issues"} onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                        <select required onChange={handleTicketChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                                            <option selected disabled value="Select">Select</option>
                                             <option value="Email Issues">Email Issues</option>
                                             <option value="Internet Connection Problems">Internet Connection Problems</option>
                                             <option value="Website Error">Website Error</option>
