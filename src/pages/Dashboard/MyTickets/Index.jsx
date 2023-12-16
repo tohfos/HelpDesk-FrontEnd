@@ -9,12 +9,7 @@ const Index = () => {
                 <div class="z-10 h-16 border-b border-base-200 px-4 flex items-center justify-center space-x-6 shadow-lg">
                     <h2 class="font-bold text-xl">My Tickets</h2>
                 </div>
-
-
-
                 <div className="h-screen overflow-auto">
-
-
                     <div className="mt-10 top-0 left-0 mb-10 m-5">
                         <CreateTicketButton />
                     </div>
@@ -34,16 +29,8 @@ const Index = () => {
                         <Ticket />
                         <Ticket />
 
-
-
-
-
                     </div>
-
-
-
                 </div>
-
             </div>
         </>
     )

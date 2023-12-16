@@ -11,27 +11,51 @@ import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
 
+    useEffect(() => {
+        const token = Cookies.get('token')
+        if (token) {
+            handleGetTheme();
+            const user = jwtDecode(token)
+            setUser(user.UserInfo.username)
+            setUserRole(user.UserInfo.role)
+            setLoading(false)
+        }
+        else {
+            window.location.href = '/'
+        }
+    }, [])
 
-
-    // useEffect(() => {
-    //     const token = Cookies.get('token')
-    //     if (token) {
-    //         const user = jwtDecode(token)
-    //         setUser(user.UserInfo.username)
-    //         setLoading(false)
-    //         console.log(user)
-    //     }
-    //     else {
-    //         window.location.href = '/'
-    //     }
-    // }, [])
-
-
-
+    const [loading, setLoading] = useState(true)
     const [user, setUser] = useState('')
+    const [userRole, setUserRole] = useState('')
 
-    // loading state of the outlet component
-    const [loading, setLoading] = useState(false)
+    const handleGetTheme = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/getTheme`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+
+            const data = await response.json()
+            console.log(data.mainTheme, data.secondaryTheme)
+            // set the theme in local storage
+            localStorage.setItem('mainTheme', data.mainTheme)
+            localStorage.setItem('secondaryTheme', data.secondaryTheme)
+
+            // set the data-theme attribute on the html tag
+            if (localStorage.getItem('isMain') === 'true') {
+                document.documentElement.setAttribute('data-theme', localStorage.getItem('mainTheme'))
+            } else {
+                document.documentElement.setAttribute('data-theme', localStorage.getItem('secondaryTheme'))
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <>
@@ -46,11 +70,12 @@ const Index = () => {
                         <img src={Logo} class="h-12" alt="" />
                     </span>
                 </div>
+
                 {/* <!-- body --> */}
                 <div class="h-full flex">
 
                     {/* <!-- Main Sliderbar --> */}
-                    <MainSliderbar />
+                    <MainSliderbar userRole={userRole} />
 
                     {/* <!-- Main Content --> */}
                     {loading ? (
