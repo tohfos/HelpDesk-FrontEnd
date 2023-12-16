@@ -45,6 +45,8 @@ const Login = () => {
 
         console.log(username, password)
 
+        console.log(process.env.REACT_APP_EXPRESS_URL)
+
         const input = {
             UserName: username,
             Password: password
