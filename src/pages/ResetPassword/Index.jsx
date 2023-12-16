@@ -6,6 +6,8 @@ import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
 
+    // TODO smth is wrong here
+
     const [oldPassword, setOldPassword] = React.useState('')
     const [newPassword, setNewPassword] = React.useState('')
 

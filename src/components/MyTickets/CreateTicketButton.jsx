@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const CreateTicketButton = () => {
 
@@ -47,21 +50,74 @@ const CreateTicketButton = () => {
         e.preventDefault()
         console.log('Ticket Created')
         console.log(ticket)
-        modalOnRequestClose()
+
+        let input = {
+            ticketCategory: ticket.category,
+            SubCategory: ticket.subcategory,
+            priority: ticket.priority,
+            title: ticket.subject,
+            description: ticket.message,
+        }
+
+        try {
+            const response = fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/create`, {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+                body: JSON.stringify(input),
+                credentials: 'include'
+            })
+            const data = response.json()
+            console.log(data)
+
+            if (response.ok) {
+                // Close the modal
+                modalOnRequestClose()
+
+                // show success toast
+                success(data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            fail(error)
+        }
     }
 
+    const success = (alert) => {
+        toast.success(alert, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            draggable: true
+        })
+    }
 
-
-
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            draggable: true
+        })
+    }
 
     return (
-        <div>
+        <>
             <button className="btn btn-primary btn-wide shadow-md" onClick={handleOpenModal}>Create Ticket</button>
 
-            <Modal className={'overflow-hidden'} isOpen={modalIsOpen} onRequestClose={modalOnRequestClose}>
-                <div className="relative flex min-h-screen flex-col justify-center overflow-auto py-12">
-                    <div className="relative px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl bg-base-100">
-                        <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
+            <Modal style={{
+                overlay: {
+                    zIndex: 9999,
+                },
+            }} className={"overflow-auto"} isOpen={modalIsOpen} onRequestClose={modalOnRequestClose}>
+                <div className="relative flex min-h-screen flex-col justify-center py-12 overflow-visible bg-base-100" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
+                    <div className="relative px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+                        <div className="mx-auto flex w-full max-w-md flex-col space-y-16 ">
                             <div className="flex flex-col items-center justify-center text-center space-y-2">
                                 <div className="font-semibold text-3xl">
                                     <p>Create Ticket</p>
@@ -143,14 +199,12 @@ const CreateTicketButton = () => {
                                     <button onClick={handleSubmit} className="btn btn-primary">Create Ticket</button>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-            </Modal>
+            </Modal >
 
-        </div>
+        </>
     )
 }
 
