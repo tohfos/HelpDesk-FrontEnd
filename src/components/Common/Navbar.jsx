@@ -16,6 +16,12 @@ const Navbar = () => {
 
     //set the progress bar value as the user scrolls
     useEffect(() => {
+
+        //if no theme is set in local storage, set it to lofi
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'black')
+        }
+
         const onScroll = () => {
             const scrollCheck = document.body.scrollTop || document.documentElement.scrollTop
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight
