@@ -222,7 +222,6 @@ const CreateUser = () => {
         </div>
       </div>
     </div>
-
         </>
     )
 }
