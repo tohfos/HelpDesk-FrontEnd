@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import Cookies from 'js-cookie'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { jwtDecode } from 'jwt-decode'
 
 const CreateTicketButton = () => {
 
@@ -42,25 +43,33 @@ const CreateTicketButton = () => {
                 setRangeClassName('range-error')
             }
         }
-
         console.log(ticket)
     }
 
-    const handleSubmit = (e) => {
+
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Ticket Created')
-        console.log(ticket)
+
+        if (ticket.subject === '' || ticket.message === '' || ticket.category === '' || ticket.subcategory === '') {
+            console.log('Please fill out all the fields')
+            fail('Please fill out all the fields')
+            return
+        }
 
         let input = {
             ticketCategory: ticket.category,
             SubCategory: ticket.subcategory,
-            priority: ticket.priority,
+            priority: ticket.priority === '0' ? 'Low' : ticket.priority === '1' ? 'Medium' : 'High',
             title: ticket.subject,
             description: ticket.message,
         }
 
+        console.log(Cookies.get('token'))
+
         try {
-            const response = fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/create`, {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/create`, {
                 method: 'POST',
 
                 headers: {
@@ -70,7 +79,7 @@ const CreateTicketButton = () => {
                 body: JSON.stringify(input),
                 credentials: 'include'
             })
-            const data = response.json()
+            let data = await response.json()
             console.log(data)
 
             if (response.ok) {
@@ -79,6 +88,15 @@ const CreateTicketButton = () => {
 
                 // show success toast
                 success(data.message)
+
+                // reset the ticket state
+                setTicket({
+                    subject: '',
+                    message: '',
+                    priority: 0,
+                    category: '',
+                    subcategory: ''
+                })
             }
         } catch (error) {
             console.log(error)
@@ -98,13 +116,15 @@ const CreateTicketButton = () => {
 
     const fail = (alert) => {
         toast.error(alert, {
-            position: "top-center",
+            position: 'top-center',
             autoClose: 3000,
-            hideProgressBar: true,
+            hideProgressBar: false,
             closeOnClick: true,
-            draggable: true
-        })
-    }
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
     return (
         <>
@@ -112,7 +132,7 @@ const CreateTicketButton = () => {
 
             <Modal style={{
                 overlay: {
-                    zIndex: 9999,
+                    zIndex: 99,
                 },
             }} className={"overflow-auto"} isOpen={modalIsOpen} onRequestClose={modalOnRequestClose}>
                 <div className="relative flex min-h-screen flex-col justify-center py-12 overflow-visible bg-base-100" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
@@ -130,12 +150,12 @@ const CreateTicketButton = () => {
                             <div className="flex flex-col space-y-4">
                                 <div className="flex flex-col space-y-1">
                                     <label htmlFor="subject" className="text-sm font-medium text-base-content">Subject</label>
-                                    <input onChange={handleTicketChange} type="text" name="subject" id="subject" placeholder="Subject" className="input input-bordered" />
+                                    <input required onChange={handleTicketChange} type="text" name="subject" id="subject" placeholder="Subject" className="input input-bordered" />
                                 </div>
 
                                 <div className="flex flex-col space-y-1">
                                     <label htmlFor="message" className="text-sm font-medium text-base-content">Message</label>
-                                    <textarea onChange={handleTicketChange} name="message" id="message" placeholder="Message" className="textarea textarea-bordered h-24 max-h-44" />
+                                    <textarea required onChange={handleTicketChange} name="message" id="message" placeholder="Message" className="textarea textarea-bordered h-24 max-h-44" />
                                 </div>
 
                                 <div className="flex flex-col space-y-1">
@@ -203,7 +223,7 @@ const CreateTicketButton = () => {
                     </div>
                 </div>
             </Modal >
-
+            <ToastContainer />
         </>
     )
 }

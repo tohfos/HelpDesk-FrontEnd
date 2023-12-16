@@ -31,7 +31,7 @@ const Index = () => {
     const [user, setUser] = useState('')
 
     // loading state of the outlet component
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     return (
         <>

@@ -2,38 +2,26 @@ import React, { useState } from 'react'
 import SliderbarItem from './SliderbarItem'
 import { NavLink } from 'react-router-dom'
 import Cookies from 'js-cookie'
-import { toast } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 
 const MainSliderbar = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
 
         try {
-            const res = fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/logout`, {
+            const res = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/logout`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Cookies.get('token')}`
-                }
-
-            }).then(res => {
-                if (res.status === 204) {
-                    success('Logged out successfully')
-                    Cookies.remove('token')
-                    //delays the redirect to give the user time to see the success message
-                    setTimeout(() => {
-                        window.location.href = '/'
-                    }
-                        , 2000)
-                }
-                else {
-                    fail('Something went wrong')
                 }
             })
+            const data = await res.json()
+            success(data.message)
+
         }
         catch (err) {
             fail(err)
@@ -119,8 +107,7 @@ const MainSliderbar = () => {
                     </>
                 )}
             </div >
-
-
+            <ToastContainer />
         </>
     )
 }
