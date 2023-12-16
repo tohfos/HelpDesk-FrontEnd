@@ -13,39 +13,32 @@ const Index = () => {
 
 
 
-                <div className="h-screen overflow-auto">
+                    <div className="h-screen overflow-auto">
 
 
 
 
-                    {/* <!-- Tickets --> */}
-                    <div className="mt-4 space-y-4">
+                        {/* <!-- Tickets --> */}
+                        <div className="space-y-4">
 
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
+                            <Ticket />
+                            <Ticket />
+                            <Ticket />
+                            <Ticket />
+                            <Ticket />
 
 
 
+
+                        </div>
+
+                        {/* place button at bottom right */}
+                        <div className="absolute bottom-0 right-0 mb-10 mr-10">
+                            <CreateTicketButton />
+                        </div>
 
 
                     </div>
-
-                    {/* place button at bottom right */}
-                    <div className="absolute bottom-0 right-0 mb-10 mr-10">
-                        <CreateTicketButton />
-                    </div>
-
-
                 </div>
             </div>
         </>
