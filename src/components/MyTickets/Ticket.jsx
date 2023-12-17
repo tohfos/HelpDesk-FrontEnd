@@ -47,7 +47,7 @@ const Ticket = ({ ticket }) => {
                         </div>
                         <div>
                             <div class="bg-warning rounded-none ml-3 my-5 p-1 w-20">
-                                <div class="uppercase text-xs leading-4 font-semibold text-center">View Ticket</div>
+                                <div class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</div>
                             </div>
                         </div>
                         <div>
