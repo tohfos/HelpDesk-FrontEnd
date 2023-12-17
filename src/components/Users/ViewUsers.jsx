@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import Modal from 'react-modal';
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
+
+  const openModal = () => {
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -62,7 +75,7 @@ const ViewUsers = () => {
               <td>{user.profile.email}</td>
               <td>
                 <div className="form-control mt-6">
-                  <button className="btn btn-outline ml-6">Change Role</button>
+                  <button className="btn btn-outline ml-6" onClick={openModal}>Change Role</button>
                 </div>
               </td>
               {user.Role === 'Agent' && (
@@ -77,6 +90,13 @@ const ViewUsers = () => {
           ))}
         </tbody>
       </table>
+
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Example Modal">
+        <div className="flex justify-between items-center">
+          <h2>Change Role</h2>
+          <button className="btn btn-outline" onClick={closeModal}>close</button>
+        </div>
+      </Modal>
     </>
   );
 };
