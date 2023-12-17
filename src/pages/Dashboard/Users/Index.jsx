@@ -2,6 +2,7 @@ import React from 'react'
 import CreateUser from '../../../components/Users/CreateUser'
 import ViewUsers from '../../../components/Users/ViewUsers'
 
+
 const Index = () => {
     return (
         <>
@@ -17,7 +18,6 @@ const Index = () => {
 
                         {/* Create User */}
                         <CreateUser />
-
 
                         {/* View Users */}
                         <ViewUsers />
