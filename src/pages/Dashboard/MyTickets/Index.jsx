@@ -1,8 +1,45 @@
 import React from 'react'
 import Ticket from '../../../components/MyTickets/Ticket'
 import CreateTicketButton from '../../../components/MyTickets/CreateTicketButton'
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+
 
 const Index = () => {
+
+    const [tickets, setTickets] = useState([]);
+
+    useEffect(() => {
+        fetchTickets();
+    }, []);
+
+
+    const fetchTickets = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/get`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+
+
+            console.log(data);
+            setTickets(data);
+        } catch (error) {
+            console.error('Error fetching tickets:', error);
+        }
+    };
+
     return (
         <>
             <div class="h-full w-full border-r border-base-200 flex flex-col">
@@ -16,18 +53,9 @@ const Index = () => {
 
                     {/* <!-- Tickets --> */}
                     <div className="ml-5 space-y-4 my-24">
-
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
-                        <Ticket />
+                        {tickets.map((ticket) => (
+                            <Ticket key={ticket._id} ticket={ticket} />
+                        ))}
 
                     </div>
                 </div>

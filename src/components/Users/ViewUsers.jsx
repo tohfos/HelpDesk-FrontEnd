@@ -7,6 +7,7 @@ const ViewUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        console.log('fetching users');
         const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/getallusers`, {
           method: 'GET',
           headers: {
@@ -22,6 +23,7 @@ const ViewUsers = () => {
         }
 
         const data = await response.json();
+        console.log('data:', data);
         setUsers(data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -32,8 +34,8 @@ const ViewUsers = () => {
   }, []);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
+    <>
+      <table className="table table-xs lg:table-lg overflow-auto my-24">
         <thead>
           <tr>
             <th></th>
@@ -48,7 +50,7 @@ const ViewUsers = () => {
                 <th>Lowresponsibility</th>
               </>
             )}
-            <th></th> 
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -65,17 +67,17 @@ const ViewUsers = () => {
               </td>
               {user.Role === 'Agent' && (
                 <>
-                <td>{user.Highresponsibility}</td>
-                <td>{user.Midresponsibility}</td>
-                <td>{user.Lowresponsibility}</td>
+                  <td>{user.Highresponsibility}</td>
+                  <td>{user.Midresponsibility}</td>
+                  <td>{user.Lowresponsibility}</td>
                 </>
               )}
-              
+
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 
