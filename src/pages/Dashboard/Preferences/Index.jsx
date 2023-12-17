@@ -125,6 +125,15 @@ const Index = () => {
                         <hr className="border-base-200 my-5" />
                     </section>
 
+
+                    <section className="flex flex-col justify-center items-center mt-5">
+                        <h1 className="self-start font-semibold text-xl ml-4">Backup & Restore </h1>
+
+
+
+
+                        <hr className="border-base-200 my-5" />
+                    </section>
                 </div>
 
             </div>

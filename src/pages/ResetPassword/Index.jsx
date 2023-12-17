@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
 
-    // TODO smth is wrong here
+    // TODO add confirm password field
 
     const [oldPassword, setOldPassword] = React.useState('')
     const [newPassword, setNewPassword] = React.useState('')
@@ -50,7 +50,7 @@ const Index = () => {
             if (response.ok) {
                 // redirect to the dashboard page
                 success(data.message)
-                window.location.href = '/dashboard'
+                window.location.href = '/dashboard/knowledgebase'
             } else {
                 console.log(data.message + " dasdadd")
                 fail(data.message)

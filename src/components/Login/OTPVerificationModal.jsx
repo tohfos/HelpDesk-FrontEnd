@@ -56,7 +56,7 @@ function OTPVerificationModal({ isOpen, onRequestClose, userEmail, userId, userN
 
                 //save token in cookie
                 Cookies.set('token', data.accessToken, { expires: 0.01 });
-                window.location.href = "/dashboard";
+                window.location.href = "/dashboard/knowledgebase";
             } else {
                 //reset the input fields
                 document.getElementById('Digit_1').value = "";
