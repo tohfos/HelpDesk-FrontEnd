@@ -72,11 +72,11 @@ const CreateUser = () => {
       } else {
         // Handle error, maybe show an error message
         console.error('Failed to create user');
-        fail('Failed to create user')
+        fail('Failed to create user ', response.message)
       }
     } catch (error) {
       console.error('Error:', error);
-      fail('Failed to create user')
+      fail('Failed to create user ', error.message)
     }
   }
 
