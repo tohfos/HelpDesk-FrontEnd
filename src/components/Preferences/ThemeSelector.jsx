@@ -1,16 +1,17 @@
 import React from 'react';
 import Themes from '../../constants/Themes';
 
-const ThemeSelector = ({ selectedTheme, handleThemeSelect, onSave }) => {
+const ThemeSelector = ({ selectedTheme, handleThemeSelect, isMainTheme }) => {
+
     return (
 
         <div className="flex flex-col space-y-8">
             <p>
                 {/* show saved themes from localstorage */}
-                current Main theme: <span className="font-semibold">{selectedTheme}</span>
+                current {isMainTheme ? "main " : "secondary "} theme: <span className="font-semibold">{selectedTheme}</span>
             </p>
             <div className="flex flex-row space-x-2">
-                <h1 className="self-start text-lg mr-3 my-3">Main Theme Select: </h1>
+                <h1 className="self-start text-lg mr-3 my-3">{isMainTheme ? "Main " : "Secondary "} Theme Select: </h1>
                 <div className="dropdown mb-32">
                     <div tabIndex={0} role="button" className="btn m-1">
                         {selectedTheme}

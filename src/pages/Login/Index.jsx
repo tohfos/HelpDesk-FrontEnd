@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,15 +7,16 @@ import { jwtDecode } from "jwt-decode";
 import ReCAPTCHA from "react-google-recaptcha";
 
 
+
 const Login = () => {
 
     // TODO ask for notifcations permission after login, and get theme from the user settings
 
-    const [username, setUsername] = React.useState('')
-    const [password, setPassword] = React.useState('')
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [userId, setUserId] = React.useState('');
-    const [userEmail, setUserEmail] = React.useState('');
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [isOpen, setIsOpen] = useState(false);
+    const [userId, setUserId] = useState('');
+    const [userEmail, setUserEmail] = useState('');
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
@@ -32,6 +33,8 @@ const Login = () => {
     //     setCaptchaValue(response);
     // }
 
+
+
     const handleLogin = async (e) => {
         e.preventDefault()
 
@@ -41,7 +44,6 @@ const Login = () => {
         // }
 
         console.log(username, password)
-
         const input = {
             UserName: username,
             Password: password
@@ -59,6 +61,8 @@ const Login = () => {
             console.log(data)
 
             if (response.ok) {
+                //get theme from the user settings
+                // handleGetTheme()
 
                 // save the token in the cookies that will expire in 15 minutes
                 Cookies.set('token', data.accessToken, { expires: 0.01 });
@@ -73,9 +77,7 @@ const Login = () => {
 
                     //TODO change to use the access token
                     setUserId(data.user_id);
-                    let user = jwtDecode(Cookies.get('token'));
                     setUserEmail(data.UserInfo.email);
-                    //hena we will get the access token ba3d ma ne3mel verify
                 }
             } else {
                 fail(data.message)
