@@ -174,7 +174,7 @@ const CreateUser = () => {
                 <select
                   className="select select-bordered"
                   name='Role'
-                  defaultValue={"User"}
+                  
                   onChange={handleChange}
                   required
                 >
