@@ -7,12 +7,32 @@ import Cookies from 'js-cookie'
 
 const Index = () => {
 
+    const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortOption, setSortOption] = useState('');
+    const [filterOption, setFilterOption] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ticketsPerPage, setTicketsPerPage] = useState(6);
 
     useEffect(() => {
         fetchTickets();
     }, []);
 
+    const handleSearch = (searchTerm) => {
+        setSearchTerm(searchTerm);
+        if (searchTerm === '') {
+            setTickets(allTickets);
+        } else {
+            setTickets(allTickets.filter((ticket) =>
+                ticket.title.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+        }
+    }
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const fetchTickets = async () => {
         try {
@@ -22,23 +42,19 @@ const Index = () => {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + Cookies.get('token')
                 },
-                credentials: 'include'
             });
-
-            if (!response.ok) {
-                console.error('Error:', response.statusText);
-                return;
-            }
-
             const data = await response.json();
-
-
-            console.log(data);
+            data.reverse();
+            setAllTickets(data);
             setTickets(data);
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error:', error);
         }
-    };
+    }
+
+    const indexOfLastTicket = currentPage * ticketsPerPage;
+    const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
+    const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
     return (
         <>
@@ -47,16 +63,51 @@ const Index = () => {
                     <h2 class="font-bold text-xl">My Tickets</h2>
                 </div>
                 <div className="h-screen overflow-auto">
-                    <div className="mt-10 top-0 left-0 mb-10 m-5">
+                    <div className="mt-10 top-0 left-0 mb-10 m-5 flex flex-row space-x-6">
                         <CreateTicketButton />
+
+                        {/* Sort */}
+                        <select
+                            className="select select-secondary w-full max-w-xs"
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                        >
+                            <option disabled value="" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Sort by</option>
+                            {/* Add sort options here */}
+                        </select>
+
+                        {/* Filter */}
+                        <select
+                            className="select select-secondary w-full max-w-xs"
+                            value={filterOption}
+                            onChange={(e) => setFilterOption(e.target.value)}
+                        >
+                            <option disabled value="" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Filter by</option>
+                            {/* Add filter options here */}
+                        </select>
+
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            className="input input-primary input-bordered w-full max-w-xs"
+                        />
                     </div>
 
-                    {/* <!-- Tickets --> */}
-                    <div className="ml-5 space-y-4 my-24">
-                        {tickets.map((ticket) => (
-                            <Ticket key={ticket._id} ticket={ticket} />
-                        ))}
+                    <div className="flex flex-col">
+                        <div className="join mx-auto self-center">
+                            {[...Array(Math.ceil(tickets.length / ticketsPerPage))].map((e, i) => (
+                                <button className={`join-item btn btn-square ${currentPage === i + 1 ? "btn-active" : ""}`} type="radio" name="options" key={i} onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
+                            ))}
+                        </div>
 
+                        {/* <!-- Tickets --> */}
+                        <div className="ml-5 space-y-4 my-24">
+                            {currentTickets.map((ticket) => (
+                                <Ticket key={ticket._id} ticket={ticket} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
