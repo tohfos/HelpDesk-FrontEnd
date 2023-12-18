@@ -29,7 +29,7 @@ const Chat = () => {
 
     const sendMessage = () => {
 
-        socket.emit('newMessage', { message, UserId: socket.id, RoomId: 1234 });
+        // socket.emit('newMessage', { message, UserId: socket.id, RoomId: 1234 });
 
         // fetch('http://localhost:3000/api/chats/', {
         //     method: 'POST',
