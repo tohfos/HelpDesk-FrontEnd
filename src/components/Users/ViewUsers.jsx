@@ -96,6 +96,8 @@ const ViewUsers = () => {
 
       const data = await response.json();
       console.log('data:', data);
+      //refresh page
+      window.location.reload();
       closeModal();
     } catch (error) {
       console.error('Error updating role:', error);
