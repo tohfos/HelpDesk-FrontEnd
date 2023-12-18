@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { jwtDecode } from 'jwt-decode'
 
+
 const CreateTicketButton = () => {
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false)
@@ -97,6 +98,9 @@ const CreateTicketButton = () => {
                     category: '',
                     subcategory: ''
                 })
+
+                // refresh the page
+                window.location.reload()
             }
         } catch (error) {
             console.log(error)

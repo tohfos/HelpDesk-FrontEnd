@@ -3,6 +3,9 @@ import React from 'react'
 const Ticket = ({ ticket }) => {
     return (
         <>
+
+            {/* TODO add functionality for view ticket, drop down for agent, and rate ticket */}
+
             <div>
                 <div class="bg-base-100 mx-auto border-base-200 border rounded-sm mb-0.5 h-30 shadow-md">
                     <div className={`flex p-3 border-l-8 ${ticket.priority === "Medium" ? "border-warning" : ticket.priority === "Low" ? "border-success" : ticket.priority === "High" ? "border-error" : ""}`}>
@@ -48,6 +51,7 @@ const Ticket = ({ ticket }) => {
                         </div>
                         <div>
                             {/* Drop down button */}
+                            {/* only for agent */}
                             <button class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
