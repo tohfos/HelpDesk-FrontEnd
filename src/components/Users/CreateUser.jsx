@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { ReactSortable } from "react-sortablejs";
 
 const CreateUser = () => {
   //const [selectedRole, setSelectedRole] = useState('');
@@ -22,12 +22,18 @@ const CreateUser = () => {
 
 
   const handleChange = (e) => {
-
     setUser({
-      ...User, [e.target.name]: e.target.value
+      ...User,
+      [e.target.name]: e.target.value,
+      "Highresponsibility": items[0].name,
+      "Midresponsibility": items[1].name,
+      "Lowresponsibility": items[2].name
     })
     console.log(User)
+
+    console.log(items)
   }
+
   const handleCreateUser = async (e) => {
     e.preventDefault();
 
@@ -42,13 +48,11 @@ const CreateUser = () => {
       },
       "Role": User.Role
     };
-
     if (User.Role === "Agent") {
-      usingUser["Highresponsibility"] = User.Highresponsibility;
-      usingUser["Midresponsibility"] = User.Midresponsibility;
-      usingUser["Lowresponsibility"] = User.Lowresponsibility;
+      usingUser["Highresponsibility"] = items[0].name;
+      usingUser["Midresponsibility"] = items[1].name;
+      usingUser["Lowresponsibility"] = items[2].name;
     }
-
 
     try {
       const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/createUser`, {
@@ -68,11 +72,11 @@ const CreateUser = () => {
       } else {
         // Handle error, maybe show an error message
         console.error('Failed to create user');
-        fail('Failed to create user')
+        fail('Failed to create user ', response.message)
       }
     } catch (error) {
       console.error('Error:', error);
-      fail('Failed to create user')
+      fail('Failed to create user ', error.message)
     }
   }
 
@@ -99,6 +103,23 @@ const CreateUser = () => {
     });
   }
 
+
+  const [items, setItems] = useState([
+    { id: "Software", name: "Software" },
+    { id: "Hardware", name: "Hardware" },
+    { id: "Network", name: "Network" },
+  ]);
+
+  const onSortEnd = (newList) => {
+    setItems(newList);
+
+    setUser({
+      ...User,
+      "Highresponsibility": newList[0].name,
+      "Midresponsibility": newList[1].name,
+      "Lowresponsibility": newList[2].name
+    })
+  };
 
   return (
     <>
@@ -153,72 +174,57 @@ const CreateUser = () => {
                 <select
                   className="select select-bordered"
                   name='Role'
-                  defaultValue={"Select Role"}
+                  defaultValue={"User"}
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Select Role</option>
+                  <option selected disabled value="">Select Role</option>
                   <option value="User">User</option>
                   <option value="Agent">Agent</option>
                   <option value="Manager">Manager</option>
                 </select>
               </div>
-              {/* Additional fields for Agent role */}
+
               {User.Role === 'Agent' && (
                 <>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">High Responsibility</span>
-                    </label>
-                    <select
-                      className="select select-bordered"
-                      name='Highresponsibility'
-                      defaultValue={"Select Role"}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select Role</option>
-                      <option value="Software">Software</option>
-                      <option value="Hardware">Hardware</option>
-                      <option value="Network">Network</option>
-                    </select>
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Mid Responsibility</span>
-                    </label>
-                    <select
-                      className="select select-bordered"
-                      name='Midresponsibility'
-                      defaultValue={"Software"}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select Role</option>
-                      <option value="Software">Software</option>
-                      <option value="Hardware">Hardware</option>
-                      <option value="Network">Network</option>
-                    </select>
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Low Responsibility</span>
-                    </label>
-                    <select
-                      className="select select-bordered"
-                      name='Lowresponsibility'
-                      defaultValue={"Software"}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select Role</option>
-                      <option value="Software">Software</option>
-                      <option value="Hardware">Hardware</option>
-                      <option value="Network">Network</option>
-                    </select>
-                  </div>
+                  <label className="label">
+                    <span className="label-text text-lg font-semibold">Agent Responsibility</span>
+                  </label>
+                  <label className="label">
+                    <span className="label-text text-xs text-success">Highest Responsibility</span>
+                  </label>
+                  <ReactSortable
+                    list={items}
+                    setList={setItems}
+                    onSortEnd={onSortEnd}
+                    onChange={handleChange}
+                  >
+                    {items.map((item) => (
+                      <div key={item.id} className="px-3 py-2 border rounded-md mb-2" >
+                        {/* drag icon */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 inline-block"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5 9a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm0 4a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        &nbsp;
+                        {item.name}
+                      </div>
+                    ))}
+                  </ReactSortable>
+                  <label className="label">
+                    <span className="label-text text-xs text-error">Lowest Responsibility:</span>
+                  </label>
                 </>
               )}
+
               <div className="form-control mt-6">
                 <button className="btn btn-primary" onClick={handleCreateUser}>Create User</button>
               </div>

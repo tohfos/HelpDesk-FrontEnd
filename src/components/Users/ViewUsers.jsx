@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import Modal from 'react-modal';
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
 
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
+
+  const openModal = () => {
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        console.log('fetching users');
         const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/getallusers`, {
           method: 'GET',
           headers: {
@@ -22,6 +36,7 @@ const ViewUsers = () => {
         }
 
         const data = await response.json();
+        console.log('data:', data);
         setUsers(data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -32,8 +47,8 @@ const ViewUsers = () => {
   }, []);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
+    <>
+      <table className="table table-xs lg:table-lg overflow-auto my-24">
         <thead>
           <tr>
             <th></th>
@@ -48,7 +63,7 @@ const ViewUsers = () => {
                 <th>Lowresponsibility</th>
               </>
             )}
-            <th></th> 
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -60,22 +75,29 @@ const ViewUsers = () => {
               <td>{user.profile.email}</td>
               <td>
                 <div className="form-control mt-6">
-                  <button className="btn btn-outline ml-6">Change Role</button>
+                  <button className="btn btn-outline ml-6" onClick={openModal}>Change Role</button>
                 </div>
               </td>
               {user.Role === 'Agent' && (
                 <>
-                <td>{user.Highresponsibility}</td>
-                <td>{user.Midresponsibility}</td>
-                <td>{user.Lowresponsibility}</td>
+                  <td>{user.Highresponsibility}</td>
+                  <td>{user.Midresponsibility}</td>
+                  <td>{user.Lowresponsibility}</td>
                 </>
               )}
-              
+
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Example Modal">
+        <div className="flex justify-between items-center">
+          <h2>Change Role</h2>
+          <button className="btn btn-outline" onClick={closeModal}>close</button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

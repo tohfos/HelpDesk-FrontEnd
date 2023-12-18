@@ -61,7 +61,7 @@ const CreateTicketButton = () => {
         let input = {
             ticketCategory: ticket.category,
             SubCategory: ticket.subcategory,
-            priority: ticket.priority === '0' ? 'Low' : ticket.priority === '1' ? 'Medium' : 'High',
+            priority: ticket.priority === '0' ? 'Low' : ticket.priority === '1' ? 'Medium' : ticket.priority === '2' ? 'High' : "Low",
             title: ticket.subject,
             description: ticket.message,
         }
