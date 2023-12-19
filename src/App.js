@@ -15,8 +15,7 @@ import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
 import Backup from './pages/Dashboard/Backup/Index';
 import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
-
-
+import Profile from './pages/Profile/Index';
 
 function App() {
   return (
@@ -26,6 +25,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={< Profile/>} />
+
         <Route path="/dashboard" element={<Dashboard />}>
 
           <Route path="mytickets" element={<MyTickets />} />
