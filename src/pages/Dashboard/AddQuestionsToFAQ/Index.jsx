@@ -15,7 +15,9 @@ const Index = () => {
             ...FAQ,
             [e.target.name]: e.target.value
         })
+        console.log(FAQ)
     }
+
 
     const HandleFAQbutton =async (e) => {
         e.preventDefault()
