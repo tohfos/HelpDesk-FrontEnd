@@ -3,6 +3,7 @@ import ThemeSelector from '../../../components/Preferences/ThemeSelector'; // Up
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const Index = () => {
     const [mainTheme, setMainTheme] = useState('');
@@ -35,7 +36,8 @@ const Index = () => {
             const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/changeTheme`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
                 },
                 body: JSON.stringify(input),
                 credentials: 'include'
@@ -55,6 +57,12 @@ const Index = () => {
             console.log(err)
         }
     }
+
+    useEffect(() => {
+
+        setMainTheme(localStorage.getItem('mainTheme'))
+        setSecondaryTheme(localStorage.getItem('secondaryTheme'))
+    }, [])
 
 
 
@@ -95,6 +103,7 @@ const Index = () => {
 
                         {/* Main Theme Select */}
                         <ThemeSelector
+                            isMainTheme={true}
                             selectedTheme={mainTheme}
                             handleThemeSelect={handleMainThemeSelect}
                             label="Main Theme Select"
@@ -102,6 +111,7 @@ const Index = () => {
 
                         {/* Secondary Theme Select */}
                         <ThemeSelector
+                            isMainTheme={false}
                             selectedTheme={secondaryTheme}
                             handleThemeSelect={handleSecondaryThemeSelect}
                             label="Secondary Theme Select"
@@ -115,6 +125,15 @@ const Index = () => {
                         <hr className="border-base-200 my-5" />
                     </section>
 
+
+                    <section className="flex flex-col justify-center items-center mt-5">
+                        <h1 className="self-start font-semibold text-xl ml-4">Backup & Restore </h1>
+
+
+
+
+                        <hr className="border-base-200 my-5" />
+                    </section>
                 </div>
 
             </div>
