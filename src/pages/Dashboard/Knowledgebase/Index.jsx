@@ -22,7 +22,7 @@ const Index = () => {
 
     const Handleknoledgebutton =async (e) => {
         e.preventDefault()
-        console.log("Knowledgebase")
+        console.log("123",Knowledgebase)
         const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/AddDataToKnowledgeBase`, {
             method: 'POST',
             headers: {
@@ -75,8 +75,8 @@ const Index = () => {
         <div className="flex flex-col space-y-4 max-w-lg mx-auto">
     
             <div className="flex flex-col space-y-1">
-                <label htmlFor="category" className="text-sm font-medium text-base-content">Category</label>
-                <select required onChange={handleknoledgeChange} name="category" id="category" className="select select-bordered w-full">
+                <label htmlFor="Category" className="text-sm font-medium text-base-content">Category</label>
+                <select required onChange={handleknoledgeChange} name="Category" id="Category" className="select select-bordered w-full">
                      
                     <option selected disabled value="Select">Select</option>
                     <option value="Software">Software Issue</option>
@@ -85,10 +85,10 @@ const Index = () => {
                 </select>
             </div>
     
-            {Knowledgebase.category === 'Software' && (
+            {Knowledgebase.Category === 'Software' && (
                 <div className="flex flex-col space-y-1">
                     <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
-                    <select required onChange={handleknoledgeChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
+                    <select required onChange={handleknoledgeChange} name="SubCategory" id="SubCategory" className="select select-bordered w-full">
                         <option selected disabled value="Select">Select</option>
                         <option value="Operating System">Operating System</option>
                         <option value="Application Software">Application Software</option>
