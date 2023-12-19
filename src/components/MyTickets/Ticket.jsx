@@ -1,6 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+import { jwtDecode } from 'jwt-decode'
+import ViewTicketModal from './ViewTicketModal';
+import RateTicketModal from './RateTicketModal';
+
 
 const Ticket = ({ ticket }) => {
+
+    const user = jwtDecode(Cookies.get('token'));
+
+    const [rateModalIsOpen, setRateModalIsOpen] = useState(false);
+
+    const handleOpenRateModal = () => {
+        setRateModalIsOpen(true);
+    }
+
+    const handleCloseRateModal = () => {
+        setRateModalIsOpen(false);
+    }
+
+
+    const [ViewTicketModalIsOpen, setViewTicketModalIsOpen] = useState(false);
+
+    const handleOpenViewTicketModal = () => {
+        setViewTicketModalIsOpen(true);
+    }
+
+    const handleCloseViewTicketModal = () => {
+        setViewTicketModalIsOpen(false);
+    }
+
+
+
     return (
         <>
 
@@ -36,9 +67,7 @@ const Ticket = ({ ticket }) => {
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
-
-                                        {/* if not rated add rate button */}
-                                        <button class="text-center text-sm leading-4 font-semibold">Rate</button>
+                                        <button onClick={handleOpenRateModal} class="text-center text-sm leading-4 font-semibold">Rate</button>
                                     </div>
                                 </div>
                             </div>
@@ -46,21 +75,29 @@ const Ticket = ({ ticket }) => {
                         }
                         <div>
                             <div class={`rounded-none ml-3 my-5 p-1 w-20 ${ticket.priority === "Medium" ? "bg-warning" : ticket.priority === "Low" ? "bg-success" : ticket.priority === "High" ? "bg-error" : ""}`}>
-                                <button class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
+                                <button onClick={handleOpenViewTicketModal} class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
                             </div>
                         </div>
                         <div>
                             {/* Drop down button */}
                             {/* only for agent */}
-                            <button class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
+                            {/* TODO handle logic */}
+                            {user.UserInfo.role === "Agent" && (
+                                <button class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
+
+            <ViewTicketModal isOpen={ViewTicketModalIsOpen} onRequestClose={handleCloseViewTicketModal} ticket={ticket} />
+            <RateTicketModal isOpen={rateModalIsOpen} onRequestClose={handleCloseRateModal} ticket={ticket} />
+
+
         </>
     )
 }

@@ -3,6 +3,7 @@ import Ticket from '../../../components/MyTickets/Ticket'
 import CreateTicketButton from '../../../components/MyTickets/CreateTicketButton'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
+import { jwtDecode } from 'jwt-decode'
 
 
 const Index = () => {
@@ -15,9 +16,13 @@ const Index = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [ticketsPerPage, setTicketsPerPage] = useState(6);
 
+
     useEffect(() => {
         fetchTickets();
+        console.log(allTickets);
     }, []);
+
+
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
