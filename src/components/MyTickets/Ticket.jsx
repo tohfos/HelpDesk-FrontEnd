@@ -2,31 +2,33 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 import ViewTicketModal from './ViewTicketModal';
+import RateTicketModal from './RateTicketModal';
 
 
 const Ticket = ({ ticket }) => {
 
     const user = jwtDecode(Cookies.get('token'));
 
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [rateModalIsOpen, setRateModalIsOpen] = useState(false);
 
-    const handleOpenModal = () => {
-        setModalIsOpen(true);
+    const handleOpenRateModal = () => {
+        setRateModalIsOpen(true);
     }
 
-    const handleCloseModal = () => {
-        setModalIsOpen(false);
-    }
-
-    const handleViewTicket = () => {
-        // TODO
-    }
-
-    const handleRateTicket = () => {
-        // TODO
+    const handleCloseRateModal = () => {
+        setRateModalIsOpen(false);
     }
 
 
+    const [ViewTicketModalIsOpen, setViewTicketModalIsOpen] = useState(false);
+
+    const handleOpenViewTicketModal = () => {
+        setViewTicketModalIsOpen(true);
+    }
+
+    const handleCloseViewTicketModal = () => {
+        setViewTicketModalIsOpen(false);
+    }
 
 
 
@@ -65,9 +67,7 @@ const Ticket = ({ ticket }) => {
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
-
-                                        {/* if not rated add rate button */}
-                                        <button class="text-center text-sm leading-4 font-semibold">Rate</button>
+                                        <button onClick={handleOpenRateModal} class="text-center text-sm leading-4 font-semibold">Rate</button>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@ const Ticket = ({ ticket }) => {
                         }
                         <div>
                             <div class={`rounded-none ml-3 my-5 p-1 w-20 ${ticket.priority === "Medium" ? "bg-warning" : ticket.priority === "Low" ? "bg-success" : ticket.priority === "High" ? "bg-error" : ""}`}>
-                                <button onClick={handleOpenModal} class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
+                                <button onClick={handleOpenViewTicketModal} class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
                             </div>
                         </div>
                         <div>
@@ -93,7 +93,11 @@ const Ticket = ({ ticket }) => {
                     </div>
                 </div>
             </div>
-            <ViewTicketModal ticket={ticket} isOpen={modalIsOpen} onRequestClose={handleCloseModal} />
+
+            <ViewTicketModal isOpen={ViewTicketModalIsOpen} onRequestClose={handleCloseViewTicketModal} ticket={ticket} />
+            <RateTicketModal isOpen={rateModalIsOpen} onRequestClose={handleCloseRateModal} ticket={ticket} />
+
+
         </>
     )
 }
