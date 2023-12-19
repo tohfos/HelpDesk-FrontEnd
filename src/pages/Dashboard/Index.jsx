@@ -40,7 +40,6 @@ const Index = () => {
             })
 
             const data = await response.json()
-            console.log(data.mainTheme, data.secondaryTheme)
             // set the theme in local storage
             localStorage.setItem('mainTheme', data.mainTheme)
             localStorage.setItem('secondaryTheme', data.secondaryTheme)
