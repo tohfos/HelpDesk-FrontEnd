@@ -13,7 +13,7 @@ import Reports from './pages/Dashboard/Reports/Index';
 import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
 import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
-
+import Backup from './pages/Tools/Index';
 
 
 function App() {
@@ -32,6 +32,7 @@ function App() {
           <Route path="preferences" element={<Preferences />} />
           <Route path="messages" element={<MessagesSliderbar />} />
           <Route path="users" element={<Users />} />
+          <Route path='/tools' element={<Backup />} />
 
         </Route>
         <Route path='/resetpassword' element={<ResetPassword />} />
