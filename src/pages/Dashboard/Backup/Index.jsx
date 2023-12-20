@@ -37,11 +37,16 @@ const handelrestore  = async () => {
     credentials: 'include',
 
   });
-
-  if(!response.ok){
-    console.error('Error:', response.statusText);
-    return;
+  if (response.ok) {
+    // Handle success, maybe redirect or show a success message
+    console.log('Restored successfully');
+    success('Restored successfully',response.message)
+  } else {
+    // Handle error, maybe show an error message
+    console.error('Restore failed to Add');
+    fail('Restore failed to Add', response.message)
   }
+  
 } 
    
 const fail = (alert) => {
