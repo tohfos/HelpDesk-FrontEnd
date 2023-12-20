@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
 
 
+
 const Index = () => {
 
     useEffect(() => {
@@ -61,10 +62,10 @@ const Index = () => {
             <div class=" h-screen flex flex-col rounded-xl overflow-hidden shadow-xl mb-16"  >
                 {/* <!-- navbar --> */}
                 <div class=" border-b border-base-200 px-5 py-1 flex justify-between items-center">
-                    <span class="text-xl font-bold">
+                    <a href="profile" class="text-xl font-bold">
                         Welcome, {user} <br />
                         <span class="text-base font-medium">to the Dashboard</span>
-                    </span>
+                    </a>
                     <span>
                         <img src={Logo} class="h-12" alt="" />
                     </span>
