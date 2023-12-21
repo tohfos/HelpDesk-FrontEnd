@@ -58,9 +58,10 @@ const Index = () => {
     //   }
     // }
     // else if (user.UserInfo.Role === "User") {
-    console.log("hellllo")
     // console.log(Knowledgebase)
+
     try {
+      console.log(Knowledgebase)
       const response = await fetch(
         `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/postQuestion`,
         {
@@ -69,35 +70,31 @@ const Index = () => {
             "Content-Type": "application/json",
             Authorization: "Bearer " + Cookies.get("token"),
           },
-          body: {
-            Category: Knowledgebase.Category,
-            SubCategory: Knowledgebase.SubCategory,
-            Question: Knowledgebase.Question
-          },
+          body: JSON.stringify(Knowledgebase),
           credentials: "include",
         }
       );
-      console.log(response.data)
+      const data = await response.json();
+      console.log(data);
       if (response.ok) {
         // Handle success, maybe redirect or show a success message
-        console.log("Question Posted successfully");
-        success("Question posted successfully", response.message);
+        console.log("knoledgebase Added successfully");
+        success("knowledgebase Added successfully", response.message);
       } else {
         // Handle error, maybe show an error message
-        console.error("Failed to post question");
-        fail("Failed to post question", response.message);
+        console.error("Failed to Add knoledgebase");
+        fail("Failed to Add knowledgebase", response.message);
       }
+    } catch (error) {
+      console.error("Failed to Add knoledgebase");
+      fail("Failed to Add knowledgebase", error.message);
     }
-    catch (error) {
-      console.log(error)
-    }
+
     // }
     //window.location.reload();
   };
 
   const handleGetQuestions = async () => {
-
-    console.log("456", Knowledgebase);
 
     const response = await fetch(
       `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
@@ -116,7 +113,7 @@ const Index = () => {
     // If user role is "User," filter questions to show only those with answers
     let filteredQuestions;
     if (user.UserInfo.role === "User") {
-      filteredQuestions = data.filter((question) => question.Answer !== "");
+      filteredQuestions = data.filter((question) => question.Answer !== undefined);
     } else {
       // If the user has any other role, show all questions
       filteredQuestions = data;
