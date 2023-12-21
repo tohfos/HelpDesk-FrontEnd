@@ -5,6 +5,13 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
+
+  // TODO answer and description functionality for admin and agent
+  // TODO search functionality
+  // TODO filter functionality
+  // TODO pagination
+  // TODO show the questions
+
   const [Knowledgebase, setKnowledgebase] = useState({
     Category: "",
     SubCategory: "",
