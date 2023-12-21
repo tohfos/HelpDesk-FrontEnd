@@ -6,8 +6,8 @@ import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
   const [Knowledgebase, setKnowledgebase] = useState({
-    category: "",
-    subcategory: "",
+    Category: "",
+    SubCategory: "",
     Question: "",
     Answer: "",
     Description: "",
@@ -26,36 +26,41 @@ const Index = () => {
     console.log(Knowledgebase);
   };
 
-  useEffect(() => {handleGetQuestions()}, []);
+  useEffect(() => { handleGetQuestions() }, []);
 
   //   To handle Agent adding
   const Handleknoledgebutton = async (e) => {
     e.preventDefault();
     console.log("123", Knowledgebase);
 
-    if (user.UserInfo.role === "Admin") {
-      const response = await fetch(
-        `${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/AddDataToKnowledgeBase`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + Cookies.get("token"),
-          },
-          body: JSON.stringify(Knowledgebase),
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        // Handle success, maybe redirect or show a success message
-        console.log("knoledgebase Added successfully");
-        success("knowledgebase Added successfully", response.message);
-      } else {
-        // Handle error, maybe show an error message
-        console.error("Failed to Add knoledgebase");
-        fail("Failed to Add knowledgebase", response.message);
-      }
-    } else if (user.UserInfo.Role === "User") {
+    console.log(user)
+    // if (user.UserInfo.role === "Admin") {
+    //   const response = await fetch(
+    //     `${process.env.REACT_APP_EXPRESS_URL}/api/v1/admin/AddDataToKnowledgeBase`,
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: "Bearer " + Cookies.get("token"),
+    //       },
+    //       body: JSON.stringify(Knowledgebase),
+    //       credentials: "include",
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     // Handle success, maybe redirect or show a success message
+    //     console.log("knoledgebase Added successfully");
+    //     success("knowledgebase Added successfully", response.message);
+    //   } else {
+    //     // Handle error, maybe show an error message
+    //     console.error("Failed to Add knoledgebase");
+    //     fail("Failed to Add knowledgebase", response.message);
+    //   }
+    // }
+    // else if (user.UserInfo.Role === "User") {
+    console.log("hellllo")
+    // console.log(Knowledgebase)
+    try {
       const response = await fetch(
         `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/postQuestion`,
         {
@@ -64,10 +69,15 @@ const Index = () => {
             "Content-Type": "application/json",
             Authorization: "Bearer " + Cookies.get("token"),
           },
-          body: JSON.stringify(Knowledgebase),
+          body: {
+            Category: Knowledgebase.Category,
+            SubCategory: Knowledgebase.SubCategory,
+            Question: Knowledgebase.Question
+          },
           credentials: "include",
         }
       );
+      console.log(response.data)
       if (response.ok) {
         // Handle success, maybe redirect or show a success message
         console.log("Question Posted successfully");
@@ -78,6 +88,10 @@ const Index = () => {
         fail("Failed to post question", response.message);
       }
     }
+    catch (error) {
+      console.log(error)
+    }
+    // }
     //window.location.reload();
   };
 
@@ -86,15 +100,15 @@ const Index = () => {
     console.log("456", Knowledgebase);
 
     const response = await fetch(
-        `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
-        {
-            method : 'GET',
-            headers : {
-                "Content-Type" : "application/json",
-                Authorization : "Bearer " + Cookies.get("token")
-            },
-            credentials : "include"
-        }
+      `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
+      {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Cookies.get("token")
+        },
+        credentials: "include"
+      }
     )
     const data = await response.json()
 
@@ -102,12 +116,12 @@ const Index = () => {
     // If user role is "User," filter questions to show only those with answers
     let filteredQuestions;
     if (user.UserInfo.role === "User") {
-        filteredQuestions = data.filter((question) => question.Answer !== "");
+      filteredQuestions = data.filter((question) => question.Answer !== "");
     } else {
-        // If the user has any other role, show all questions
-        filteredQuestions = data;
+      // If the user has any other role, show all questions
+      filteredQuestions = data;
     }
-    
+
     setQuestions(filteredQuestions);
     console.log("questions", filteredQuestions)
 
