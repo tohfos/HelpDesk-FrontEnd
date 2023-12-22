@@ -53,13 +53,44 @@ const Index = () => {
                 credentials: 'include'
             })
             const data = await response.json()
+            if(response.ok){
+                toast.success("Report Generated!", {
+                    position: 'top-center',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  }); 
+                  setNewReport(data)
+
+            }
+
+            else{
+                fail(data.message)
+             }
+
             console.log(data)
-            setNewReport(data)
         }
         catch (error) {
             console.log(error)
+            fail(error)
         }
     }
+
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
     return (
         <div><Header
