@@ -28,6 +28,8 @@ const CreateTicketButton = () => {
         subcategory: ''
     })
 
+    const [workflow, setWorkflow] = useState([])
+
     const handleTicketChange = (e) => {
         const { name, value } = e.target;
         setTicket({
@@ -45,6 +47,8 @@ const CreateTicketButton = () => {
             }
         }
         console.log(ticket)
+
+        if (ticket.category !== "" && ticket.subcategory !== "") handleGetAutomationAndWorkflow();
     }
 
 
@@ -106,6 +110,29 @@ const CreateTicketButton = () => {
             console.log(error)
             fail(error)
         }
+    }
+
+
+    const handleGetAutomationAndWorkflow = async () => {
+        const response = await fetch(
+            `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/workflow/${ticket.category}/${ticket.subcategory}`,
+            {
+                method : 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + Cookies.get("token"),
+                  },
+                  credentials: "include",
+            }
+        )
+
+        const data = await response.json();
+        let filteredWorkflow;
+        filteredWorkflow = data.filter(
+            (workflow) => workflow.Description !== undefined
+          );
+        setWorkflow(filteredWorkflow)
+        console.log("workflow", workflow)
     }
 
     const success = (alert) => {
@@ -220,6 +247,16 @@ const CreateTicketButton = () => {
                                         </select>
                                     </div>
                                 )}
+
+
+                                <div className="ml-5 space-y-4 my-24">
+
+                                    <ol className='list-decimal ml-4'>
+                                        {workflow.map((workflow, index) => (
+                                            <li key={index} className='text-primary w-full'>{workflow.Description}</li>
+                                        ))}
+                                    </ol>
+                                </div>
 
 
                                 <div className="flex flex-row space-x-2 self-end">
