@@ -12,6 +12,10 @@ const Index = () => {
   // TODO pagination
   // TODO show the questions
 
+  //I will get all the questions first and save them in all question api
+  //after that when trying to get the filtered question based on the selection I have made I will call the respective api for it
+  //adn then say bismallah
+
   const [Knowledgebase, setKnowledgebase] = useState({
     Category: "",
     SubCategory: "",
@@ -22,29 +26,41 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [allQuestions, setAllQuestions] = useState([]);
-
   const [questions, setQuestions] = useState([]);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
 
   const user = jwtDecode(Cookies.get("token"));
 
   const handleknoledgeChange = (e) => {
-    setKnowledgebase((prevKnowledgebase) => ({
-      ...prevKnowledgebase,
-      [e.target.name]: e.target.value,
-    }));
-    // console.log("event value:", e.target.value);
-    // console.log("category:", Knowledgebase.Category);
-    // let filteredQuestions = questions.filter(
-    //   (question) => question.Category === Knowledgebase.Category
-    // );
-    // setQuestions(filteredQuestions);
-    // console.log("filtered question:", filteredQuestions);
-    // console.log("question:", questions);
+    const { name, value } = e.target;
+  
+    // Check if the changed field is the category
+    if (name === 'Category') {
+      // Reset the subcategory when the category changes
+      setKnowledgebase((prevKnowledgebase) => ({
+        ...prevKnowledgebase,
+        [name]: value,
+        SubCategory: '', // Reset subcategory to empty string or null
+      }));
+    } else {
+      // For other fields, update normally
+      setKnowledgebase((prevKnowledgebase) => ({
+        ...prevKnowledgebase,
+        [name]: value,
+      }));
+    }
   };
+  
+  
 
   useEffect(() => {
     handleGetQuestions();
   }, []);
+
+  useEffect(() => {
+    handleFiltredQuestion();
+  }, [Knowledgebase.Category, Knowledgebase.SubCategory]);
+  
 
   //   To handle Agent adding
   const Handleknoledgebutton = async (e) => {
@@ -111,7 +127,6 @@ const Index = () => {
       }
     } else if (user.UserInfo.role === "Agent") {
       try {
-        console.log("hello")
         const response = await fetch(
           `${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/addWorkFlow`,
           {
@@ -143,6 +158,12 @@ const Index = () => {
 
     // }
     //window.location.reload();
+    if (Knowledgebase.Category === "") {
+      handleGetQuestions();
+    } else {
+        handleFiltredQuestion();
+       
+    }
   };
 
   const handleGetQuestions = async () => {
@@ -170,26 +191,56 @@ const Index = () => {
       filteredQuestions = data;
     }
 
+    setAllQuestions(data);
     setQuestions(filteredQuestions);
   };
 
-  //   const handleFiltredQuestion = async () => {
-  //     let data = questions;
-  //     if (Knowledgebase.Category !== ""){
-  //         let filteredQuestions;
-  //         if (user.UserInfo.role === "User") {
-  //             filteredQuestions = data.filter(
-  //               (question) => question.Answer !== undefined && question.Category
-  //             );
-  //           } else {
-  //             // If the user has any other role, show all questions
-  //             filteredQuestions = data;
-  //           }
+  const handleFiltredQuestion = async () => {
+    if (Knowledgebase.Category !== "") {
+      try {
+        let apiUrl = `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase/${Knowledgebase.Category}`;
+  
+        if (Knowledgebase.SubCategory !== "") {
+          apiUrl += `/${Knowledgebase.SubCategory}`;
+        }
+  
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + Cookies.get("token"),
+          },
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log("data:", data)
+          let filteredQuestions;
+  
+          if (user.UserInfo.role === "User") {
+            filteredQuestions = data.filter(
+              (question) => question.Answer !== undefined
+            );
+          } else {
+            filteredQuestions = data;
+          }
+  
+          setFilteredQuestions(filteredQuestions);
+        } else {
+          console.error("Failed to fetch filtered questions");
+        }
+      } catch (error) {
+        console.error("Error fetching filtered questions", error);
+      }
+    } else {
+      // If no category is selected, fetch all questions
+      handleGetQuestions();
+    }
+  };
+  
 
-  //           setQuestions(filteredQuestions)
-  //           console.log("filtered question", filteredQuestions)
-  //     }
-  //   }
+  
   // if (Knowledgebase.category === "" && Knowledgebase.subcategory === "") {
   //   const response = await fetch(
   //     `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
@@ -294,7 +345,7 @@ const Index = () => {
         {Knowledgebase.Category === "Software" && (
           <div className="flex flex-col space-y-1">
             <label
-              htmlFor="subcategory"
+              htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
             >
               Subcategory
@@ -320,7 +371,7 @@ const Index = () => {
         {Knowledgebase.Category === "Hardware" && (
           <div className="flex flex-col space-y-1">
             <label
-              htmlFor="subcategory"
+              htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
             >
               Subcategory
@@ -328,8 +379,8 @@ const Index = () => {
             <select
               required
               onChange={handleknoledgeChange}
-              name="subcategory"
-              id="subcategory"
+              name="SubCategory"
+              id="SubCategory"
               className="select select-bordered w-full"
             >
               <option selected disabled value="Select">
@@ -347,7 +398,7 @@ const Index = () => {
         {Knowledgebase.Category === "Network" && (
           <div className="flex flex-col space-y-1">
             <label
-              htmlFor="subcategory"
+              htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
             >
               Subcategory
@@ -355,8 +406,8 @@ const Index = () => {
             <select
               required
               onChange={handleknoledgeChange}
-              name="subcategory"
-              id="subcategory"
+              name="SubCategory"
+              id="SubCategory"
               className="select select-bordered w-full"
             >
               <option selected disabled value="Select">
@@ -466,11 +517,19 @@ const Index = () => {
           </button>
         </div>
       </div>
-      <div className="ml-5 space-y-4 my-24">
-        {questions.map((question) => (
-          <Question key={question._id} question={question} />
-        ))}
-      </div>
+      {Knowledgebase.Category !== "" ? (
+        <div className="ml-5 space-y-4 my-24">
+          {filteredQuestions.map((question) => (
+            <Question key={question._id} question={question} />
+          ))}
+        </div>
+      ) : (
+        <div className="ml-5 space-y-4 my-24">
+          {questions.map((question) => (
+            <Question key={question._id} question={question} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
