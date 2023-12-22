@@ -98,7 +98,7 @@ const Index = () => {
                 </div>
             )}
     
-            {Knowledgebase.category === 'Hardware' && (
+            {Knowledgebase.Category === 'Hardware' && (
                 <div className="flex flex-col space-y-1">
                     <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
                     <select required onChange={handleknoledgeChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
@@ -112,7 +112,7 @@ const Index = () => {
                 </div>
             )}
     
-            {Knowledgebase.category === 'Network' && (
+            {Knowledgebase.Category === 'Network' && (
                 <div className="flex flex-col space-y-1">
                     <label htmlFor="subcategory" className="text-sm font-medium text-base-content">Subcategory</label>
                     <select required onChange={handleknoledgeChange} name="subcategory" id="subcategory" className="select select-bordered w-full">
