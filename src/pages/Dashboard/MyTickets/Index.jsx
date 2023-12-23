@@ -21,6 +21,7 @@ const Index = () => {
     useEffect(() => {
         fetchTickets();
         console.log(allTickets);
+        console.log(tickets);
     }, []);
 
 

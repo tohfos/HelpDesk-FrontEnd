@@ -32,8 +32,9 @@ const RateTicketModal = ({ isOpen, onRequestClose, ticket }) => {
             console.log(data);
             if (data.success) {
                 console.log('success');
-                onRequestClose();
             }
+            onRequestClose();
+            window.location.reload();
         }
         catch (error) {
             console.error('Error:', error);
