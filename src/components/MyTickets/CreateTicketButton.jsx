@@ -53,7 +53,7 @@ const CreateTicketButton = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (ticket.subject === '' || ticket.message === '' || ticket.category === '' || ticket.subcategory === '') {
+        if (ticket.subject === '' || ticket.message === '' || ticket.category === '') {
             console.log('Please fill out all the fields')
             fail('Please fill out all the fields')
             return
@@ -179,6 +179,7 @@ const CreateTicketButton = () => {
                                         <option value="Software">Software Issue</option>
                                         <option value="Hardware">Hardware Issue</option>
                                         <option value="Network">Network Issue</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
 

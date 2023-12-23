@@ -82,8 +82,7 @@ const Ticket = ({ ticket }) => {
                         }
 
                         {/* TODO Start the chat with the agent */}
-                        {/* law el user unstatisfied, aw el ticket catagory is other */}
-                        {ticket.status === "Resolved" && user.UserInfo.role === "User" ?
+                        {(ticket.ticketCategory === "Other" || (ticket.rating < 3 && ticket.rating > 0)) && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
@@ -91,7 +90,7 @@ const Ticket = ({ ticket }) => {
                                     </div>
                                 </div>
                             </div>
-                            : ""
+                            : (null)
                         }
 
                         <div>
