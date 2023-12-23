@@ -30,6 +30,43 @@ const Ticket = ({ ticket }) => {
         setViewTicketModalIsOpen(false);
     }
 
+    const handleStartTicket = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/startTicket/${ticket._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            //refresh page
+            window.location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const handleSolveTicket = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/solveTicket/${ticket._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            //refresh page
+            window.location.reload();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
 
 
     return (
@@ -56,14 +93,21 @@ const Ticket = ({ ticket }) => {
                         </div>
                         <div class="border-r-2 pr-3">
                             <div >
-                                <div class={`ml-3 my-3 border-base-200 border-2 bg-base-300 p-1 ${ticket.status === "Resolved" ? "bg-success" : ""}`}>
-                                    <div class="uppercase text-xs leading-4 font-medium">Status</div>
+                                <div class={`ml-3 my-3 border-base-200 border-2 p-1 ${ticket.status === "Resolved" ? "bg-success text-base-100" : ""}`}>
+                                    <div class="uppercase text-xs leading-4 font-medium">Status:</div>
                                     <div class="text-center text-sm leading-4 font-semibold">{ticket.status}</div>
-                                    {ticket.status === "Resolved" ? <div class="text-center text-sm leading-4 font-semibold">Rating: {ticket.rating}</div> : ""}
+                                    {ticket.status === "Resolved" ?
+                                        <div className="rating">
+                                            {/* add stars for the number of ticket rating */}
+                                            {ticket.rating && Array.from({ length: ticket.rating }).map((_, index) => (
+                                                <span key={index} className="star">&#9733;</span>
+                                            ))}
+                                        </div>
+                                        : ""}
                                 </div>
                             </div>
                         </div>
-                        {ticket.status === "Resolved" && ticket.rating === null ?
+                        {ticket.status === "Resolved" && ticket.rating === null && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
@@ -73,6 +117,19 @@ const Ticket = ({ ticket }) => {
                             </div>
                             : ""
                         }
+
+                        {/* TODO Start the chat with the agent */}
+                        {(ticket.ticketCategory === "Other" || ticket.status === "Resolved") && user.UserInfo.role === "User" ?
+                            <div class="h-auto border-r-2 pr-3">
+                                <div>
+                                    <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
+                                        <button class="text-center text-sm leading-4 font-semibold">Message Agent</button>
+                                    </div>
+                                </div>
+                            </div>
+                            : (null)
+                        }
+
                         <div>
                             <div class={`rounded-none ml-3 my-5 p-1 w-20 ${ticket.priority === "Medium" ? "bg-warning" : ticket.priority === "Low" ? "bg-success" : ticket.priority === "High" ? "bg-error" : ""}`}>
                                 <button onClick={handleOpenViewTicketModal} class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
@@ -82,21 +139,37 @@ const Ticket = ({ ticket }) => {
                             {/* Drop down button */}
                             {/* only for agent */}
                             {user.UserInfo.role === "Agent" && (
-                                <button class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
+                                <>
+                                    <div class="dropdown dropdown-hover dropdown-end">
+                                        <div tabindex="0" class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                        <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                                            <li>
+                                                <a onClick={handleStartTicket} class="flex items-center space-x-2">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>In-Progress</span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a onClick={handleSolveTicket} class="flex items-center space-x-2">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>Resolved</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
-
             <ViewTicketModal isOpen={ViewTicketModalIsOpen} onRequestClose={handleCloseViewTicketModal} ticket={ticket} />
             <RateTicketModal isOpen={rateModalIsOpen} onRequestClose={handleCloseRateModal} ticket={ticket} />
-
-
         </>
     )
 }

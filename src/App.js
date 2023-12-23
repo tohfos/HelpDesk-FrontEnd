@@ -15,8 +15,7 @@ import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
 import Backup from './pages/Dashboard/Backup/Index';
 import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
-import GetFAQs from './pages/Dashboard/Knowledgebase/GetFAQs';
-
+import Profile from './pages/Profile/Index';
 
 
 function App() {
@@ -28,7 +27,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />}>
-
           <Route path="mytickets" element={<MyTickets />} />
           <Route path="reports" element={<Reports />} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
@@ -38,8 +36,7 @@ function App() {
           <Route path="backup" element={<Backup />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="getFAQ" element={<GetFAQs />} />
-          
-
+          <Route path="profile" element={<Profile />} />
         </Route>
         <Route path='/resetpassword' element={<ResetPassword />} />
         <Route path='/test' element={<Test />} />
