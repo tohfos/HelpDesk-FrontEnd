@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Modal from 'react-modal';
 import { ReactSortable } from "react-sortablejs";
+import { toast, ToastContainer } from 'react-toastify';
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
@@ -89,9 +90,14 @@ const ViewUsers = () => {
         body: JSON.stringify(Data)
       });
 
-      if (!response.ok) {
-        console.error('Error:', response.statusText);
-        return;
+      if (response.ok) {
+        // Handle success, maybe redirect or show a success message
+        console.log('Role Updated successfully');
+        success('Role Updated successfully',response.message)
+      } else {
+        // Handle error, maybe show an error message
+        console.error('Failed to Update Role');
+        fail('Failed to Update Role', response.message)
       }
 
       const data = await response.json();
@@ -132,6 +138,28 @@ const ViewUsers = () => {
 
     fetchUsers();
   }, []);
+  const fail = (alert) => {
+    toast.error(alert, {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const success = (alert) => {
+    toast.success(alert, {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
 
   return (
     <>

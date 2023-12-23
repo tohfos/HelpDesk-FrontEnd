@@ -13,7 +13,9 @@ import Reports from './pages/Dashboard/Reports/Index';
 import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
 import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
-
+import Backup from './pages/Dashboard/Backup/Index';
+import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
+import Profile from './pages/Profile/Index';
 
 
 function App() {
@@ -32,6 +34,10 @@ function App() {
           <Route path="preferences" element={<Preferences />} />
           <Route path="messages" element={<MessagesSliderbar />} />
           <Route path="users" element={<Users />} />
+          <Route path="backup" element={<Backup />} />
+          <Route path="faq" element={<FAQ />} />
+          <Route path="profile" element={<Profile />} />
+          
 
         </Route>
         <Route path='/resetpassword' element={<ResetPassword />} />
