@@ -72,7 +72,7 @@ const Ticket = ({ ticket }) => {
     return (
         <>
 
-            {/* TODO add functionality for view ticket, drop down for agent, and rate ticket */}
+            {/* TODO add functionality for drop down for agent*/}
 
             <div>
                 <div class="bg-base-100 mx-auto border-base-200 border rounded-sm mb-0.5 h-30 shadow-md">
@@ -138,7 +138,6 @@ const Ticket = ({ ticket }) => {
                         <div>
                             {/* Drop down button */}
                             {/* only for agent */}
-                            {/* TODO handle logic */}
                             {user.UserInfo.role === "Agent" && (
                                 <>
                                     <div class="dropdown dropdown-hover dropdown-end">
