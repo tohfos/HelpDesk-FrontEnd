@@ -239,58 +239,6 @@ const Index = () => {
     }
   };
   
-
-  
-  // if (Knowledgebase.category === "" && Knowledgebase.subcategory === "") {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Bearer " + Cookies.get("token"),
-  //       },
-  //       credentials: "include",
-  //     }
-  //   );
-  //   if (response.ok) {
-  //     // make logic to show questions that match the search bar item or similarities
-  //   }
-  // } else if (
-  //   Knowledgebase.category !== "" &&
-  //   Knowledgebase.subcategory === ""
-  // ) {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase/${Knowledgebase.category}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Bearer " + Cookies.get("token"),
-  //       },
-  //       credentials: "include",
-  //     }
-  //   );
-  //   if (response.ok) {
-  //     // make logic to show questions that match the search bar item or similarities
-  //   }
-  // } else {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase/${Knowledgebase.category}/${Knowledgebase.subcategory}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Bearer " + Cookies.get("token"),
-  //       },
-  //       credentials: "include",
-  //     }
-  //   );
-  //   if (response.ok) {
-  //     // make logic to show questions that match the search bar item or similarities
-  //   }
-  // }
-
   const fail = (alert) => {
     toast.error(alert, {
       position: "top-center",
@@ -506,16 +454,28 @@ const Index = () => {
             </div>
           </>
         ) : null}
-
-        <div className="form-control mt-6">
+        {Knowledgebase.Category !=="" && Knowledgebase.SubCategory !== "" ? 
+        (<div className="form-control mt-6">
+        <button
+          type="submit"
+          className="btn btn-primary btn-wide shadow-md"
+          onClick={Handleknoledgebutton}
+          
+        >
+          Add
+        </button>
+      </div>) : (<div className="form-control mt-6">
           <button
             type="submit"
             className="btn btn-primary btn-wide shadow-md"
             onClick={Handleknoledgebutton}
+            disabled="disabled"
           >
             Add
           </button>
-        </div>
+        </div>)}
+          
+        
       </div>
       {Knowledgebase.Category !== "" ? (
         <div className="ml-5 space-y-4 my-24">
