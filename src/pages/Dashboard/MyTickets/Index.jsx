@@ -15,6 +15,7 @@ const Index = () => {
     const [filterOption, setFilterOption] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [ticketsPerPage, setTicketsPerPage] = useState(6);
+    const user = jwtDecode(Cookies.get('token'));
 
 
     useEffect(() => {
@@ -40,20 +41,40 @@ const Index = () => {
     };
 
     const fetchTickets = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/get`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + Cookies.get('token')
-                },
-            });
-            const data = await response.json();
-            data.reverse();
-            setAllTickets(data);
-            setTickets(data);
-        } catch (error) {
-            console.error('Error:', error);
+
+        if (user.UserInfo.role === "User") {
+
+            try {
+                const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/get`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Cookies.get('token')
+                    },
+                });
+                const data = await response.json();
+                data.reverse();
+                setAllTickets(data);
+                setTickets(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else if (user.UserInfo.role === "Agent") {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/get`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Cookies.get('token')
+                    },
+                });
+                const data = await response.json();
+                data.reverse();
+                setAllTickets(data);
+                setTickets(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
     }
 
@@ -69,8 +90,10 @@ const Index = () => {
                 </div>
                 <div className="h-screen overflow-auto">
                     <div className="mt-10 top-0 left-0 mb-10 m-5 flex flex-row space-x-6">
-                        <CreateTicketButton />
-
+                        {user.UserInfo.role === "User" ?
+                            < CreateTicketButton />
+                            : null
+                        }
                         {/* Sort */}
                         <select
                             className="select select-secondary w-full max-w-xs"
