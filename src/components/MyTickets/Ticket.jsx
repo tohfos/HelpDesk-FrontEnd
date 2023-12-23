@@ -41,6 +41,8 @@ const Ticket = ({ ticket }) => {
             });
             const data = await response.json();
             console.log(data);
+            //refresh page
+            window.location.reload();
         } catch (error) {
             console.error('Error:', error);
         }
@@ -57,6 +59,8 @@ const Ticket = ({ ticket }) => {
             });
             const data = await response.json();
             console.log(data);
+            //refresh page
+            window.location.reload();
         } catch (error) {
             console.error('Error:', error);
         }
@@ -103,7 +107,7 @@ const Ticket = ({ ticket }) => {
                                 </div>
                             </div>
                         </div>
-                        {ticket.status === "Resolved" && ticket.rating === null ?
+                        {ticket.status === "Resolved" && ticket.rating === null && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">

@@ -24,7 +24,6 @@ const Index = () => {
     }, []);
 
 
-
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
         if (searchTerm === '') {
