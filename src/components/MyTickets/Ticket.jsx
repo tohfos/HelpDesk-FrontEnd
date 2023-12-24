@@ -56,10 +56,17 @@ const Ticket = ({ ticket }) => {
                         </div>
                         <div class="border-r-2 pr-3">
                             <div >
-                                <div class={`ml-3 my-3 border-base-200 border-2 bg-base-300 p-1 ${ticket.status === "Resolved" ? "bg-success" : ""}`}>
-                                    <div class="uppercase text-xs leading-4 font-medium">Status</div>
+                                <div class={`ml-3 my-3 border-base-200 border-2 p-1 ${ticket.status === "Resolved" ? "bg-success text-base-100" : ""}`}>
+                                    <div class="uppercase text-xs leading-4 font-medium">Status:</div>
                                     <div class="text-center text-sm leading-4 font-semibold">{ticket.status}</div>
-                                    {ticket.status === "Resolved" ? <div class="text-center text-sm leading-4 font-semibold">Rating: {ticket.rating}</div> : ""}
+                                    {ticket.status === "Resolved" ?
+                                        <div className="rating">
+                                            {/* add stars for the number of ticket rating */}
+                                            {ticket.rating && Array.from({ length: ticket.rating }).map((_, index) => (
+                                                <span key={index} className="star">&#9733;</span>
+                                            ))}
+                                        </div>
+                                        : ""}
                                 </div>
                             </div>
                         </div>
@@ -73,6 +80,19 @@ const Ticket = ({ ticket }) => {
                             </div>
                             : ""
                         }
+
+                        {/* TODO Start the chat with the agent */}
+                        {(ticket.ticketCategory === "Other" || (ticket.rating < 3 && ticket.rating > 0)) && user.UserInfo.role === "User" ?
+                            <div class="h-auto border-r-2 pr-3">
+                                <div>
+                                    <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
+                                        <button class="text-center text-sm leading-4 font-semibold">Message Agent</button>
+                                    </div>
+                                </div>
+                            </div>
+                            : (null)
+                        }
+
                         <div>
                             <div class={`rounded-none ml-3 my-5 p-1 w-20 ${ticket.priority === "Medium" ? "bg-warning" : ticket.priority === "Low" ? "bg-success" : ticket.priority === "High" ? "bg-error" : ""}`}>
                                 <button onClick={handleOpenViewTicketModal} class="uppercase text-xs leading-4 font-semibold text-center text-base-100">View Ticket</button>
