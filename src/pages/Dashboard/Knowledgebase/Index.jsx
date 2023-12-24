@@ -4,6 +4,9 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import Question from "../../../components/Question/Question";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // import the styles
+import Workflow from "../../../components/WorkFlow/WorkFlow";
 
 const Index = () => {
   // TODO answer and description functionality for admin and agent
@@ -24,23 +27,55 @@ const Index = () => {
     Description: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
-
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [quillText, setQuillText] = useState("");
+  const [allWorkflows, setAllWorkflows] = useState([]);
+  const [workflows, setWorkflows] = useState([]);
+  const [filteredWorkflows, setFilteredWorkflows] = useState([]);
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image"],
+      ["clean"],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+  ];
 
   const user = jwtDecode(Cookies.get("token"));
 
   const handleknoledgeChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Check if the changed field is the category
-    if (name === 'Category') {
+    if (name === "Category") {
       // Reset the subcategory when the category changes
       setKnowledgebase((prevKnowledgebase) => ({
         ...prevKnowledgebase,
         [name]: value,
-        SubCategory: '', // Reset subcategory to empty string or null
+        SubCategory: "", // Reset subcategory to empty string or null
       }));
     } else {
       // For other fields, update normally
@@ -49,18 +84,118 @@ const Index = () => {
         [name]: value,
       }));
     }
+    if (name === "Question" || name === "Answer" || name === "Description") {
+      handleSearch(value);
+    }
   };
+
+  const handleSearch = async (searchTerm) => {
+    setSearchTerm(searchTerm);
+
+    if (user.UserInfo.role === "User"){
+      if (searchTerm === "") {
+        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
+          // If no category or subcategory is selected, reset to all questions
+          setQuestions(allQuestions.filter(filterUserQuestions));
+          setFilteredQuestions([]);
+        } else {
+          // If a category or subcategory is selected, reset to filtered questions
+          setQuestions([]);
+          handleFiltredQuestion();
+        }
+      } else {
+        // If there is a search term, filter the questions
+        const filtered = allQuestions.filter((question) => {
+          // Check if question and question.Question are defined before filtering
+          return (
+            question &&
+            question.Question &&
+            question.Answer &&
+            question.Question.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
   
+        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
+          // If no category or subcategory is selected, update all questions
+          setQuestions(filtered.filter(filterUserQuestions));
+          setFilteredQuestions([]);
+        } else {
+          // If a category or subcategory is selected, update filtered questions
+          setFilteredQuestions(filtered.filter(filterUserQuestions));
+          setQuestions([]);
+        }
+      }
+    }else if (user.UserInfo.role === "Admin"){
+      if (searchTerm === "") {
+        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
+          // If no category or subcategory is selected, reset to all questions
+          setQuestions(allQuestions.filter(filterAdminQuestions));
+          setFilteredQuestions([]);
+        } else {
+          // If a category or subcategory is selected, reset to filtered questions
+          setQuestions([]);
+          handleFiltredQuestion();
+        }
+      } else {
+        // If there is a search term, filter the questions
+        const filtered = allQuestions.filter((question) => {
+          // Check if question and question.Question are defined before filtering
+          return (
+            question &&
+            question.Question &&
+            question.Answer &&
+            question.Question.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
   
+        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
+          // If no category or subcategory is selected, update all questions
+          setQuestions(filtered.filter(filterAdminQuestions));
+          setFilteredQuestions([]);
+        } else {
+          // If a category or subcategory is selected, update filtered questions
+          setFilteredQuestions(filtered.filter(filterAdminQuestions));
+          setQuestions([]);
+        }
+      }
+    }
+    
+  };
+
+  // Helper function to filter questions for the "User" role
+  const filterUserQuestions = (question) => {
+    return user.UserInfo.role === "User" && question.Answer !== undefined;
+  };
+
+  // Helper function to filter questions for the "User" role
+  const filterAdminQuestions = (question) => {
+    return user.UserInfo.role === "Admin" && question.Question !== undefined && (question.Answer !== undefined || question.Answer === undefined);
+  };
+  // Helper function to check if the "Add" button should be enabled
+  const isAddButtonDisabled = () => {
+    if (user.UserInfo.role === "User") {
+      return !Knowledgebase.Question.trim() || !quillText.trim();
+    } else if (user.UserInfo.role === "Admin") {
+      return !(Knowledgebase.Question.trim() && Knowledgebase.Answer.trim());
+    } else if (user.UserInfo.role === "Agent") {
+      return !quillText.trim();
+    }
+  };
 
   useEffect(() => {
     handleGetQuestions();
+    handleGetWorkflows();
   }, []);
 
   useEffect(() => {
     handleFiltredQuestion();
+    handleFilteredWorkflow(); // Filter workflows when Category or SubCategory changes
   }, [Knowledgebase.Category, Knowledgebase.SubCategory]);
-  
+
+  const convertHtmlToPlainText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
 
   //   To handle Agent adding
   const Handleknoledgebutton = async (e) => {
@@ -135,7 +270,10 @@ const Index = () => {
               "Content-Type": "application/json",
               Authorization: "Bearer " + Cookies.get("token"),
             },
-            body: JSON.stringify(Knowledgebase),
+            body: JSON.stringify({
+              ...Knowledgebase,
+              Description: convertHtmlToPlainText(quillText),
+            }),
             credentials: "include",
           }
         );
@@ -159,10 +297,11 @@ const Index = () => {
     // }
     //window.location.reload();
     if (Knowledgebase.Category === "") {
-      handleGetQuestions();
+      if (user.UserInfo.role !== "Agent") handleGetQuestions();
+      else handleGetWorkflows();
     } else {
-        handleFiltredQuestion();
-       
+      if (user.UserInfo.role !== "Agent") handleFiltredQuestion();
+      else handleFilteredWorkflow();
     }
   };
 
@@ -199,11 +338,11 @@ const Index = () => {
     if (Knowledgebase.Category !== "") {
       try {
         let apiUrl = `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase/${Knowledgebase.Category}`;
-  
+
         if (Knowledgebase.SubCategory !== "") {
           apiUrl += `/${Knowledgebase.SubCategory}`;
         }
-  
+
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -212,20 +351,20 @@ const Index = () => {
           },
           credentials: "include",
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          console.log("data:", data)
+          console.log("data:", data);
           let filteredQuestions;
-  
+
           if (user.UserInfo.role === "User") {
             filteredQuestions = data.filter(
-              (question) => question.Answer !== undefined
+              (question) => question.Answer !== undefined 
             );
           } else {
             filteredQuestions = data;
           }
-  
+
           setFilteredQuestions(filteredQuestions);
         } else {
           console.error("Failed to fetch filtered questions");
@@ -238,7 +377,71 @@ const Index = () => {
       handleGetQuestions();
     }
   };
-  
+
+  const handleGetWorkflows = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Cookies.get("token"),
+        },
+        credentials: "include",
+      }
+    );
+    const data = await response.json();
+
+    // If user role is "User," filter questions to show only those with answers
+    let filteredWorkflows;
+
+    filteredWorkflows = data.filter(
+      (workflow) => workflow.Description !== undefined
+    );
+
+    setAllWorkflows(data);
+    setWorkflows(filteredWorkflows);
+  };
+
+  const handleFilteredWorkflow = async () => {
+    if (Knowledgebase.Category !== "") {
+      try {
+        let apiUrl = `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/KnowledgeBase/${Knowledgebase.Category}`;
+
+        if (Knowledgebase.SubCategory !== "") {
+          apiUrl += `/${Knowledgebase.SubCategory}`;
+        }
+
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + Cookies.get("token"),
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("data:", data);
+          let filteredWorkflows;
+
+          filteredWorkflows = data.filter(
+            (workflow) => workflow.Description !== undefined
+          );
+
+          setFilteredWorkflows(filteredWorkflows);
+        } else {
+          console.error("Failed to fetch filtered workflows");
+        }
+      } catch (error) {
+        console.error("Error fetching filtered workflows", error);
+      }
+    } else {
+      // If no category is selected, fetch all workflows
+      handleGetWorkflows();
+    }
+  };
   const fail = (alert) => {
     toast.error(alert, {
       position: "top-center",
@@ -267,7 +470,7 @@ const Index = () => {
       style={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}
     >
       <div className="flex flex-col space-y-4 max-w-lg mx-auto">
-        <div className="flex flex-col space-y-1">
+        <div className="flex flex-col space-y-4">
           <label
             htmlFor="Category"
             className="text-sm font-medium text-base-content"
@@ -379,27 +582,6 @@ const Index = () => {
               >
                 Question
               </label>
-              {user.UserInfo.role === "User" ? (
-                <span className="label-text-alt">
-                  <button className="btn btn-circle btn-ghost">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </button>
-                </span>
-              ) : null}
-
             </div>
 
             <input
@@ -414,6 +596,7 @@ const Index = () => {
           </div>
         ) : null}
 
+          
         {user.UserInfo.role === "Admin" ? (
           <>
             <div className="flex flex-col space-y-1">
@@ -437,35 +620,38 @@ const Index = () => {
         ) : null}
         {user.UserInfo.role === "Agent" ? (
           <>
-            <div className="flex flex-col space-y-1">
+            <div className="flex flex-col space-y-4 ml-5">
               <label
                 htmlFor="Description"
                 className="text-sm font-medium text-base-content"
               >
-                Description
+                Workflow
               </label>
-              <textarea
-                required
-                onChange={handleknoledgeChange}
-                name="Description"
-                id="Description"
-                className="textarea textarea-bordered h-24 max-h-44"
-                placeholder="Description"
+              <ReactQuill
+                value={quillText}
+                onChange={(value) => setQuillText(value)}
+                modules={modules}
+                formats={formats}
+                className="quill h-44"
+                placeholder="Type your workflow here..."
               />
             </div>
           </>
         ) : null}
-        {Knowledgebase.Category !=="" && Knowledgebase.SubCategory !== "" ? 
-        (<div className="form-control mt-6">
-        <button
-          type="submit"
-          className="btn btn-primary btn-wide shadow-md"
-          onClick={Handleknoledgebutton}
-          
-        >
-          Add
-        </button>
-      </div>) : (<div className="form-control mt-6">
+
+        {Knowledgebase.Category !== "" && Knowledgebase.SubCategory !== "" ? (
+        <div className="form-control mt-6">
+          <button
+            type="submit"
+            className="btn btn-primary btn-wide shadow-md"
+            onClick={Handleknoledgebutton}
+            disabled={isAddButtonDisabled()}
+          >
+            Add
+          </button>
+        </div>
+      ) : (
+        <div className="form-control mt-6">
           <button
             type="submit"
             className="btn btn-primary btn-wide shadow-md"
@@ -474,21 +660,50 @@ const Index = () => {
           >
             Add
           </button>
-        </div>)}
-          
-        
+        </div>
+      )}
       </div>
       {Knowledgebase.Category !== "" ? (
         <div className="ml-5 space-y-4 my-24">
-          {filteredQuestions.map((question) => (
-            <Question key={question._id} question={question} />
-          ))}
+          {user.UserInfo.role === "User" ||  user.UserInfo.role === "Admin"?
+            filteredQuestions.map((question) => (
+              <Question
+                key={question._id}
+                question={question}
+                userRole={user.UserInfo.role}
+              />
+            )) : null}
+          <div className="ml-5 space-y-4 my-24">
+            {user.UserInfo.role === "Agent" &&
+              filteredWorkflows.map((workflow) => (
+                <Workflow
+                  key={workflow._id}
+                  workflow={workflow}
+                  userRole={user.UserInfo.role}
+                />
+              ))}
+          </div>
         </div>
       ) : (
         <div className="ml-5 space-y-4 my-24">
-          {questions.map((question) => (
-            <Question key={question._id} question={question} />
-          ))}
+          {user.UserInfo.role === "User" ||  user.UserInfo.role === "Admin"?
+            questions.map((question) => (
+              <Question
+                key={question._id}
+                question={question}
+                userRole={user.UserInfo.role}
+              />
+            )) : null}
+          <div className="ml-5 space-y-4 my-24">
+            {user.UserInfo.role === "Agent" &&
+              workflows.map((workflow) => (
+                <Workflow
+                  key={workflow._id}
+                  workflow={workflow}
+                  userRole={user.UserInfo.role}
+                />
+              ))}
+          </div>
         </div>
       )}
     </div>
