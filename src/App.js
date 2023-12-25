@@ -33,9 +33,8 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
           <Route path="preferences" element={<Preferences />} />
-          <Route path="messages" element={<MessagesSliderbar />} >
-            <Route path=":id" element={<Chat />} /> 
-          </Route>
+          <Route path="messages" element={<MessagesSliderbar />} />
+          <Route path="messages/:id" element={<Chat />} />
           <Route path="users" element={<Users />} />
           <Route path="backup" element={<Backup />} />
           {/* <Route path="faq" element={<FAQ />} /> */}

@@ -3,15 +3,18 @@ import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
 import Chat from '../../components/Messages/Chat'
-import SecondarySliderbar from './MessagesSliderbar/Index'
 import { Outlet } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
+import { set } from 'lodash'
 
 
 const Index = () => {
 
+
     useEffect(() => {
+
+
         const token = Cookies.get('token')
         if (token) {
             handleGetTheme();
@@ -84,11 +87,9 @@ const Index = () => {
                     ) : (
                         // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
                         <Outlet />
-
                     )}
-                    <Chat />
                 </div>
-                
+
             </div>
         </>
     )
