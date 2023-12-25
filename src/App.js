@@ -22,6 +22,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* TODO check user role */}
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
