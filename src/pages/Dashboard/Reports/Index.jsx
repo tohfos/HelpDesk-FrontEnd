@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import Header from '../../../components/Report/Header';
 import GenReport from '../../../components/Report/GenReport';
-import Report from '../../../components/Report/Report';
 import ViewReports from '../../../components/Report/ViewReports';
 
 const ReportsContainer = () => {
