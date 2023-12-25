@@ -27,7 +27,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />}>
-
           <Route path="mytickets" element={<MyTickets />} />
           <Route path="reports" element={<Reports />} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
@@ -37,8 +36,6 @@ function App() {
           <Route path="backup" element={<Backup />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="profile" element={<Profile />} />
-          
-
         </Route>
         <Route path='/resetpassword' element={<ResetPassword />} />
         <Route path='/test' element={<Test />} />
