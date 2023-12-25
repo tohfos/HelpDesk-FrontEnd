@@ -7,10 +7,10 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 //add notification for ticket started and resolved
-import socketIOClient from "socket.io-client";
+//import socketIOClient from "socket.io-client";
 
 
-const Ticket = ({ ticket }) => {
+const Ticket = ({ ticket , socket }) => {
 
     const user = jwtDecode(Cookies.get('token'));
 
@@ -48,11 +48,15 @@ const Ticket = ({ ticket }) => {
             console.log(data);
             if (response.status === 200) {
 
-                // send notification to user
-                socket.emit("ticketStarted", {
-                    message: "Ticket Started!",
-                    userid: ticket.userid
+                console.log("send notification")
+                socket.emit("sendNotification", {
+                    notification: "Ticket Started!",
                 });
+                // // send notification to user
+                // socket.emit("ticketStarted", {
+                //     message: "Ticket Started!",
+                //     userid: ticket.userid
+                // });
 
 
                 success("Ticket Started!")
@@ -81,12 +85,18 @@ const Ticket = ({ ticket }) => {
             console.log(data);
 
             if (response.status === 200) {
+                //console.log("socket fe Ticket: ", socket);
 
-                // send notification to user
-                socket.emit("ticketResolved", {
-                    message: "Ticket Resolved!",
-                    userid: ticket.userid
+                console.log("send notification")
+                socket.emit("sendNotification", {
+                    notification: "Ticket Solved!"
                 });
+
+                // // send notification to user
+                // socket.emit("ticketResolved", {
+                //     message: "Ticket Resolved!",
+                //     userid: ticket.userid
+                // });
 
                 success("Ticket Resolved!")
             } else {
@@ -99,16 +109,21 @@ const Ticket = ({ ticket }) => {
         }
     }
 
-    // handle notification for ticket started and resolved
-    const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
-    socket.on("ticketStarted", (data) => {
-        console.log(data);
-        success(data.message)
+    // // handle notification for ticket started and resolved
+    // const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
+    // socket.on("ticketStarted", (data) => {
+    //     console.log(data);
+    //     success(data.message)
+    // });
+    socket.on("newNotification 1", (data) => {
+        console.log("abdo abooof" , data);
+        // socket.emit("sendNotification", {
+        //     notification: data.notification,
+        // });
+        success(data)
     });
-    socket.on("ticketResolved", (data) => {
-        console.log(data);
-        success(data.message)
-    });
+
+    
 
 
     const fail = (alert) => {

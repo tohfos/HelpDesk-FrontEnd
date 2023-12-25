@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 
 
-const Index = () => {
+const Index = ({ socket }) => {
 
     const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]);
@@ -19,6 +19,7 @@ const Index = () => {
 
 
     useEffect(() => {
+        //console.log("socket ely fel myticket: ",socket);
         fetchTickets();
         console.log(allTickets);
         console.log(tickets);
@@ -133,7 +134,7 @@ const Index = () => {
                         {/* <!-- Tickets --> */}
                         <div className="ml-5 space-y-4 my-24">
                             {currentTickets.map((ticket) => (
-                                <Ticket key={ticket._id} ticket={ticket} />
+                                <Ticket key={ticket._id} socket={socket} ticket={ticket} />
                             ))}
                         </div>
                     </div>

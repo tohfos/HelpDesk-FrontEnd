@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { jwtDecode } from 'jwt-decode'
 
 
-const CreateTicketButton = () => {
+const CreateTicketButton = ({socket}) => {
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false)
     const [rangeClassName, setRangeClassName] = useState('range-success')
@@ -112,7 +112,10 @@ useEffect(() => {
                     category: '',
                     subcategory: ''
                 })
-
+                console.log("ticket id ", data.ticket._id)
+                // socket.emit("joinRoom",{
+                //     RoomId:data.ticket._id
+                // })
                 // refresh the page
                 window.location.reload()
             }
