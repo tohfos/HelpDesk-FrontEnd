@@ -115,7 +115,7 @@ const Ticket = ({ ticket }) => {
                                     </div>
                                 </div>
                             </div>
-                            : ""
+                            : null
                         }
 
                         {/* TODO Start the chat with the agent */}
