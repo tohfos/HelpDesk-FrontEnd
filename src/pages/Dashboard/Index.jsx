@@ -9,7 +9,6 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
 
 
-
 const Index = () => {
 
     useEffect(() => {
@@ -85,8 +84,11 @@ const Index = () => {
                     ) : (
                         // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
                         <Outlet />
+
                     )}
+                    <Chat />
                 </div>
+                
             </div>
         </>
     )
