@@ -101,14 +101,16 @@ const Ticket = ({ ticket }) => {
 
     // handle notification for ticket started and resolved
     const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
-    socket.on("ticketStarted", (data) => {
-        console.log(data);
-        success(data.message)
-    });
-    socket.on("ticketResolved", (data) => {
-        console.log(data);
-        success(data.message)
-    });
+    useEffect(() => {
+        socket.on("ticketStarted", (data) => {
+            console.log(data);
+            success(data.message)
+        });
+        socket.on("ticketResolved", (data) => {
+            console.log(data);
+            success(data.message)
+        });
+    }, []);
 
 
     const fail = (alert) => {
@@ -153,7 +155,7 @@ const Ticket = ({ ticket }) => {
                         {/* add color to priority */}
                         <div class="space-y-1 border-r-2 pr-3">
                             <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal  pr"> Ticket #</span> {ticket._id}</div>
-                            <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal "> Assinged to: </span> {ticket.assignedTo}</div>
+                            <div class="text-sm leading-5 font-semibold"><span class={`text-xs leading-4 font-normal ${user.UserInfo.userid === ticket.assignedTo ? "text-primary" : ""}`}> Assinged to: </span> {ticket.assignedTo}</div>
                             <div class="text-sm leading-5 font-semibold">Created at: {ticket.createdAt}</div>
                         </div>
                         <div class="flex-1">
@@ -210,7 +212,7 @@ const Ticket = ({ ticket }) => {
                         <div>
                             {/* Drop down button */}
                             {/* only for agent */}
-                            {(user.UserInfo.role === "Agent" && user.UserInfo.userid === ticket.assignedTo) && (
+                            {(user.UserInfo.role === "Agent" && user.UserInfo.userid === ticket.assignedTo && ticket.status !== "Resolved") && (
                                 <>
                                     <div class="dropdown dropdown-hover dropdown-end">
                                         <div tabindex="0" class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">

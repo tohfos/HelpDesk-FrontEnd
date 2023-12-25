@@ -435,10 +435,9 @@ const Index = () => {
   };
   return (
     <div
-      className="hero flex min-h-screen justify-center py-12 overflow-visible bg-base-100"
-      style={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}
+      className="hero flex flex-col h-full justify-center py-12 overflow-y-auto bg-base-100"
     >
-      <div className="flex flex-col space-y-4 max-w-lg mx-auto">
+      <div className="flex flex-row space-y-4 max-w-lg mx-auto mt-96">
         <div className="flex flex-col space-y-4 md:p-5">
           <label
             htmlFor="Category"
@@ -636,12 +635,12 @@ const Index = () => {
         <div className="ml-5 space-y-4 my-24">
           {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
             ? filteredQuestions.map((question) => (
-                <Question
-                  key={question._id}
-                  question={question}
-                  userRole={user.UserInfo.role}
-                />
-              ))
+              <Question
+                key={question._id}
+                question={question}
+                userRole={user.UserInfo.role}
+              />
+            ))
             : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&
@@ -658,12 +657,12 @@ const Index = () => {
         <div className="ml-5 space-y-4 my-24">
           {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
             ? questions.map((question) => (
-                <Question
-                  key={question._id}
-                  question={question}
-                  userRole={user.UserInfo.role}
-                />
-              ))
+              <Question
+                key={question._id}
+                question={question}
+                userRole={user.UserInfo.role}
+              />
+            ))
             : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&

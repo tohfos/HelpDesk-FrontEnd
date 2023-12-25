@@ -55,7 +55,7 @@ const GetFAQs = () => {
   };
 
   return (
-    <div className="hero flex min-h-screen justify-center py-12 overflow-visible bg-base-100">
+    <div className="hero flex flex-row min-h-screen justify-center py-12 overflow-visible bg-base-100">
       <div className="form-control">
         <div className="input-group">
           <div className="label">
