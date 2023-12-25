@@ -3,6 +3,11 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 import ViewTicketModal from './ViewTicketModal';
 import RateTicketModal from './RateTicketModal';
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
+//add notification for ticket started and resolved
+import socketIOClient from "socket.io-client";
 
 
 const Ticket = ({ ticket }) => {
@@ -41,8 +46,23 @@ const Ticket = ({ ticket }) => {
             });
             const data = await response.json();
             console.log(data);
+            if (response.status === 200) {
+
+                // send notification to user
+                socket.emit("ticketStarted", {
+                    message: "Ticket Started!",
+                    userid: ticket.userid
+                });
+
+
+                success("Ticket Started!")
+
+            } else {
+                fail(data.message)
+            }
             //refresh page
-            window.location.reload();
+            // window.location.reload();
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -59,12 +79,64 @@ const Ticket = ({ ticket }) => {
             });
             const data = await response.json();
             console.log(data);
-            //refresh page
-            window.location.reload();
+
+            if (response.status === 200) {
+
+                // send notification to user
+                socket.emit("ticketResolved", {
+                    message: "Ticket Resolved!",
+                    userid: ticket.userid
+                });
+
+                success("Ticket Resolved!")
+            } else {
+                fail(data.message)
+            }
+
+
         } catch (error) {
             console.error('Error:', error);
         }
     }
+
+    // handle notification for ticket started and resolved
+    const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
+    socket.on("ticketStarted", (data) => {
+        console.log(data);
+        success(data.message)
+    });
+    socket.on("ticketResolved", (data) => {
+        console.log(data);
+        success(data.message)
+    });
+
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    const success = (alert) => {
+        toast.success(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+
+        });
+    };
+
+
 
 
 
@@ -81,7 +153,7 @@ const Ticket = ({ ticket }) => {
                         {/* add color to priority */}
                         <div class="space-y-1 border-r-2 pr-3">
                             <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal  pr"> Ticket #</span> {ticket._id}</div>
-                            <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal "> Assingeed to: </span> {ticket.assignedTo}</div>
+                            <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal "> Assinged to: </span> {ticket.assignedTo}</div>
                             <div class="text-sm leading-5 font-semibold">Created at: {ticket.createdAt}</div>
                         </div>
                         <div class="flex-1">
@@ -138,7 +210,7 @@ const Ticket = ({ ticket }) => {
                         <div>
                             {/* Drop down button */}
                             {/* only for agent */}
-                            {user.UserInfo.role === "Agent" && (
+                            {(user.UserInfo.role === "Agent" && user.UserInfo.userid === ticket.assignedTo) && (
                                 <>
                                     <div class="dropdown dropdown-hover dropdown-end">
                                         <div tabindex="0" class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
@@ -170,6 +242,7 @@ const Ticket = ({ ticket }) => {
             </div>
             <ViewTicketModal isOpen={ViewTicketModalIsOpen} onRequestClose={handleCloseViewTicketModal} ticket={ticket} />
             <RateTicketModal isOpen={rateModalIsOpen} onRequestClose={handleCloseRateModal} ticket={ticket} />
+            <ToastContainer />
         </>
     )
 }
