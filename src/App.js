@@ -16,7 +16,7 @@ import Users from './pages/Dashboard/Users/Index';
 import Backup from './pages/Dashboard/Backup/Index';
 // import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
 import Profile from './pages/Profile/Index';
-import Chat from './components/Messages/Chat';
+import Chat from './components/Messages/Chat';import Analytics from './pages/Dashboard/Analytics'
 
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="mytickets" element={<MyTickets />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="analytics" element={< Analytics/>} />
           <Route path="knowledgebase" element={<KnowledgeBase />} />
           <Route path="preferences" element={<Preferences />} />
           <Route path="messages" element={<MessagesSliderbar />} />
