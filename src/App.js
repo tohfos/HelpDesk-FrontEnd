@@ -35,6 +35,7 @@ function App() {
           <Route path="messages" element={<MessagesSliderbar />} />
           <Route path="users" element={<Users />} />
           <Route path="backup" element={<Backup />} />
+          <Route path="faq" element={<FAQ />} />
           {/* <Route path="faq" element={<FAQ />} /> */}
           {/* <Route path="getFAQ" element={<GetFAQs />} /> */}
           <Route path="profile" element={<Profile />} />
