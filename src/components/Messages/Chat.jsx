@@ -92,6 +92,10 @@ const Chat = () => {
 
         socket.on('newMessage', (message) => {
             console.log(message);
+            setMessages([...messages, message]);
+
+            //update chat
+            fetchChat();
         });
 
     }, [messages]);
