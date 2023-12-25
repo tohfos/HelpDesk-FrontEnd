@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import Question from "../../../components/Question/Question";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // import the styles
 import Workflow from "../../../components/WorkFlow/WorkFlow";
+import Fuse from "fuse.js";
 
 const Index = () => {
   // TODO answer and description functionality for admin and agent
@@ -34,6 +35,13 @@ const Index = () => {
   const [allWorkflows, setAllWorkflows] = useState([]);
   const [workflows, setWorkflows] = useState([]);
   const [filteredWorkflows, setFilteredWorkflows] = useState([]);
+
+  const fuseOptions = {
+    keys: ["Question"],
+    threshold: 0.4, // Set your desired threshold here
+  };
+
+  const fuse = new Fuse(allQuestions, fuseOptions);
 
   const modules = {
     toolbar: [
@@ -92,74 +100,31 @@ const Index = () => {
   const handleSearch = async (searchTerm) => {
     setSearchTerm(searchTerm);
 
-    if (user.UserInfo.role === "User"){
-      if (searchTerm === "") {
-        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
-          // If no category or subcategory is selected, reset to all questions
-          setQuestions(allQuestions.filter(filterUserQuestions));
-          setFilteredQuestions([]);
-        } else {
-          // If a category or subcategory is selected, reset to filtered questions
-          setQuestions([]);
-          handleFiltredQuestion();
-        }
+    const filterFunction =
+      user.UserInfo.role === "User"
+        ? filterUserQuestions
+        : filterAdminQuestions;
+
+    if (searchTerm === "") {
+      // If no search term, reset to all questions
+      setQuestions(allQuestions.filter(filterFunction));
+      setFilteredQuestions([]);
+    } else {
+      // If there is a search term, use Fuse to filter the questions
+      const result = fuse.search(searchTerm);
+
+      if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
+        // If no category or subcategory is selected, update all questions
+        setQuestions(result.map(({ item }) => item).filter(filterFunction));
+        setFilteredQuestions([]);
       } else {
-        // If there is a search term, filter the questions
-        const filtered = allQuestions.filter((question) => {
-          // Check if question and question.Question are defined before filtering
-          return (
-            question &&
-            question.Question &&
-            question.Answer &&
-            question.Question.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-        });
-  
-        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
-          // If no category or subcategory is selected, update all questions
-          setQuestions(filtered.filter(filterUserQuestions));
-          setFilteredQuestions([]);
-        } else {
-          // If a category or subcategory is selected, update filtered questions
-          setFilteredQuestions(filtered.filter(filterUserQuestions));
-          setQuestions([]);
-        }
-      }
-    }else if (user.UserInfo.role === "Admin"){
-      if (searchTerm === "") {
-        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
-          // If no category or subcategory is selected, reset to all questions
-          setQuestions(allQuestions.filter(filterAdminQuestions));
-          setFilteredQuestions([]);
-        } else {
-          // If a category or subcategory is selected, reset to filtered questions
-          setQuestions([]);
-          handleFiltredQuestion();
-        }
-      } else {
-        // If there is a search term, filter the questions
-        const filtered = allQuestions.filter((question) => {
-          // Check if question and question.Question are defined before filtering
-          return (
-            question &&
-            question.Question &&
-            question.Answer &&
-            question.Question.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-        });
-  
-        if (Knowledgebase.Category === "" && Knowledgebase.SubCategory === "") {
-          // If no category or subcategory is selected, update all questions
-          setQuestions(filtered.filter(filterAdminQuestions));
-          setFilteredQuestions([]);
-        } else {
-          // If a category or subcategory is selected, update filtered questions
-          setFilteredQuestions(filtered.filter(filterAdminQuestions));
-          setQuestions([]);
-        }
+        // If a category or subcategory is selected, update filtered questions
+        setFilteredQuestions(
+          result.map(({ item }) => item).filter(filterFunction)
+        );
+        setQuestions([]);
       }
     }
-    
   };
 
   // Helper function to filter questions for the "User" role
@@ -169,12 +134,16 @@ const Index = () => {
 
   // Helper function to filter questions for the "User" role
   const filterAdminQuestions = (question) => {
-    return user.UserInfo.role === "Admin" && question.Question !== undefined && (question.Answer !== undefined || question.Answer === undefined);
+    return (
+      user.UserInfo.role === "Admin" &&
+      question.Question !== undefined &&
+      (question.Answer !== undefined || question.Answer === undefined)
+    );
   };
   // Helper function to check if the "Add" button should be enabled
   const isAddButtonDisabled = () => {
     if (user.UserInfo.role === "User") {
-      return !Knowledgebase.Question.trim() || !quillText.trim();
+      return !Knowledgebase.Question.trim();
     } else if (user.UserInfo.role === "Admin") {
       return !(Knowledgebase.Question.trim() && Knowledgebase.Answer.trim());
     } else if (user.UserInfo.role === "Agent") {
@@ -359,7 +328,7 @@ const Index = () => {
 
           if (user.UserInfo.role === "User") {
             filteredQuestions = data.filter(
-              (question) => question.Answer !== undefined 
+              (question) => question.Answer !== undefined
             );
           } else {
             filteredQuestions = data;
@@ -470,7 +439,7 @@ const Index = () => {
       style={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}
     >
       <div className="flex flex-col space-y-4 max-w-lg mx-auto">
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 md:p-5">
           <label
             htmlFor="Category"
             className="text-sm font-medium text-base-content"
@@ -494,7 +463,7 @@ const Index = () => {
         </div>
 
         {Knowledgebase.Category === "Software" && (
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1 md:p-5">
             <label
               htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
@@ -520,7 +489,7 @@ const Index = () => {
         )}
 
         {Knowledgebase.Category === "Hardware" && (
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1 md:p-5">
             <label
               htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
@@ -547,7 +516,7 @@ const Index = () => {
         )}
 
         {Knowledgebase.Category === "Network" && (
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1 md:p-5">
             <label
               htmlFor="SubCategory"
               className="text-sm font-medium text-base-content"
@@ -574,7 +543,7 @@ const Index = () => {
         )}
 
         {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" ? (
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y- 1 md:p-5">
             <div className="label">
               <label
                 htmlFor="question"
@@ -596,10 +565,9 @@ const Index = () => {
           </div>
         ) : null}
 
-          
         {user.UserInfo.role === "Admin" ? (
           <>
-            <div className="flex flex-col space-y-1">
+            <div className="flex flex-col space-y- 1 md:p-5">
               <label
                 htmlFor="Answer"
                 className="text-sm font-medium text-base-content"
@@ -618,9 +586,10 @@ const Index = () => {
             </div>
           </>
         ) : null}
+
         {user.UserInfo.role === "Agent" ? (
           <>
-            <div className="flex flex-col space-y-4 ml-5">
+            <div className="flex flex-col space-y-1 ml-5 md:p-5">
               <label
                 htmlFor="Description"
                 className="text-sm font-medium text-base-content"
@@ -640,39 +609,40 @@ const Index = () => {
         ) : null}
 
         {Knowledgebase.Category !== "" && Knowledgebase.SubCategory !== "" ? (
-        <div className="form-control mt-6">
-          <button
-            type="submit"
-            className="btn btn-primary btn-wide shadow-md"
-            onClick={Handleknoledgebutton}
-            disabled={isAddButtonDisabled()}
-          >
-            Add
-          </button>
-        </div>
-      ) : (
-        <div className="form-control mt-6">
-          <button
-            type="submit"
-            className="btn btn-primary btn-wide shadow-md"
-            onClick={Handleknoledgebutton}
-            disabled="disabled"
-          >
-            Add
-          </button>
-        </div>
-      )}
+          <div className="flex flex-col form-control mt-10 p-5 md:p-14">
+            <button
+              type="submit"
+              className="btn btn-primary btn-wide md:w-full lg:w-auto shadow-md"
+              onClick={Handleknoledgebutton}
+              disabled={isAddButtonDisabled()}
+            >
+              Add
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col form-control mt-10 p-5 md:p-14">
+            <button
+              type="submit"
+              className="btn btn-primary btn-wide md:w-full lg:w-auto shadow-md"
+              onClick={Handleknoledgebutton}
+              disabled="disabled"
+            >
+              Add
+            </button>
+          </div>
+        )}
       </div>
       {Knowledgebase.Category !== "" ? (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" ||  user.UserInfo.role === "Admin"?
-            filteredQuestions.map((question) => (
-              <Question
-                key={question._id}
-                question={question}
-                userRole={user.UserInfo.role}
-              />
-            )) : null}
+          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
+            ? filteredQuestions.map((question) => (
+                <Question
+                  key={question._id}
+                  question={question}
+                  userRole={user.UserInfo.role}
+                />
+              ))
+            : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&
               filteredWorkflows.map((workflow) => (
@@ -686,14 +656,15 @@ const Index = () => {
         </div>
       ) : (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" ||  user.UserInfo.role === "Admin"?
-            questions.map((question) => (
-              <Question
-                key={question._id}
-                question={question}
-                userRole={user.UserInfo.role}
-              />
-            )) : null}
+          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
+            ? questions.map((question) => (
+                <Question
+                  key={question._id}
+                  question={question}
+                  userRole={user.UserInfo.role}
+                />
+              ))
+            : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&
               workflows.map((workflow) => (

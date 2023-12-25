@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify'
@@ -32,10 +32,18 @@ const CreateTicketButton = () => {
 
     const handleTicketChange = (e) => {
         const { name, value } = e.target;
-        setTicket({
-            ...ticket,
-            [name]: value
-        })
+        if (name === "category") {
+            setTicket({
+                ...ticket,
+                [name]: value,
+                subcategory : ""
+            })
+        }else{
+            setTicket({
+                ...ticket,
+                [name]: value,
+            })
+        }
 
         if (name === 'priority') {
             if (value === '0') {
@@ -50,7 +58,9 @@ const CreateTicketButton = () => {
 
         if (ticket.category !== "" && ticket.subcategory !== "") handleGetAutomationAndWorkflow();
     }
-
+useEffect(() => {
+    handleGetAutomationAndWorkflow()
+},[ticket.category, ticket.subcategory])
 
 
 
