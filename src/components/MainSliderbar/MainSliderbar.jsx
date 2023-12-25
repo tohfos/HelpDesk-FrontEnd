@@ -129,6 +129,9 @@ const MainSliderbar = ({ userRole }) => {
                                 <NavLink to="/dashboard/reports" activeClassName="active" className="flex items-center space-x-2 mt-5">
                                     <SliderbarItem itemName="Reports" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="reports" />
                                 </NavLink>
+                                <NavLink to="/dashboard/analytics" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                                    <SliderbarItem itemName="Analytics" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="analytics" />
+                                </NavLink>
                             </>
                         ) : (null)}
 
@@ -145,10 +148,6 @@ const MainSliderbar = ({ userRole }) => {
 
                                 <NavLink to="/dashboard/Backup" activeClassName="active" className="flex items-center space-x-2 mt-3">
                                     <SliderbarItem itemName='Database' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                                </NavLink>
-
-                                <NavLink to="/dashboard/FAQ" activeClassName="active" className="flex items-center space-x-2 mt-3">
-                                    <SliderbarItem itemName='FAQ' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                 </NavLink>
                             </>
                         ) : (null)}
