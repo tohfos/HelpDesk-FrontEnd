@@ -82,7 +82,7 @@ const Index = () => {
                     {/* <!-- Main Content --> */}
                     {loading ? (
                         <div className="w-full h-full flex justify-center items-center">
-                            <h1 className="text-3xl font-semibold text-primary">Loading...</h1>
+                            <span className="loading loading-spinner loading-lg"></span>
                         </div>
                     ) : (
                         // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
