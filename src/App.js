@@ -17,7 +17,7 @@ import Users from './pages/Dashboard/Users/Index';
 // import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
 import Profile from './pages/Profile/Index';
 import Chat from './components/Messages/Chat'; import Analytics from './pages/Dashboard/Analytics'
-
+import Logs from './pages/Dashboard/Logs/Index';
 
 
 function App() {
@@ -39,6 +39,7 @@ function App() {
           <Route path="messages/:id" element={<Chat />} />
           <Route path="users" element={<Users />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="logs" element={<Logs/>}/>
 
         </Route>
         <Route path='/resetpassword' element={<ResetPassword />} />
