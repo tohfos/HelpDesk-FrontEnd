@@ -17,6 +17,7 @@ const Index = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [ticketsPerPage, setTicketsPerPage] = useState(6);
     const user = jwtDecode(Cookies.get('token'));
+    const [isLoading, setIsLoading] = useState(false);
 
 
     useEffect(() => {
@@ -43,12 +44,6 @@ const Index = () => {
         localStorage.setItem('popupState', JSON.stringify(updatedPopupState));
     };
 
-    // useEffect(() => {
-    //     fetchTickets();
-    //     console.log(allTickets);
-    //     console.log(tickets);
-    // }, []);
-
 
     const handleSearch = (searchTerm) => {
         setSearchTerm(searchTerm);
@@ -67,8 +62,9 @@ const Index = () => {
 
     const fetchTickets = async () => {
 
-        if (user.UserInfo.role === "User") {
+        setIsLoading(true);
 
+        if (user.UserInfo.role === "User") {
             try {
                 const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/get`, {
                     method: 'GET',
@@ -81,6 +77,7 @@ const Index = () => {
                 data.reverse();
                 setAllTickets(data);
                 setTickets(data);
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -97,6 +94,8 @@ const Index = () => {
                 data.reverse();
                 setAllTickets(data);
                 setTickets(data);
+                setIsLoading(false);
+
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -116,7 +115,7 @@ const Index = () => {
                 <div className="h-screen overflow-auto">
                     <div className="mt-10 top-0 left-0 mb-10 m-5 flex flex-row space-x-6">
                         {user.UserInfo.role === "User" ?
-                            < CreateTicketButton onTicketCreated={handleTicketCreated}/>
+                            < CreateTicketButton onTicketCreated={handleTicketCreated} />
                             : null
                         }
                         {/* Sort */}
@@ -155,15 +154,33 @@ const Index = () => {
                             ))}
                         </div>
 
-                        {/* <!-- Tickets --> */}
-                        <div className="ml-5 space-y-4 my-24">
-                            {currentTickets.map((ticket) => (
-                                <Ticket key={ticket._id} ticket={ticket} />
-                            ))}
-                        </div>
+                        {isLoading ? (
+                            <div className="flex flex-col gap-4 w-full mt-4 mx-8">
+                                <div className="skeleton h-32 w-full"></div>
+                                <div className="skeleton h-4 w-28"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                                <div className="skeleton h-32 w-full"></div>
+                                <div className="skeleton h-4 w-28"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                                <div className="skeleton h-32 w-full"></div>
+                                <div className="skeleton h-4 w-28"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                                <div className="skeleton h-4 w-full"></div>
+                            </div>
+
+                        ) : (
+                            //Tickets
+                            < div className="ml-5 space-y-4 my-24">
+                                {currentTickets.map((ticket) => (
+                                    <Ticket key={ticket._id} ticket={ticket} />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
-            </div>
+            </div >
             {/* {showPopup && (
                 <div className="popup">
                     <p>This is the popup content</p>

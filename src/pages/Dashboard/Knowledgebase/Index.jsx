@@ -424,7 +424,7 @@ const Index = () => {
   };
   return (
     <div
-      className="flex flex-col h-screen py-12 overflow-y-auto bg-base-100"
+      className="flex flex-col h-screen w-full py-12 overflow-y-auto bg-base-100"
     >
       <div className="flex flex-row space-x-4">
         <div className="flex flex-col space-y-1 md:p-5">
