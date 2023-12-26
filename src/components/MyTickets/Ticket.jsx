@@ -134,7 +134,7 @@ const Ticket = ({ ticket }) => {
 
     const handleEmailUser = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/emailUser/${ticket._id}`, {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/communicate/${ticket._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ const Ticket = ({ ticket }) => {
     const handleTicketResolvedUpdate = async () => {
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/updateTicket/${ticket._id}`, {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/solveTicket/${ticket._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ const Ticket = ({ ticket }) => {
                 },
                 body: JSON.stringify({
                     status: "Resolved",
-                    rating: 5
+                    // rating: 5
                 })
             });
             const data = await response.json();
