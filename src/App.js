@@ -15,10 +15,9 @@ import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
 import Profile from './pages/Profile/Index';
 
-import Chat from './components/Messages/Chat'; import Analytics from './pages/Dashboard/Analytics'
-import Logs from './pages/Dashboard/Logs/Index';
 import Chat from './components/Messages/Chat';
 import Analytics from './pages/Dashboard/Analytics'
+import Logs from './pages/Dashboard/Logs/Index';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
 
