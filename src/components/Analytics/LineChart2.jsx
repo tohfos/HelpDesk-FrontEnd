@@ -27,7 +27,7 @@ const LineChart2 = ({ y,string,labels }) => {
             label: string,
             data: myFeatures,
             backgroundColor: 'rgba(75,192,192,0.4)',
-            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBorderColor: 'yellow',
             borderColor:'blue'
         }]
     };
@@ -63,7 +63,7 @@ const LineChart2 = ({ y,string,labels }) => {
         padding:'20px'
     }
   }>
-  <Line data={data} options={options}></Line>
+  <Line data={data} options={options} ></Line>
   </div>
   );
 };

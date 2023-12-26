@@ -6,6 +6,25 @@ import Agent from '../../../components/Analytics/Agent'
 import TicketCategory from '../../../components/Analytics/TicketCategory'
 import SubCategory from '../../../components/Analytics/SubCategory'
 import LineChart2 from '../../../components/Analytics/LineChart2'
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Legend,
+    Tooltip
+  )
 const Index = () => {
     const [showGenAnalysis, setShowGenAnalysis] = useState(false)
     const [startDate,setStartDate]= useState(null)
@@ -16,7 +35,7 @@ const Index = () => {
     const [rating,setRating] = useState([])
     const [resolutionTime,setResolutionTime] = useState([])
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (id,category,subCategory) => {
           try {
             let response;
             let data;
@@ -70,7 +89,48 @@ const Index = () => {
     
         
       }, [ startDate, endDate, value]); 
-    const handleChange = (event) => {
+      const data = {
+        labels: tickets,
+        datasets: [{
+            label: `analytics for ${value} for ratings`,
+            data: rating,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            pointBorderColor: 'yellow',
+            borderColor:'blue'
+        }]
+    };
+    const data2 = {
+        labels: tickets,
+        datasets: [{
+            label: `analytics for ${value} for resolution time in hours`,
+            data: resolutionTime,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            pointBorderColor: 'yellow',
+            borderColor:'blue'
+        }]
+    };
+    const options = {
+        plugins: {
+            legend: true,
+
+        },
+        scales: {
+            x:{
+                grid:{
+                    display:false
+                }
+            },
+            y:{
+                ticks:{
+                    stepSize:1
+                },
+                grid:{
+                    borderDash:[10]
+                }
+            }
+        }
+    }
+      const handleChange = (event) => {
 
         setValue(event.target.value);
      
@@ -123,12 +183,16 @@ const Index = () => {
          console.log("abo 7amada",data)
          let ticks = data.analyticsDetails.ticketId
          setTickets(ticks.map((ticket)=>ticket))
+
          console.log(tickets)
          let rates = data.analyticsDetails.Rating
          setRating(rates.map((ratings)=>ratings))
+
          console.log('ratings',rating)
          let times = data.analyticsDetails.ResolutionTime
          setResolutionTime(times.map((time)=>time))
+         
+
      }catch (error) {
          console.log(error)
      }  
@@ -209,26 +273,37 @@ const Index = () => {
 </label>}
 <> 
         {value==='Agent' && <Agent onAdd={generateAnalyticsAgent}/> }
-        {value==='Agent' && 
-        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
- }
-        {value==='Agent' && 
-        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
- }
+        
         {value==='ticketCategory' && <TicketCategory onAdd={generateAnalyticsCategory}/>}
-        {value==='ticketCategory' && 
-        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
+       
+        {value==='SubCategory' && <SubCategory onAdd={generateAnalyticsSubCategory} />}
+        
+        <div style={
+    {
+        width:'1000px',
+        height:'300px',
+        padding:'20px'
+    }
+  }> {value==='Agent' && 
+        <Line data={data} options={options}/>        
+    }
+        {value==='Agent' && 
+        <Line data={data2} options={options}/>        
+    }
+  {value==='ticketCategory' && 
+        <Line data={data} options={options}/>        
     }
         {value==='ticketCategory' && 
-        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
+        <Line data={data2} options={options}/>        
     }
-        {value==='SubCategory' && <SubCategory onAdd={generateAnalyticsSubCategory}/>}
-        {value==='SubCategory' && 
-        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
- }
-        {value==='ticketCategory' && 
-        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
-    }   
+    {value==='SubCategory' && 
+        <Line data={data} options={options}/>        
+    }
+    
+    {value==='SubCategory' && 
+        <Line data={data2} options={options}/>        
+    }
+    </div>
         </>
       </>
       
