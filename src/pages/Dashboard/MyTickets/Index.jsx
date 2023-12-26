@@ -61,7 +61,7 @@ const Index = () => {
             ));
         }
     }
-    
+
     const handleFilter = (filterItem) => {
         setFilterItem(filterItem)
         if (filterItem === '') {
@@ -70,7 +70,7 @@ const Index = () => {
             setTickets(allTickets.filter((ticket) => {
                 if (filterItem === 'Software' || filterItem === 'Hardware' || filterItem === 'Network' || filterItem === 'Other')
                     return ticket.ticketCategory === filterItem
-                else 
+                else
                     return ticket.status === filterItem
             }
             ));

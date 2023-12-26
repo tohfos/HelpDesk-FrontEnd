@@ -53,10 +53,10 @@ function App() {
                 : <Route path="*" element={<NotFound />} />}
 
               {user.UserInfo.role === 'Admin' ?
-                 (
+                (
                   <>
-                <Route path="preferences" element={<Preferences />} />
-                <Route path="logs" element={<Logs/>}/>
+                    <Route path="preferences" element={<Preferences />} />
+                    <Route path="logs" element={<Logs />} />
                   </>
                 )
                 : <Route path="*" element={<NotFound />} />}
