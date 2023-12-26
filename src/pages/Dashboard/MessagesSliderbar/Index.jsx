@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import Contact from '../../../components/Messages/Contact'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
-import Chat from '../../../components/Messages/Chat'
 
 const Index = () => {
     const user = jwtDecode(Cookies.get('token'));
@@ -38,7 +37,7 @@ const Index = () => {
             <div class="h-screen overflow-auto">
                 {contacts.map((contact) => (
                     <NavLink to={`/dashboard/messages/${contact.ticketId}`} activeClassName="active" className="flex items-center space-x-2 mt-5">
-                        <Contact contactName={contact.ticketId} contactLastText="Ok, Thanks." />
+                        <Contact contactName={contact.ticketId} />
                     </NavLink>
                 ))}
 
