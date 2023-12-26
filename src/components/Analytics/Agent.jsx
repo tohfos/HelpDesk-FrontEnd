@@ -6,7 +6,7 @@ const Agent = ({onAdd}) => {
         e.preventDefault()
     
         if (!agentId) {
-          alert('Please add a ticket id')
+          alert('Please add an agent id')
           return
         }
         onAdd({ agentId })
