@@ -147,6 +147,10 @@ const MainSliderbar = ({ userRole }) => {
                                 <NavLink to="/dashboard/preferences" activeClassName="active" className="flex items-center space-x-2 mt-3">
                                     <SliderbarItem itemName='Preferences' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M19 14v1a2 2 0 01-2 2h-1.586a2 2 0 00-1.414.586l-1.708 1.707a2 2 0 01-2.828 0l-1.708-1.707a2 2 0 00-1.414-.586H7a2 2 0 01-2-2v-1a2 2 0 012-2h1.586a2 2 0 001.414-.586l1.708-1.707a2 2 0 012.828 0l1.708 1.707a2 2 0 001.414.586H17a2 2 0 012 2zm-7 3a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </NavLink>
+
+                                <NavLink to="/dashboard/logs" activeClassName="active" className="flex items-center space-x-2 mt-3">
+                                    <SliderbarItem itemName='Logs' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M19 14v1a2 2 0 01-2 2h-1.586a2 2 0 00-1.414.586l-1.708 1.707a2 2 0 01-2.828 0l-1.708-1.707a2 2 0 00-1.414-.586H7a2 2 0 01-2-2v-1a2 2 0 012-2h1.586a2 2 0 001.414-.586l1.708-1.707a2 2 0 012.828 0l1.708 1.707a2 2 0 001.414.586H17a2 2 0 012 2zm-7 3a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </NavLink>
                             </>
                         ) : (null)}
 

@@ -14,10 +14,13 @@ import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
 import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
 import Profile from './pages/Profile/Index';
+
 import Chat from './components/Messages/Chat';
 import Analytics from './pages/Dashboard/Analytics'
+import Logs from './pages/Dashboard/Logs/Index';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
+
 
 
 function App() {
@@ -32,6 +35,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
+
 
         {/* check user for token */}
 
@@ -49,7 +53,12 @@ function App() {
                 : <Route path="*" element={<NotFound />} />}
 
               {user.UserInfo.role === 'Admin' ?
+                 (
+                  <>
                 <Route path="preferences" element={<Preferences />} />
+                <Route path="logs" element={<Logs/>}/>
+                  </>
+                )
                 : <Route path="*" element={<NotFound />} />}
 
               <Route path="mytickets" element={<MyTickets />} />
@@ -62,6 +71,7 @@ function App() {
             </Route>
           </>
         ) : <Route path="*" element={<NotFound />} />}
+
         <Route path='/resetpassword' element={<ResetPassword />} />
       </Routes>
     </Router>

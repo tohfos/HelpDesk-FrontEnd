@@ -7,7 +7,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 //add notification for ticket started and resolved
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 
 
 const Ticket = ({ ticket }) => {
@@ -76,10 +76,6 @@ const Ticket = ({ ticket }) => {
             console.log(data);
 
             if (response.status === 200) {
-
-
-
-
                 success("Ticket Resolved!")
             } else {
                 fail(data.message)
@@ -91,18 +87,18 @@ const Ticket = ({ ticket }) => {
         }
     }
 
-    // handle notification for ticket started and resolved
-    const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
-    useEffect(() => {
-        socket.on("ticketStarted", (data) => {
-            console.log(data);
-            success(data.message)
-        });
-        socket.on("ticketResolved", (data) => {
-            console.log(data);
-            success(data.message)
-        });
-    }, []);
+    // // handle notification for ticket started and resolved
+    // const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
+    // useEffect(() => {
+    //     socket.on("ticketStarted", (data) => {
+    //         console.log(data);
+    //         success(data.message)
+    //     });
+    //     socket.on("ticketResolved", (data) => {
+    //         console.log(data);
+    //         success(data.message)
+    //     });
+    // }, []);
 
 
     const handleMessgeAgent = async () => {
@@ -242,7 +238,7 @@ const Ticket = ({ ticket }) => {
                                             )
                                             }
 
-                                            {(ticket.status === "In-Progress") && (
+                                            {(ticket.status === "In Progress") && (
                                                 <li>
                                                     <a onClick={handleSolveTicket} class="flex items-center space-x-2">
                                                         <i class="fas fa-user"></i>

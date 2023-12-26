@@ -37,7 +37,7 @@ const Index = () => {
             <div class="h-screen overflow-auto">
                 {contacts.map((contact) => (
                     <NavLink to={`/dashboard/messages/${contact.ticketId}`} activeClassName="active" className="flex items-center space-x-2 mt-5">
-                        <Contact contactName={contact.ticketId} />
+                        <Contact contactName={contact.title} />
                     </NavLink>
                 ))}
 
