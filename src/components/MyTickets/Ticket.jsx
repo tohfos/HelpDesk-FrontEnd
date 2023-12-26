@@ -48,11 +48,6 @@ const Ticket = ({ ticket }) => {
             console.log(data);
             if (response.status === 200) {
 
-                // send notification to user
-                socket.emit("ticketStarted", {
-                    message: "Ticket Started!",
-                    userid: ticket.userid
-                });
 
 
                 success("Ticket Started!")
@@ -82,11 +77,8 @@ const Ticket = ({ ticket }) => {
 
             if (response.status === 200) {
 
-                // send notification to user
-                socket.emit("ticketResolved", {
-                    message: "Ticket Resolved!",
-                    userid: ticket.userid
-                });
+
+
 
                 success("Ticket Resolved!")
             } else {
