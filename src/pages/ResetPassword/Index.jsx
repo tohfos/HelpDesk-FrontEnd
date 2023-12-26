@@ -136,7 +136,7 @@ const Index = () => {
                                     placeholder="Confirm your new password"
                                     className="input input-bordered"
                                     required
-                                    onChange={handleNewPasswordChange}
+                                    onChange={handleConfirmPasswordChange}
                                     value={confirmPassword}
                                 />
                             </div>
