@@ -5,17 +5,11 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import Question from "../../../components/Question/Question";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // import the styles
+import "react-quill/dist/quill.snow.css";
 import Workflow from "../../../components/WorkFlow/WorkFlow";
 import Fuse from "fuse.js";
 
 const Index = () => {
-  // TODO answer and description functionality for admin and agent
-  // TODO search functionality
-  // TODO filter functionality
-  // TODO pagination
-  // TODO show the questions
-
   //I will get all the questions first and save them in all question api
   //after that when trying to get the filtered question based on the selection I have made I will call the respective api for it
   //adn then say bismallah
@@ -260,11 +254,6 @@ const Index = () => {
         fail("Failed to Add workflow", error.message);
       }
     }
-    // else if (user.UserInfo.Role === "User") {
-    // console.log(Knowledgebase)
-
-    // }
-    //window.location.reload();
     if (Knowledgebase.Category === "") {
       if (user.UserInfo.role !== "Agent") handleGetQuestions();
       else handleGetWorkflows();
@@ -435,10 +424,10 @@ const Index = () => {
   };
   return (
     <div
-      className="hero flex flex-col h-full justify-center py-12 overflow-y-auto bg-base-100"
+      className="flex flex-col h-screen py-12 overflow-y-auto bg-base-100"
     >
-      <div className="flex flex-row space-y-4 max-w-lg mx-auto mt-96">
-        <div className="flex flex-col space-y-4 md:p-5">
+      <div className="flex flex-row space-x-4">
+        <div className="flex flex-col space-y-1 md:p-5">
           <label
             htmlFor="Category"
             className="text-sm font-medium text-base-content"
@@ -542,7 +531,7 @@ const Index = () => {
         )}
 
         {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" ? (
-          <div className="flex flex-col space-y- 1 md:p-5">
+          <div className="flex flex-col space-y-1 md:p-5">
             <div className="label">
               <label
                 htmlFor="question"
@@ -566,7 +555,7 @@ const Index = () => {
 
         {user.UserInfo.role === "Admin" ? (
           <>
-            <div className="flex flex-col space-y- 1 md:p-5">
+            <div className="flex flex-col space-y-1 md:p-5">
               <label
                 htmlFor="Answer"
                 className="text-sm font-medium text-base-content"
@@ -608,7 +597,7 @@ const Index = () => {
         ) : null}
 
         {Knowledgebase.Category !== "" && Knowledgebase.SubCategory !== "" ? (
-          <div className="flex flex-col form-control mt-10 p-5 md:p-14">
+          <div className="flex flex-col form-control p-5 md:p-14">
             <button
               type="submit"
               className="btn btn-primary btn-wide md:w-full lg:w-auto shadow-md"
@@ -619,7 +608,7 @@ const Index = () => {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col form-control mt-10 p-5 md:p-14">
+          <div className="flex flex-col form-control p-5 md:p-14">
             <button
               type="submit"
               className="btn btn-primary btn-wide md:w-full lg:w-auto shadow-md"

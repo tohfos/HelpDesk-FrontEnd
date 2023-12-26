@@ -2,14 +2,9 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
-<<<<<<< HEAD
-=======
-import Chat from '../../components/Messages/Chat'
->>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
 import { Outlet } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
-import { set } from 'lodash'
 
 const Index = () => {
 

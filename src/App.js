@@ -13,18 +13,10 @@ import Reports from './pages/Dashboard/Reports/Index';
 import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
 import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
-<<<<<<< HEAD
-// import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
-import Profile from './pages/Profile/Index';
-import Chat from './components/Messages/Chat';
-import Analytics from './pages/Dashboard/Analytics'
-=======
 
-import Backup from './pages/Dashboard/Backup/Index';
 // import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
 import Profile from './pages/Profile/Index';
-import Chat from './components/Messages/Chat';import Analytics from './pages/Dashboard/Analytics'
->>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
+import Chat from './components/Messages/Chat'; import Analytics from './pages/Dashboard/Analytics'
 
 
 
@@ -40,23 +32,12 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="mytickets" element={<MyTickets />} />
           <Route path="reports" element={<Reports />} />
-<<<<<<< HEAD
           <Route path="analytics" element={< Analytics />} />
-=======
-          <Route path="analytics" element={< Analytics/>} />
->>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
           <Route path="knowledgebase" element={<KnowledgeBase />} />
           <Route path="preferences" element={<Preferences />} />
           <Route path="messages" element={<MessagesSliderbar />} />
           <Route path="messages/:id" element={<Chat />} />
           <Route path="users" element={<Users />} />
-<<<<<<< HEAD
-=======
-
-          <Route path="backup" element={<Backup />} />
-          {/* <Route path="faq" element={<FAQ />} /> */}
-          {/* <Route path="getFAQ" element={<GetFAQs />} /> */}
->>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
           <Route path="profile" element={<Profile />} />
 
         </Route>
