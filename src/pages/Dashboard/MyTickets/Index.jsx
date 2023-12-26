@@ -9,7 +9,6 @@ import { jwtDecode } from 'jwt-decode'
 const Index = () => {
 
     const [showPopup, setShowPopup] = useState(false);
-
     const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
