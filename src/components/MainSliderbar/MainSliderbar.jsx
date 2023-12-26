@@ -119,9 +119,6 @@ const MainSliderbar = ({ userRole }) => {
                         ) : (null)}
 
                         {/* Knowledge is availabe to everyone */}
-                        <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
-                            <SliderbarItem itemName="Knowledge Base" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
-                        </NavLink>
 
                         {/* if user is manager show */}
                         {userRole === 'Manager' ? (
@@ -133,6 +130,7 @@ const MainSliderbar = ({ userRole }) => {
                                     <SliderbarItem itemName="Analytics" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="analytics" />
                                 </NavLink>
                             </>
+<<<<<<< HEAD
                         ) :
                             <>
                                 <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
@@ -140,6 +138,14 @@ const MainSliderbar = ({ userRole }) => {
                                 </NavLink>
                             </>
                         }
+=======
+                        ) : 
+                        <>
+                        <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                            <SliderbarItem itemName="Knowledge Base" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
+                        </NavLink>
+                        </>}
+>>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
 
                         {/*  if user is admin, show users tab */}
                         {userRole === 'Admin' ? (
@@ -194,7 +200,11 @@ const MainSliderbar = ({ userRole }) => {
                             ) : (null)}
 
                             {/* Knowledge is availabe to everyone */}
+<<<<<<< HEAD
 
+=======
+                            
+>>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
 
                             {/* if user is manager show */}
                             {userRole === 'Manager' ? (
@@ -206,12 +216,21 @@ const MainSliderbar = ({ userRole }) => {
                                         <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="analytics" />
                                     </NavLink>
                                 </>
+<<<<<<< HEAD
                             ) :
                                 <>
                                     <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
                                         <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
                                     </NavLink>
                                 </>}
+=======
+                            ) : 
+                            <>
+                                <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                                    <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
+                                </NavLink>
+                            </>}
+>>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
 
                             {/*  if user is admin, show users tab */}
                             {userRole === 'Admin' ? (

@@ -2,14 +2,21 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
+<<<<<<< HEAD
+=======
+import Chat from '../../components/Messages/Chat'
+>>>>>>> 88e589e39c4e20c6bf52c73e8b3e4938ea1f8885
 import { Outlet } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
-
+import { set } from 'lodash'
 
 const Index = () => {
 
+
     useEffect(() => {
+
+
         const token = Cookies.get('token')
         if (token) {
             handleGetTheme();
@@ -79,13 +86,14 @@ const Index = () => {
                     {/* <!-- Main Content --> */}
                     {loading ? (
                         <div className="w-full h-full flex justify-center items-center">
-                            <h1 className="text-3xl font-semibold text-primary">Loading...</h1>
+                            <span className="loading loading-spinner loading-lg"></span>
                         </div>
                     ) : (
                         // renders the outlet component, which can be MyTickets, Messages, Reports, KnowledgeBase, or Preferences
                         <Outlet />
                     )}
                 </div>
+
             </div>
         </>
     )
