@@ -3,6 +3,11 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 import ViewTicketModal from './ViewTicketModal';
 import RateTicketModal from './RateTicketModal';
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
+//add notification for ticket started and resolved
+import socketIOClient from "socket.io-client";
 
 
 const Ticket = ({ ticket }) => {
@@ -30,12 +35,96 @@ const Ticket = ({ ticket }) => {
         setViewTicketModalIsOpen(false);
     }
 
+    const handleStartTicket = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/startTicket/${ticket._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.status === 200) {
+
+
+
+                success("Ticket Started!")
+
+            } else {
+                fail(data.message)
+            }
+            //refresh page
+            // window.location.reload();
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const handleSolveTicket = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/solveTicket/${ticket._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+
+            if (response.status === 200) {
+
+             
+               
+
+                success("Ticket Resolved!")
+            } else {
+                fail(data.message)
+            }
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const fail = (alert) => {
+        toast.error(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    const success = (alert) => {
+        toast.success(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+
+        });
+    };
+
+
+
+
 
 
     return (
         <>
 
-            {/* TODO add functionality for view ticket, drop down for agent, and rate ticket */}
+            {/* TODO add functionality for drop down for agent*/}
 
             <div>
                 <div class="bg-base-100 mx-auto border-base-200 border rounded-sm mb-0.5 h-30 shadow-md">
@@ -44,7 +133,7 @@ const Ticket = ({ ticket }) => {
                         {/* add color to priority */}
                         <div class="space-y-1 border-r-2 pr-3">
                             <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal  pr"> Ticket #</span> {ticket._id}</div>
-                            <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal "> Assingeed to: </span> {ticket.assignedTo}</div>
+                            <div class="text-sm leading-5 font-semibold"><span class="text-xs leading-4 font-normal "> Assinged to: </span> {ticket.assignedTo}</div>
                             <div class="text-sm leading-5 font-semibold">Created at: {ticket.createdAt}</div>
                         </div>
                         <div class="flex-1">
@@ -70,7 +159,7 @@ const Ticket = ({ ticket }) => {
                                 </div>
                             </div>
                         </div>
-                        {ticket.status === "Resolved" && ticket.rating === null ?
+                        {ticket.status === "Resolved" && ticket.rating === null && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
@@ -78,11 +167,11 @@ const Ticket = ({ ticket }) => {
                                     </div>
                                 </div>
                             </div>
-                            : ""
+                            : null
                         }
 
                         {/* TODO Start the chat with the agent */}
-                        {(ticket.ticketCategory === "Other" || (ticket.rating < 3 && ticket.rating > 0)) && user.UserInfo.role === "User" ?
+                        {(ticket.ticketCategory === "Other" || ticket.status === "Resolved") && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
@@ -101,23 +190,39 @@ const Ticket = ({ ticket }) => {
                         <div>
                             {/* Drop down button */}
                             {/* only for agent */}
-                            {/* TODO handle logic */}
-                            {user.UserInfo.role === "Agent" && (
-                                <button class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
+                            {(user.UserInfo.role === "Agent" && user.UserInfo.userid === ticket.assignedTo) && (
+                                <>
+                                    <div class="dropdown dropdown-hover dropdown-end">
+                                        <div tabindex="0" class="rounded-sm my-6 ml-2 focus:outline-none bg-base-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                        <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                                            <li>
+                                                <a onClick={handleStartTicket} class="flex items-center space-x-2">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>In-Progress</span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a onClick={handleSolveTicket} class="flex items-center space-x-2">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>Resolved</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
-
             <ViewTicketModal isOpen={ViewTicketModalIsOpen} onRequestClose={handleCloseViewTicketModal} ticket={ticket} />
             <RateTicketModal isOpen={rateModalIsOpen} onRequestClose={handleCloseRateModal} ticket={ticket} />
-
-
+            <ToastContainer />
         </>
     )
 }

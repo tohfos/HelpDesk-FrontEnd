@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify'
@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { jwtDecode } from 'jwt-decode'
 
 
-const CreateTicketButton = () => {
+const CreateTicketButton = ({ onTicketCreated }) => {
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false)
     const [rangeClassName, setRangeClassName] = useState('range-success')
@@ -28,12 +28,22 @@ const CreateTicketButton = () => {
         subcategory: ''
     })
 
+    const [workflow, setWorkflow] = useState([])
+
     const handleTicketChange = (e) => {
         const { name, value } = e.target;
-        setTicket({
-            ...ticket,
-            [name]: value
-        })
+        if (name === "category") {
+            setTicket({
+                ...ticket,
+                [name]: value,
+                subcategory : ""
+            })
+        }else{
+            setTicket({
+                ...ticket,
+                [name]: value,
+            })
+        }
 
         if (name === 'priority') {
             if (value === '0') {
@@ -45,8 +55,12 @@ const CreateTicketButton = () => {
             }
         }
         console.log(ticket)
-    }
 
+        if (ticket.category !== "" && ticket.subcategory !== "") handleGetAutomationAndWorkflow();
+    }
+useEffect(() => {
+    handleGetAutomationAndWorkflow()
+},[ticket.category, ticket.subcategory])
 
 
 
@@ -86,10 +100,12 @@ const CreateTicketButton = () => {
             if (response.ok) {
                 // Close the modal
                 modalOnRequestClose()
-
+                
                 // show success toast
-                success(data.message)
-
+                success("Ticket has been created")
+                 // Update the parent component with the new ticket
+                 onTicketCreated();
+                
                 // reset the ticket state
                 setTicket({
                     subject: '',
@@ -98,14 +114,37 @@ const CreateTicketButton = () => {
                     category: '',
                     subcategory: ''
                 })
-
+                
                 // refresh the page
-                window.location.reload()
+                // window.location.reload()
             }
         } catch (error) {
             console.log(error)
             fail(error)
         }
+    }
+
+
+    const handleGetAutomationAndWorkflow = async () => {
+        const response = await fetch(
+            `${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/workflow/${ticket.category}/${ticket.subcategory}`,
+            {
+                method : 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + Cookies.get("token"),
+                  },
+                  credentials: "include",
+            }
+        )
+
+        const data = await response.json();
+        let filteredWorkflow;
+        filteredWorkflow = data.filter(
+            (workflow) => workflow.Description !== undefined
+          );
+        setWorkflow(filteredWorkflow)
+        console.log("workflow", workflow)
     }
 
     const success = (alert) => {
@@ -221,6 +260,16 @@ const CreateTicketButton = () => {
                                         </select>
                                     </div>
                                 )}
+
+
+                                <div className="ml-5 space-y-4 my-24">
+
+                                    <ol className='list-decimal ml-4'>
+                                        {workflow.map((workflow, index) => (
+                                            <li key={index} className='text-primary w-full'>{workflow.Description}</li>
+                                        ))}
+                                    </ol>
+                                </div>
 
 
                                 <div className="flex flex-row space-x-2 self-end">
