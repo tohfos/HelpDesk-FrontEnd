@@ -140,15 +140,7 @@ const Index = () => {
                             < CreateTicketButton onTicketCreated={handleTicketCreated} />
                             : null
                         }
-                        {/* Sort */}
-                        <select
-                            className="select select-secondary w-full max-w-xs"
-                            value={sortOption}
-                            onChange={(e) => setSortOption(e.target.value)}
-                        >
-                            <option disabled value="" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Sort by</option>
-                            {/* Add sort options here */}
-                        </select>
+                        
 
                         {/* Filter */}
                         <select

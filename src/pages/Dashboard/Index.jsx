@@ -5,7 +5,7 @@ import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
 import { Outlet } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
-
+import Notification from '../../components/Notifications/Notification'
 const Index = () => {
 
 
@@ -28,7 +28,8 @@ const Index = () => {
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState('')
     const [userRole, setUserRole] = useState('')
-
+    const [notifications,setNotifications] = useState([])
+    const [displayedNotifications,setDisplayedNotifications]=useState([])
     const handleGetTheme = async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/getTheme`, {
@@ -64,16 +65,22 @@ const Index = () => {
 
     const fetchNotifications = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/auth/getNotifications`, {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/getnotifcations`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+
                 },
                 credentials: 'include'
             })
 
             const data = await response.json()
             console.log(data)
+            setNotifications(data)
+            let notifText = notifications.map(notification=>notification.text)
+            setDisplayedNotifications(notifText.slice(-3).map(notification =>notification))
+           console.log(displayedNotifications)
         }
         catch (err) {
             console.log(err)
@@ -96,7 +103,7 @@ const Index = () => {
                         </a>
                     </span>
                     {/* <!-- notifactions dropdown --> */}
-                    <div class="dropdown dropdown-end">
+                    <div class="dropdown dropdown-end" onClick={fetchNotifications}>
                         <div tabindex="0" class="m-1 btn btn-ghost btn-circle">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <g>
@@ -110,14 +117,11 @@ const Index = () => {
                             class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
                         >
                             <li>
-                                <a>Notifaction 1</a>
-                            </li>
-                            <li>
-                                <a>Notifaction 2</a>
-                            </li>
-                            <li>
-                                <a>Notifaction 3</a>
-                            </li>
+                            {displayedNotifications.map((notification) => (
+                                    <Notification notif={notification} />
+                                ))}                            
+                                </li>
+                            
                         </ul>
                     </div>
                 </div>
