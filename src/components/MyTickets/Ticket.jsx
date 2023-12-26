@@ -13,6 +13,32 @@ import 'react-toastify/dist/ReactToastify.css'
 const Ticket = ({ ticket }) => {
 
     const user = jwtDecode(Cookies.get('token'));
+//dee
+    const [SolveTicketMessage , setSolveTicketMessage] = useState({
+        "UpdateDetails": ""
+    });
+
+    const [emailMessage , setEmailMessage] = useState({
+        "body": ""
+    });
+
+    const handelEmailMessage = (e) => {
+        setEmailMessage({
+            ...emailMessage,
+            [e.target.name]:e.target.value
+
+        })
+        console.log(emailMessage)
+    }
+    
+    const handleSolveTicketMessage = (e) => {
+
+        setSolveTicketMessage({
+            ...SolveTicketMessage,
+            [e.target.name]: e.target.value
+        })
+        console.log(SolveTicketMessage);
+    }
 
     const [rateModalIsOpen, setRateModalIsOpen] = useState(false);
 
@@ -72,6 +98,8 @@ const Ticket = ({ ticket }) => {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + Cookies.get('token')
                 },
+                body: JSON.stringify(SolveTicketMessage),
+                credentials: 'include'
             });
             const data = await response.json();
             console.log(data);
@@ -134,44 +162,20 @@ const Ticket = ({ ticket }) => {
 
     const handleEmailUser = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/emailUser/${ticket._id}`, {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/communicate/${ticket._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + Cookies.get('token')
                 },
+                body: JSON.stringify(emailMessage),
+                credentials: 'include'
+                
             });
             const data = await response.json();
             console.log(data);
             if (response.status === 200) {
                 success("Email Sent!")
-            } else {
-                fail(data.message)
-            }
-        }
-        catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    const handleTicketResolvedUpdate = async () => {
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/updateTicket/${ticket._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + Cookies.get('token')
-                },
-                body: JSON.stringify({
-                    status: "Resolved",
-                    rating: 5
-                })
-            });
-            const data = await response.json();
-            console.log(data);
-            if (response.status === 200) {
-                success("Ticket Resolved!")
             } else {
                 fail(data.message)
             }
@@ -234,10 +238,10 @@ const Ticket = ({ ticket }) => {
                                 <div class="border-r-2 pr-3 w-full">
                                     <div className='flex flex-row'>
                                         <div class={`ml-3 my-3 border-base-200 border-2 p-1 w-full`}>
-                                            <textarea class="textarea textarea-primary w-full" placeholder="Enter In Progress Email to User"></textarea>
+                                            <textarea class="textarea textarea-primary w-full" name='body' onChange={handelEmailMessage} placeholder="Enter In Progress Email to User"></textarea>
                                         </div>
                                         <div class="ml-3 my-3 border-base-200 border-2 bg-base-300 p-1">
-                                            <button class="uppercase text-xs w-12 h-12 leading-4 font-semibold">Send</button>
+                                            <button class="uppercase text-xs w-12 h-12 leading-4 font-semibold" onClick={handleEmailUser}>Send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -317,7 +321,7 @@ const Ticket = ({ ticket }) => {
                                                         <div class="border-r-2 pr-3 w-full">
                                                             <div className='flex flex-row'>
                                                                 <div class={`ml-3 my-3 border-base-200 border-2 p-1 w-full`}>
-                                                                    <textarea class="textarea textarea-primary w-full" placeholder="Enter Ticket Update"></textarea>
+                                                                    <textarea class="textarea textarea-primary w-full" name='UpdateDetails' onChange={handleSolveTicketMessage} placeholder="Enter Ticket Update"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>

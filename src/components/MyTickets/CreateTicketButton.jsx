@@ -85,7 +85,7 @@ const CreateTicketButton = ({ onTicketCreated }) => {
             description: ticket.message,
         }
 
-        console.log(Cookies.get('token'))
+      //  console.log(Cookies.get('token'))
 
         try {
 
