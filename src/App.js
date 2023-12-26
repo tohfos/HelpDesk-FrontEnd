@@ -13,36 +13,56 @@ import Reports from './pages/Dashboard/Reports/Index';
 import KnowledgeBase from './pages/Dashboard/Knowledgebase/Index';
 import Contact from './pages/Contact';
 import Users from './pages/Dashboard/Users/Index';
-
-// import FAQ from './pages/Dashboard/AddQuestionsToFAQ/Index';
 import Profile from './pages/Profile/Index';
-import Chat from './components/Messages/Chat'; import Analytics from './pages/Dashboard/Analytics'
-
+import Chat from './components/Messages/Chat';
+import Analytics from './pages/Dashboard/Analytics'
+import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
 
 
 function App() {
+
+  // get user from cookies if cookie exist
+  const user = Cookies.get('token') ? jwtDecode(Cookies.get('token')) : null;
+
   return (
     <Router>
       <Routes>
-        {/* TODO check user role */}
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="mytickets" element={<MyTickets />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="analytics" element={< Analytics />} />
-          <Route path="knowledgebase" element={<KnowledgeBase />} />
-          <Route path="preferences" element={<Preferences />} />
-          <Route path="messages" element={<MessagesSliderbar />} />
-          <Route path="messages/:id" element={<Chat />} />
-          <Route path="users" element={<Users />} />
-          <Route path="profile" element={<Profile />} />
 
-        </Route>
+        {/* check user for token */}
+
+        {user ? (
+          <>
+            <Route path="/dashboard" element={<Dashboard />}>
+
+              {user.UserInfo.role === 'Manager' ?
+                (
+                  <>
+                    <Route path="reports" element={<Reports />} />
+                    <Route path="analytics" element={< Analytics />} />
+                  </>
+                )
+                : <Route path="*" element={<NotFound />} />}
+
+              {user.UserInfo.role === 'Admin' ?
+                <Route path="preferences" element={<Preferences />} />
+                : <Route path="*" element={<NotFound />} />}
+
+              <Route path="mytickets" element={<MyTickets />} />
+              <Route path="knowledgebase" element={<KnowledgeBase />} />
+              <Route path="messages" element={<MessagesSliderbar />} />
+              <Route path="messages/:id" element={<Chat />} />
+              <Route path="users" element={<Users />} />
+              <Route path="profile" element={<Profile />} />
+
+            </Route>
+          </>
+        ) : <Route path="*" element={<NotFound />} />}
         <Route path='/resetpassword' element={<ResetPassword />} />
-        <Route path='/test' element={<Test />} />
       </Routes>
     </Router>
   );
