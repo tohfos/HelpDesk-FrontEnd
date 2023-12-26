@@ -133,7 +133,13 @@ const MainSliderbar = ({ userRole }) => {
                                     <SliderbarItem itemName="Analytics" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="analytics" />
                                 </NavLink>
                             </>
-                        ) : (null)}
+                        ) :
+                            <>
+                                <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                                    <SliderbarItem itemName="Knowledge Base" itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
+                                </NavLink>
+                            </>
+                        }
 
                         {/*  if user is admin, show users tab */}
                         {userRole === 'Admin' ? (
@@ -143,14 +149,17 @@ const MainSliderbar = ({ userRole }) => {
                                 </NavLink>
 
                                 <NavLink to="/dashboard/preferences" activeClassName="active" className="flex items-center space-x-2 mt-3">
-                                    <SliderbarItem itemName='Preferences' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                                </NavLink>
-
-                                <NavLink to="/dashboard/Backup" activeClassName="active" className="flex items-center space-x-2 mt-3">
-                                    <SliderbarItem itemName='Database' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                    <SliderbarItem itemName='Preferences' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M19 14v1a2 2 0 01-2 2h-1.586a2 2 0 00-1.414.586l-1.708 1.707a2 2 0 01-2.828 0l-1.708-1.707a2 2 0 00-1.414-.586H7a2 2 0 01-2-2v-1a2 2 0 012-2h1.586a2 2 0 001.414-.586l1.708-1.707a2 2 0 012.828 0l1.708 1.707a2 2 0 001.414.586H17a2 2 0 012 2zm-7 3a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </NavLink>
                             </>
                         ) : (null)}
+
+                        {/* My profile */}
+                        <NavLink to="/dashboard/profile" activeClassName="active" className="flex items-center space-x-2 mt-3">
+                            <SliderbarItem itemName='My Profile' itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        </NavLink>
+
+
 
                         {/* logout button */}
                         <div className="flex flex-col absolute bottom-0 mb-5 left-auto space-y-10">
@@ -185,9 +194,7 @@ const MainSliderbar = ({ userRole }) => {
                             ) : (null)}
 
                             {/* Knowledge is availabe to everyone */}
-                            <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
-                                <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
-                            </NavLink>
+
 
                             {/* if user is manager show */}
                             {userRole === 'Manager' ? (
@@ -195,8 +202,16 @@ const MainSliderbar = ({ userRole }) => {
                                     <NavLink to="/dashboard/reports" activeClassName="active" className="flex items-center space-x-2 mt-5">
                                         <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="reports" />
                                     </NavLink>
+                                    <NavLink to="/dashboard/analytics" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                                        <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" itemLink="analytics" />
+                                    </NavLink>
                                 </>
-                            ) : (null)}
+                            ) :
+                                <>
+                                    <NavLink to="/dashboard/knowledgebase" activeClassName="active" className="flex items-center space-x-2 mt-5">
+                                        <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0a3 3 0 005-2.618A4.978 4.978 0 0117 15m0 5a3 3 0 01-3-3 4.978 4.978 0 01-.643-.036A3.001 3.001 0 007 20H2v-2a3 3 0 015.356-1.857A4.978 4.978 0 0112 17a4.978 4.978 0 01.643.036A3.001 3.001 0 0117 20zm-5-7a4 4 0 100-8 4 4 0 000 8z" itemLink="knowledgebase" />
+                                    </NavLink>
+                                </>}
 
                             {/*  if user is admin, show users tab */}
                             {userRole === 'Admin' ? (
@@ -206,10 +221,14 @@ const MainSliderbar = ({ userRole }) => {
                                     </NavLink>
 
                                     <NavLink to="/dashboard/preferences" activeClassName="active" className="flex items-center space-x-2 mt-5">
-                                        <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                        <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M19 14v1a2 2 0 01-2 2h-1.586a2 2 0 00-1.414.586l-1.708 1.707a2 2 0 01-2.828 0l-1.708-1.707a2 2 0 00-1.414-.586H7a2 2 0 01-2-2v-1a2 2 0 012-2h1.586a2 2 0 001.414-.586l1.708-1.707a2 2 0 012.828 0l1.708 1.707a2 2 0 001.414.586H17a2 2 0 012 2zm-7 3a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </NavLink>
                                 </>
                             ) : (null)}
+
+                            <NavLink to="/dashboard/profile" activeClassName="active" className="flex items-center space-x-2 mt-3">
+                                <SliderbarItem itemSvgXmlns="http://www.w3.org/2000/svg" itemSvgPath="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </NavLink>
                         </>
                     )
                 }
