@@ -66,6 +66,15 @@ const Index = () => {
                         <span class="text-base font-medium">to the Dashboard</span>
                     </a>
                     <span>
+                    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        {/* SVG code goes here */}
+      </svg>
                         <a href="/dashboard/knowledgebase">
                             <img src={Logo} class="h-12" alt="" />
                         </a>
