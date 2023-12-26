@@ -9,9 +9,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 
 const Login = () => {
-
-    // TODO ask for notifcations permission after login, and get theme from the user settings
-
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isOpen, setIsOpen] = useState(false);
@@ -70,12 +67,14 @@ const Login = () => {
                 //check law first time user, y2ba send user to reset passwrord page
                 //else law user mesh first time, y2ba send user to otp modal
                 if (data.resetPassword === true) {
-                    window.location.href = '/resetpassword'
+                    success("Redirecting to reset password page")
+                    setTimeout(() => {
+                        window.location.href = '/resetpassword'
+                    }, 3000);
                 }
                 else if (data.resetPassword === false) {
+                    success("Redirecting to OTP verification page")
                     setIsOpen(true);
-
-                    //TODO change to use the access token
                     setUserId(data.user_id);
                     setUserEmail(data.UserInfo.email);
                 }
@@ -101,21 +100,16 @@ const Login = () => {
         });
     };
 
-    // const confirm = () => {
-    //     toast.success(
-    //         'Your account has been created succesfully you will be redirected to the login page',
-    //         {
-    //             position: 'top-center',
-    //             autoClose: 2000,
-    //             hideProgressBar: false,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //             theme: 'colored',
-    //         }
-    //     );
-    // };
+    const success = (alert) => {
+        toast.success(alert, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    }
 
     return (
         <>

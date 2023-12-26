@@ -77,8 +77,8 @@ const Ticket = ({ ticket }) => {
 
             if (response.status === 200) {
 
-             
-               
+
+
 
                 success("Ticket Resolved!")
             } else {
@@ -87,6 +87,47 @@ const Ticket = ({ ticket }) => {
 
 
         } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // handle notification for ticket started and resolved
+    const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
+    useEffect(() => {
+        socket.on("ticketStarted", (data) => {
+            console.log(data);
+            success(data.message)
+        });
+        socket.on("ticketResolved", (data) => {
+            console.log(data);
+            success(data.message)
+        });
+    }, []);
+
+
+    const handleMessgeAgent = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/user/openchat/${ticket._id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.status === 200) {
+                success("Chat Opened!, Redirecting to Chat Page")
+
+                setTimeout(() => {
+                    window.location.href = `/dashboard/messages/${ticket._id}`
+                }, 3000);
+
+            } else {
+                fail(data.message)
+            }
+        }
+        catch (error) {
             console.error('Error:', error);
         }
     }
@@ -116,16 +157,8 @@ const Ticket = ({ ticket }) => {
         });
     };
 
-
-
-
-
-
     return (
         <>
-
-            {/* TODO add functionality for drop down for agent*/}
-
             <div>
                 <div class="bg-base-100 mx-auto border-base-200 border rounded-sm mb-0.5 h-30 shadow-md">
                     <div className={`flex p-3 border-l-8 ${ticket.priority === "Medium" ? "border-warning" : ticket.priority === "Low" ? "border-success" : ticket.priority === "High" ? "border-error" : ""}`}>
@@ -170,12 +203,11 @@ const Ticket = ({ ticket }) => {
                             : null
                         }
 
-                        {/* TODO Start the chat with the agent */}
-                        {(ticket.ticketCategory === "Other" || ticket.status === "Resolved") && user.UserInfo.role === "User" ?
+                        {(ticket.status === "Resolved") && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
                                     <div class="ml-3 my-5 border-base-200 border-2 bg-base-300 p-1 ">
-                                        <button class="text-center text-sm leading-4 font-semibold">Message Agent</button>
+                                        <button onClick={handleMessgeAgent} class="text-center text-sm leading-4 font-semibold">Message Agent</button>
                                     </div>
                                 </div>
                             </div>
@@ -199,19 +231,27 @@ const Ticket = ({ ticket }) => {
                                             </svg>
                                         </div>
                                         <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                                            <li>
-                                                <a onClick={handleStartTicket} class="flex items-center space-x-2">
-                                                    <i class="fas fa-user"></i>
-                                                    <span>In-Progress</span>
-                                                </a>
-                                            </li>
 
-                                            <li>
-                                                <a onClick={handleSolveTicket} class="flex items-center space-x-2">
-                                                    <i class="fas fa-user"></i>
-                                                    <span>Resolved</span>
-                                                </a>
-                                            </li>
+                                            {(ticket.status === "Open") && (
+                                                <li>
+                                                    <a onClick={handleStartTicket} class="flex items-center space-x-2">
+                                                        <i class="fas fa-user"></i>
+                                                        <span>In-Progress</span>
+                                                    </a>
+                                                </li>
+                                            )
+                                            }
+
+                                            {(ticket.status === "In-Progress") && (
+                                                <li>
+                                                    <a onClick={handleSolveTicket} class="flex items-center space-x-2">
+                                                        <i class="fas fa-user"></i>
+                                                        <span>Resolved</span>
+                                                    </a>
+                                                </li>
+                                            )
+                                            }
+
                                         </ul>
                                     </div>
                                 </>
