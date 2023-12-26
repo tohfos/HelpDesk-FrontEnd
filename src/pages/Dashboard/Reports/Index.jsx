@@ -10,31 +10,7 @@ const ReportsContainer = () => {
   const [showGenReport, setShowGenReport] = useState(false);
   const [newReport, setNewReport] = useState({});
 
-  // useEffect(() => {
-  //   fetchReports();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("Reports 2",reports);
-  // }, [reports]);
-
-  // const fetchReports = async () => {
-  //   try {
-  //     const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/getReports`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': 'Bearer ' + Cookies.get('token'),
-  //       },
-  //       credentials: 'include',
-  //     });
-  //     const data = await response.json();
-  //     setReports(data); // Assuming data is an array of reports
-  //     console.log("reports",reports);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  
 
   const generateReport = async (id) => {
     try {
@@ -61,8 +37,8 @@ const ReportsContainer = () => {
         setNewReport(data);
         
         
-        
-      } else {
+      window.location.reload();
+    } else {
         fail(data.message);
       }
       console.log(data);
