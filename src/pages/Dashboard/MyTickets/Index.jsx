@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode'
 
 const Index = () => {
 
+    const [showPopup, setShowPopup] = useState(false);
     const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,10 +20,34 @@ const Index = () => {
 
 
     useEffect(() => {
+        // Load popup state from localStorage on component mount
+        const storedPopupState = localStorage.getItem('popupState');
+        if (storedPopupState) {
+            setShowPopup(JSON.parse(storedPopupState));
+        }
+
         fetchTickets();
         console.log(allTickets);
         console.log(tickets);
     }, []);
+
+    const handleTicketCreated = () => {
+        // Refresh the tickets by calling fetchTickets again
+        fetchTickets();
+    };
+
+    // Function to toggle popup visibility and update localStorage
+    const togglePopup = () => {
+        const updatedPopupState = !showPopup;
+        setShowPopup(updatedPopupState);
+        localStorage.setItem('popupState', JSON.stringify(updatedPopupState));
+    };
+
+    // useEffect(() => {
+    //     fetchTickets();
+    //     console.log(allTickets);
+    //     console.log(tickets);
+    // }, []);
 
 
     const handleSearch = (searchTerm) => {
@@ -91,7 +116,7 @@ const Index = () => {
                 <div className="h-screen overflow-auto">
                     <div className="mt-10 top-0 left-0 mb-10 m-5 flex flex-row space-x-6">
                         {user.UserInfo.role === "User" ?
-                            < CreateTicketButton />
+                            < CreateTicketButton onTicketCreated={handleTicketCreated}/>
                             : null
                         }
                         {/* Sort */}
@@ -139,6 +164,11 @@ const Index = () => {
                     </div>
                 </div>
             </div>
+            {/* {showPopup && (
+                <div className="popup">
+                    <p>This is the popup content</p>
+                </div>
+            )} */}
         </>
     )
 }

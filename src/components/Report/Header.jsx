@@ -16,9 +16,9 @@ const Header = ({ title, onAdd }) => {
   )
 }
 
-Header.defaultProps = {
-  title: 'Reports',
-}
+// Header.defaultProps = {
+//   title: 'Reports',
+// }
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
