@@ -35,6 +35,7 @@ const ViewTicketModal = ({ isOpen, onRequestClose, ticket }) => {
                                     <p>Description: {ticket.description}</p>
                                     <p>Update Date: {ticket.updateDate}</p>
                                     <p>Update At: {ticket.updatedAt}</p>
+                                    <p>Answer: {ticket.UpdateDetails}</p>
                                 </div>
                             </div>
 
