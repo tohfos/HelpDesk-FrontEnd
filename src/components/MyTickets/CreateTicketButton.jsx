@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { jwtDecode } from 'jwt-decode'
 
 
-const CreateTicketButton = () => {
+const CreateTicketButton = ({ onTicketCreated }) => {
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false)
     const [rangeClassName, setRangeClassName] = useState('range-success')
@@ -100,10 +100,12 @@ useEffect(() => {
             if (response.ok) {
                 // Close the modal
                 modalOnRequestClose()
-
+                
                 // show success toast
-                success(data.message)
-
+                success("Ticket has been created")
+                 // Update the parent component with the new ticket
+                 onTicketCreated();
+                
                 // reset the ticket state
                 setTicket({
                     subject: '',
@@ -112,9 +114,9 @@ useEffect(() => {
                     category: '',
                     subcategory: ''
                 })
-
+                
                 // refresh the page
-                window.location.reload()
+                // window.location.reload()
             }
         } catch (error) {
             console.log(error)

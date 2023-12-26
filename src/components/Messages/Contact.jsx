@@ -4,8 +4,7 @@ const Contact = (props) => {
     return (
         <div
             class="px-5 py-4   flex items-center   cursor-pointer border-l-4 border-l-transparent hover:bg-base-300">
-            <img src={props.contactImgSrc}
-                class="h-12 w-12 border-2 rounded-full" alt="" />
+
             <div class="ml-4">
                 <p x-text="user.name" class="text-md font-semibold m-0 p-0">{props.contactName}
                 </p>
