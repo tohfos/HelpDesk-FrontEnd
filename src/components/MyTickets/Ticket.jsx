@@ -48,11 +48,6 @@ const Ticket = ({ ticket }) => {
             console.log(data);
             if (response.status === 200) {
 
-                // send notification to user
-                socket.emit("ticketStarted", {
-                    message: "Ticket Started!",
-                    userid: ticket.userid
-                });
 
 
                 success("Ticket Started!")
@@ -82,11 +77,8 @@ const Ticket = ({ ticket }) => {
 
             if (response.status === 200) {
 
-                // send notification to user
-                socket.emit("ticketResolved", {
-                    message: "Ticket Resolved!",
-                    userid: ticket.userid
-                });
+             
+               
 
                 success("Ticket Resolved!")
             } else {
@@ -98,20 +90,6 @@ const Ticket = ({ ticket }) => {
             console.error('Error:', error);
         }
     }
-
-    // handle notification for ticket started and resolved
-    const socket = socketIOClient(process.env.REACT_APP_EXPRESS_URL);
-    useEffect(() => {
-        socket.on("ticketStarted", (data) => {
-            console.log(data);
-            success(data.message)
-        });
-        socket.on("ticketResolved", (data) => {
-            console.log(data);
-            success(data.message)
-        });
-    }, []);
-
 
     const fail = (alert) => {
         toast.error(alert, {
