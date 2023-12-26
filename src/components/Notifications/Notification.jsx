@@ -1,17 +1,12 @@
-import React from 'react'
+import React from "react";
 
-const Notification = ({notif}) => {
-    
-    return (
-        <div className="collapse bg-base-200 flex" width = "">
-        <input type="radio" name="my-accordion-1" checked="checked" /> 
-        <div className="collapse-title text-xl font-small">
-        {notif}
-        </div>
-        <div className="collapse-content"> 
-        </div>
-      </div>
-  )
-}
+const Notification = ({ notif }) => {
+  return (
+    <div className="mb-3 bg-primary-content p-3 relative z-50 overflow-y">
+      <div className="text-xl font-small font-semibold">{notif}</div>
+      <div className="collapse-content"></div>
+    </div>
+  );
+};
 
-export default Notification
+export default Notification;

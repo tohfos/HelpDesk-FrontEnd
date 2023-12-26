@@ -95,7 +95,7 @@ const Index = () => {
     setSearchTerm(searchTerm);
 
     const filterFunction =
-      user.UserInfo.role === "User"
+      user.UserInfo.role === "User" || user.UserInfo.role === "Manager"
         ? filterUserQuestions
         : filterAdminQuestions;
 
@@ -123,7 +123,7 @@ const Index = () => {
 
   // Helper function to filter questions for the "User" role
   const filterUserQuestions = (question) => {
-    return user.UserInfo.role === "User" && question.Answer !== undefined;
+    return (user.UserInfo.role === "User" || user.UserInfo.role === "Manager") && question.Answer !== undefined;
   };
 
   // Helper function to filter questions for the "User" role
@@ -136,7 +136,7 @@ const Index = () => {
   };
   // Helper function to check if the "Add" button should be enabled
   const isAddButtonDisabled = () => {
-    if (user.UserInfo.role === "User") {
+    if (user.UserInfo.role === "User" || user.UserInfo.role === "Manager") {
       return !Knowledgebase.Question.trim();
     } else if (user.UserInfo.role === "Admin") {
       return !(Knowledgebase.Question.trim() && Knowledgebase.Answer.trim());
@@ -166,7 +166,7 @@ const Index = () => {
     console.log("123", Knowledgebase);
 
     console.log(user);
-    if (user.UserInfo.role === "User") {
+    if (user.UserInfo.role === "User" || user.UserInfo.role === "Manager") {
       try {
         console.log(Knowledgebase);
         const response = await fetch(
@@ -530,7 +530,7 @@ const Index = () => {
           </div>
         )}
 
-        {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" ? (
+        {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager" ? (
           <div className="flex flex-col space-y-1 md:p-5">
             <div className="label">
               <label
@@ -622,7 +622,7 @@ const Index = () => {
       </div>
       {Knowledgebase.Category !== "" ? (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
+          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager"
             ? filteredQuestions.map((question) => (
               <Question
                 key={question._id}
@@ -644,7 +644,7 @@ const Index = () => {
         </div>
       ) : (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin"
+          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager"
             ? questions.map((question) => (
               <Question
                 key={question._id}

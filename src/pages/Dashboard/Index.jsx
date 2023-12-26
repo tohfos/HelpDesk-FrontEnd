@@ -79,7 +79,7 @@ const Index = () => {
             console.log(data)
             setNotifications(data)
             let notifText = notifications.map(notification=>notification.text)
-            setDisplayedNotifications(notifText.slice(-3).map(notification =>notification))
+            setDisplayedNotifications(notifText.map(notification =>notification))
            console.log(displayedNotifications)
         }
         catch (err) {
@@ -114,13 +114,16 @@ const Index = () => {
                         </div>
                         <ul
                             tabindex="0"
-                            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+                            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-96 h-40 overflow-y"
                         >
                             <li>
                             {displayedNotifications.map((notification) => (
                                     <Notification notif={notification} />
                                 ))}                            
                                 </li>
+                                {/* <li>
+                                    <button onClick={setDisplayedNotifications(displayedNotifications.slice(1000).map(notification =>notification))}>View All</button>
+                                </li> */}
                             
                         </ul>
                     </div>
