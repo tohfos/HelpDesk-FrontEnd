@@ -32,7 +32,7 @@ const TicketCategory = ({onAdd}) => {
 
   <option value="Network">Network</option>
 
-  <option value="others">Other</option>
+  <option value="Other">Other</option>
 </select>
 
 <input type='submit' value='Generate' className='btn btn-block' onClick={onSubmit}/>
