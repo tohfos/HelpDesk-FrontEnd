@@ -28,6 +28,7 @@ const handleChangeSub = (event) => {
 }; 
   return (
     <div>
+      <>
       <select onChange={handleChange} class="select select-bordered w-full max-w-xs">
 
 <option disabled selected>Category</option>
@@ -37,7 +38,8 @@ const handleChangeSub = (event) => {
 <option value="Hardware">Hardware</option>
 
 <option value="Network">Network</option>
-</select>
+</select></>
+<>
     {category==='Software'&&
     <select onChange={handleChangeSub} class="select select-bordered w-full max-w-xs">
 
@@ -82,7 +84,7 @@ const handleChangeSub = (event) => {
     <option value="Website Error">Website Error</option>
     
     </select>
-    }
+    }</>
     <input type='submit' value='Generate' className='btn btn-block' onClick={onSubmit}/>
     </div>
   )
