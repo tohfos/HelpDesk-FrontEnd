@@ -90,7 +90,7 @@ const Index = () => {
      }  
      }
     return(
-        <div>
+        <div style={{ overflowY: 'auto', height: '100vh' }}>
             <Header
         onAdd={() => setShowGenAnalysis(!showGenAnalysis)}
       />
@@ -115,8 +115,6 @@ const Index = () => {
         {showGenAnalysis &&  
         
         
-        <label>
-    Generate analytics for
 <select onChange={handleChange} class="select select-bordered w-full max-w-xs">
   
   <option disabled selected>Generate analytics for</option>
@@ -128,7 +126,7 @@ const Index = () => {
   <option value="SubCategory">Sub-category</option>
 
 </select>
-</label>}
+}
 <> 
         {value==='Agent' && <Agent onAdd={generateAnalyticsAgent}/> }
         {value==='ticketCategory' && <TicketCategory onAdd={generateAnalyticsCategory}/>}

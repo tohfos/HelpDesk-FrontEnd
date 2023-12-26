@@ -22,6 +22,7 @@ const GenReport = ({ onAdd ,report}) => {
       <div className='form-control'>
         <label>Ticket Id</label>
         <input
+          class="input input-bordered input-primary w-full max-w-xs" 
           type='text'
           placeholder=''
           value={ticketId}
@@ -30,7 +31,7 @@ const GenReport = ({ onAdd ,report}) => {
       </div>
       
 
-      <input type='submit' value='Generate' className='btn btn-block' />
+      <input type='submit' value='Generate'  className='btn btn-primary'   />
       
     </form>
     <newReport report={report}/></>

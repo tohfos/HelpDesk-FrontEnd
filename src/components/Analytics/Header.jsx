@@ -7,7 +7,6 @@ const Header = ({ title, onAdd }) => {
     <header className='header'>
       <h1>{title}</h1>
         <Button
-          color='black'
           text='Generate Analysis'
           onClick={onAdd}
         />
@@ -16,11 +15,7 @@ const Header = ({ title, onAdd }) => {
   )
 }
 
-Header.defaultProps = {
-  title: 'Analytics',
-}
 
-Header.propTypes = {
-  title: PropTypes.string.isRequired,
-}
+
+
 export default Header
