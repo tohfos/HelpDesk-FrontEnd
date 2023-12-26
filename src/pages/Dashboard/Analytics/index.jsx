@@ -1,11 +1,11 @@
 //import GenAnalytics from '../../../components/Analytics/GenAnalytics'
 import Header from '../../../components/Analytics/Header'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import Agent from '../../../components/Analytics/Agent'
 import TicketCategory from '../../../components/Analytics/TicketCategory'
 import SubCategory from '../../../components/Analytics/SubCategory'
-import LineChart from '../../../components/Analytics/LineChart'
+import LineChart2 from '../../../components/Analytics/LineChart2'
 const Index = () => {
     const [showGenAnalysis, setShowGenAnalysis] = useState(false)
     const [startDate,setStartDate]= useState(null)
@@ -15,6 +15,61 @@ const Index = () => {
     const [tickets,setTickets] = useState([])
     const [rating,setRating] = useState([])
     const [resolutionTime,setResolutionTime] = useState([])
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            let response;
+            let data;
+    
+            if (value === 'Agent') {
+              response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/generateAnalytics1/${id.agentId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + Cookies.get('token'),
+                },
+                credentials: 'include',
+                body: JSON.stringify({ startDate, endDate }),
+              });
+            } else if (value === 'ticketCategory') {
+              response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/generateAnalytics3/${category.category}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + Cookies.get('token'),
+                },
+                credentials: 'include',
+                body: JSON.stringify({ startDate, endDate }),
+              });
+            } else if (value === 'SubCategory') {
+              response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/generateAnalytics2/${subCategory.subCategory}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + Cookies.get('token'),
+                },
+                credentials: 'include',
+                body: JSON.stringify({ startDate, endDate }),
+              });
+            }
+    
+            data = await response.json();
+    
+            let ticks = data.analyticsDetails.ticketId;
+            setTickets(ticks.map((ticket) => ticket));
+    
+            let rates = data.analyticsDetails.Rating;
+            setRating(rates.map((ratings) => ratings));
+    
+            let times = data.analyticsDetails.ResolutionTime;
+            setResolutionTime(times.map((time) => time));
+          } catch (error) {
+            console.log(error);
+          }
+        };
+    
+        
+      }, [ startDate, endDate, value]); 
     const handleChange = (event) => {
 
         setValue(event.target.value);
@@ -30,7 +85,7 @@ const Index = () => {
       };
     const generateAnalyticsAgent = async(id)=>{
        try{
-        const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/generateAnalytics1/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/manager/generateAnalytics1/${id.agentId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,9 +95,15 @@ const Index = () => {
             body: JSON.stringify({"startDate": startDate ,"endDate":endDate} )
         })
         const data = await response.json()
-        setTickets(data.analyticsDetails.ticketId)
-         setRating(data.analyticsDetails.Rating)
-         setResolutionTime(data.analyticsDetails.ResolutionTime)
+        let ticks = data.analyticsDetails.ticketId
+        console.log('setting tcikets ',setTickets(ticks))
+        console.log('tickets',ticks)
+        let rates = data.analyticsDetails.Rating
+        setRating(rates.map((ratings)=>ratings))
+        console.log('ratings',rating)
+        let times = data.analyticsDetails.ResolutionTime
+        setResolutionTime(times.map((time)=>time))
+        console.log('times',resolutionTime)
     }catch (error) {
         console.log(error)
     }
@@ -59,10 +120,15 @@ const Index = () => {
              body: JSON.stringify({"startDate": startDate ,"endDate":endDate} )
          })
          const data = await response.json()
-         console.log(data)
-         setTickets(data.analyticsDetails.ticketId)
-         setRating(data.analyticsDetails.Rating)
-         setResolutionTime(data.analyticsDetails.ResolutionTime)
+         console.log("abo 7amada",data)
+         let ticks = data.analyticsDetails.ticketId
+         setTickets(ticks.map((ticket)=>ticket))
+         console.log(tickets)
+         let rates = data.analyticsDetails.Rating
+         setRating(rates.map((ratings)=>ratings))
+         console.log('ratings',rating)
+         let times = data.analyticsDetails.ResolutionTime
+         setResolutionTime(times.map((time)=>time))
      }catch (error) {
          console.log(error)
      }  
@@ -82,9 +148,20 @@ const Index = () => {
          console.log('zzs')
          const data = await response.json()
          console.log(data)
-         setTickets(data.analyticsDetails.ticketId)
-         setRating(data.analyticsDetails.Rating)
-         setResolutionTime(data.analyticsDetails.ResolutionTime)
+         console.log(data.analyticsDetails)
+         console.log(data.ticketId)
+         console.log(data.timeframe)
+         console.log(data.analyticsFor)
+         console.log(data.analyticsDetails.ticketId)
+         console.log([data.analyticsDetails.ticketId])
+         let ticks = data.analyticsDetails.ticketId
+         setTickets(ticks.map((ticket)=>ticket))
+         console.log(tickets)
+         let rates = data.analyticsDetails.Rating
+         setRating(rates.map((ratings)=>ratings))
+         console.log('ratings',rating)
+         let times = data.analyticsDetails.ResolutionTime
+         setResolutionTime(times.map((time)=>time))
      }catch (error) {
          console.log(error)
      }  
@@ -104,13 +181,14 @@ const Index = () => {
 />
 }
       </>
+      <>
       {showGenAnalysis && 
       <input type="text" 
         placeholder="End Date in yyyy-mm-dd" 
         class="input input-bordered w-full max-w-xs" 
         value={endDate}
         onChange={(e) => setEndDate(e.target.value)}
-/>}
+/>} </>
       <>
         {showGenAnalysis &&  
         
@@ -131,10 +209,26 @@ const Index = () => {
 </label>}
 <> 
         {value==='Agent' && <Agent onAdd={generateAnalyticsAgent}/> }
+        {value==='Agent' && 
+        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
+ }
+        {value==='Agent' && 
+        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
+ }
         {value==='ticketCategory' && <TicketCategory onAdd={generateAnalyticsCategory}/>}
+        {value==='ticketCategory' && 
+        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
+    }
+        {value==='ticketCategory' && 
+        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
+    }
         {value==='SubCategory' && <SubCategory onAdd={generateAnalyticsSubCategory}/>}
-        <LineChart data={ratingsChartData} />
-        <LineChart data={resolutionTimeChartData} />        
+        {value==='SubCategory' && 
+        <LineChart2 data={rating} string={`analytics for ${value} for ratings`} labels={tickets} />
+ }
+        {value==='ticketCategory' && 
+        <LineChart2 data={resolutionTime} string={`analytics for ${value} for resolution times`} labels={tickets}/>        
+    }   
         </>
       </>
       
