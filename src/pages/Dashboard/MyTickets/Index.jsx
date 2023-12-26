@@ -8,6 +8,10 @@ import { jwtDecode } from 'jwt-decode'
 
 const Index = () => {
 
+    // TODO filter for different type of users
+    // TODO for filter with the category, as well as status (resolved, in progress, open)
+    // TODO sort depending on alphabetic or ticket category/subcategory
+
     const [showPopup, setShowPopup] = useState(false);
     const [allTickets, setAllTickets] = useState([]);
     const [tickets, setTickets] = useState([]);
@@ -16,6 +20,8 @@ const Index = () => {
     const [filterOption, setFilterOption] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [ticketsPerPage, setTicketsPerPage] = useState(6);
+    const [filterItem, setFilterItem] = useState('')
+    const [sortItem, setSortItem] = useState('')
     const user = jwtDecode(Cookies.get('token'));
 
 
@@ -57,6 +63,21 @@ const Index = () => {
         } else {
             setTickets(allTickets.filter((ticket) =>
                 ticket.title.toLowerCase().includes(searchTerm.toLowerCase())
+            ));
+        }
+    }
+    
+    const handleFilter = (filterItem) => {
+        setFilterItem(filterItem)
+        if (filterItem === '') {
+            setTickets(allTickets);
+        } else {
+            setTickets(allTickets.filter((ticket) => {
+                if (filterItem === 'Software' || filterItem === 'Hardware' || filterItem === 'Network' || filterItem === 'Other')
+                    return ticket.ticketCategory === filterItem
+                else 
+                    return ticket.status === filterItem
+            }
             ));
         }
     }
@@ -107,6 +128,7 @@ const Index = () => {
     const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
     const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
+
     return (
         <>
             <div class="h-full w-full border-r border-base-200 flex flex-col">
@@ -132,11 +154,17 @@ const Index = () => {
                         {/* Filter */}
                         <select
                             className="select select-secondary w-full max-w-xs"
-                            value={filterOption}
-                            onChange={(e) => setFilterOption(e.target.value)}
+                            value={filterItem}
+                            onChange={(e) => handleFilter(e.target.value)}
                         >
-                            <option disabled value="" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Filter by</option>
-                            {/* Add filter options here */}
+                            <option value="" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>All</option>
+                            <option value="Software" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Software Category</option>
+                            <option value="Hardware" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Hardware Category</option>
+                            <option value="Network" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Network Category</option>
+                            <option value="Open" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Open Tickets</option>
+                            <option value="In Progress" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>In Progress Tickets</option>
+                            <option value="Resolved" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Resolved Tickets</option>
+                            <option value="Other" className=' z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>Other</option>
                         </select>
 
                         <input
