@@ -2,12 +2,9 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Logo from '../../logo.svg'
 import MainSliderbar from '../../components/MainSliderbar/MainSliderbar'
-import Chat from '../../components/Messages/Chat'
 import { Outlet } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode";
-import { set } from 'lodash'
-
 
 const Index = () => {
 
@@ -69,7 +66,9 @@ const Index = () => {
                         <span class="text-base font-medium">to the Dashboard</span>
                     </a>
                     <span>
-                        <img src={Logo} class="h-12" alt="" />
+                        <a href="/dashboard/knowledgebase">
+                            <img src={Logo} class="h-12" alt="" />
+                        </a>
                     </span>
                 </div>
 
