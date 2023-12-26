@@ -47,10 +47,11 @@ const Ticket = ({ ticket }) => {
             const data = await response.json();
             console.log(data);
             if (response.status === 200) {
-
-
-
                 success("Ticket Started!")
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
 
             } else {
                 fail(data.message)
@@ -77,6 +78,9 @@ const Ticket = ({ ticket }) => {
 
             if (response.status === 200) {
                 success("Ticket Resolved!")
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
             } else {
                 fail(data.message)
             }
@@ -128,6 +132,58 @@ const Ticket = ({ ticket }) => {
         }
     }
 
+    const handleEmailUser = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/emailUser/${ticket._id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.status === 200) {
+                success("Email Sent!")
+            } else {
+                fail(data.message)
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const handleTicketResolvedUpdate = async () => {
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_EXPRESS_URL}/api/v1/agent/updateTicket/${ticket._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Cookies.get('token')
+                },
+                body: JSON.stringify({
+                    status: "Resolved",
+                    rating: 5
+                })
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.status === 200) {
+                success("Ticket Resolved!")
+            } else {
+                fail(data.message)
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
+
+
     const fail = (alert) => {
         toast.error(alert, {
             position: 'top-center',
@@ -172,6 +228,23 @@ const Ticket = ({ ticket }) => {
                                 <div class="text-sm leading-4 font-normal"><span class="text-xs leading-4 font-normal "> Sub-Catagory</span> {ticket.SubCategory}</div>
                             </div>
                         </div>
+
+                        {ticket.status === "In Progress" && ticket.rating === null && user.UserInfo.role === "Agent" ?
+                            <div class="flex-1">
+                                <div class="border-r-2 pr-3 w-full">
+                                    <div className='flex flex-row'>
+                                        <div class={`ml-3 my-3 border-base-200 border-2 p-1 w-full`}>
+                                            <textarea class="textarea textarea-primary w-full" placeholder="Enter In Progress Email to User"></textarea>
+                                        </div>
+                                        <div class="ml-3 my-3 border-base-200 border-2 bg-base-300 p-1">
+                                            <button class="uppercase text-xs w-12 h-12 leading-4 font-semibold">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            : null
+                        }
+
                         <div class="border-r-2 pr-3">
                             <div >
                                 <div class={`ml-3 my-3 border-base-200 border-2 p-1 ${ticket.status === "Resolved" ? "bg-success text-base-100" : ""}`}>
@@ -188,6 +261,7 @@ const Ticket = ({ ticket }) => {
                                 </div>
                             </div>
                         </div>
+
                         {ticket.status === "Resolved" && ticket.rating === null && user.UserInfo.role === "User" ?
                             <div class="h-auto border-r-2 pr-3">
                                 <div>
@@ -226,7 +300,7 @@ const Ticket = ({ ticket }) => {
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </div>
-                                        <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                                        <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-96">
 
                                             {(ticket.status === "Open") && (
                                                 <li>
@@ -235,17 +309,27 @@ const Ticket = ({ ticket }) => {
                                                         <span>In-Progress</span>
                                                     </a>
                                                 </li>
-                                            )
-                                            }
+                                            )}
 
-                                            {(ticket.status === "In Progress") && (
-                                                <li>
-                                                    <a onClick={handleSolveTicket} class="flex items-center space-x-2">
-                                                        <i class="fas fa-user"></i>
-                                                        <span>Resolved</span>
-                                                    </a>
-                                                </li>
-                                            )
+                                            {ticket.status === "In Progress" && ticket.rating === null && user.UserInfo.role === "Agent" ?
+                                                <>
+                                                    <div class="flex-1">
+                                                        <div class="border-r-2 pr-3 w-full">
+                                                            <div className='flex flex-row'>
+                                                                <div class={`ml-3 my-3 border-base-200 border-2 p-1 w-full`}>
+                                                                    <textarea class="textarea textarea-primary w-full" placeholder="Enter Ticket Update"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <li>
+                                                        <a onClick={handleSolveTicket} class="flex items-center space-x-2">
+                                                            <i class="fas fa-user"></i>
+                                                            <span>Resolved</span>
+                                                        </a>
+                                                    </li>
+                                                </>
+                                                : null
                                             }
 
                                         </ul>
