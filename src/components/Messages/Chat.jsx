@@ -117,7 +117,7 @@ const Chat = () => {
                         </svg>
                     </a>
 
-                    <p class="font-semibold ml-3">ticket.title</p>
+                    <p class="font-semibold ml-3">{chat.title}</p>
                 </div>
             </div>
 
