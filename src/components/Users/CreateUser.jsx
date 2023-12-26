@@ -71,6 +71,8 @@ const CreateUser = () => {
         // Handle success, maybe redirect or show a success message
         console.log('User created successfully');
         success('User created successfully')
+        window.location.reload();
+
       } else {
         // Handle error, maybe show an error message
         console.error('Failed to create user');
