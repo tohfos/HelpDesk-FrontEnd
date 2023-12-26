@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import Backup from '../../../components/Preferences/Backup';
 
 const Index = () => {
     const [mainTheme, setMainTheme] = useState('');
@@ -126,12 +127,9 @@ const Index = () => {
                     </section>
 
 
-                    <section className="flex flex-col justify-center items-center mt-5">
+                    <section className="flex flex-col justify-center items-center my-12">
                         <h1 className="self-start font-semibold text-xl ml-4">Backup & Restore </h1>
-
-
-
-
+                        <Backup />
                         <hr className="border-base-200 my-5" />
                     </section>
                 </div>
