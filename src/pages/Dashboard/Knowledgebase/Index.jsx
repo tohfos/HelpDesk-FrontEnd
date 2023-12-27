@@ -123,7 +123,10 @@ const Index = () => {
 
   // Helper function to filter questions for the "User" role
   const filterUserQuestions = (question) => {
-    return (user.UserInfo.role === "User" || user.UserInfo.role === "Manager") && question.Answer !== undefined;
+    return (
+      (user.UserInfo.role === "User" || user.UserInfo.role === "Manager") &&
+      question.Answer !== undefined
+    );
   };
 
   // Helper function to filter questions for the "User" role
@@ -131,7 +134,7 @@ const Index = () => {
     return (
       user.UserInfo.role === "Admin" &&
       question.Question !== undefined &&
-      (question.Answer !== undefined || question.Answer === undefined)
+      question.Description === null
     );
   };
   // Helper function to check if the "Add" button should be enabled
@@ -423,9 +426,7 @@ const Index = () => {
     });
   };
   return (
-    <div
-      className="flex flex-col h-screen w-full py-12 overflow-y-auto bg-base-100"
-    >
+    <div className="flex flex-col h-screen w-full py-12 overflow-y-auto bg-base-100">
       <div className="flex flex-row space-x-4">
         <div className="flex flex-col space-y-1 md:p-5">
           <label
@@ -530,7 +531,9 @@ const Index = () => {
           </div>
         )}
 
-        {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager" ? (
+        {user.UserInfo.role === "User" ||
+        user.UserInfo.role === "Admin" ||
+        user.UserInfo.role === "Manager" ? (
           <div className="flex flex-col space-y-1 md:p-5">
             <div className="label">
               <label
@@ -622,14 +625,16 @@ const Index = () => {
       </div>
       {Knowledgebase.Category !== "" ? (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager"
+          {user.UserInfo.role === "User" ||
+          user.UserInfo.role === "Admin" ||
+          user.UserInfo.role === "Manager"
             ? filteredQuestions.map((question) => (
-              <Question
-                key={question._id}
-                question={question}
-                userRole={user.UserInfo.role}
-              />
-            ))
+                <Question
+                  key={question._id}
+                  question={question}
+                  userRole={user.UserInfo.role}
+                />
+              ))
             : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&
@@ -644,14 +649,16 @@ const Index = () => {
         </div>
       ) : (
         <div className="ml-5 space-y-4 my-24">
-          {user.UserInfo.role === "User" || user.UserInfo.role === "Admin" || user.UserInfo.role === "Manager"
+          {user.UserInfo.role === "User" ||
+          user.UserInfo.role === "Admin" ||
+          user.UserInfo.role === "Manager"
             ? questions.map((question) => (
-              <Question
-                key={question._id}
-                question={question}
-                userRole={user.UserInfo.role}
-              />
-            ))
+                <Question
+                  key={question._id}
+                  question={question}
+                  userRole={user.UserInfo.role}
+                />
+              ))
             : null}
           <div className="ml-5 space-y-4 my-24">
             {user.UserInfo.role === "Agent" &&
