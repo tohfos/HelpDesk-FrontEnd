@@ -6,10 +6,9 @@ import { jwtDecode } from "jwt-decode";
 
 const Index = () => {
 
-    // TODO add confirm password field
-
     const [oldPassword, setOldPassword] = React.useState('')
     const [newPassword, setNewPassword] = React.useState('')
+    const [confirmPassword, setConfirmPassword] = React.useState('')
 
     const handleOldPasswordChange = (e) => {
         setOldPassword(e.target.value)
@@ -19,8 +18,17 @@ const Index = () => {
         setNewPassword(e.target.value)
     }
 
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value)
+    }
+
     const handleResetPassword = async (e) => {
         e.preventDefault()
+
+        if (newPassword !== confirmPassword) {
+            fail("Passwords do not match")
+            return
+        }
 
         let user = jwtDecode(Cookies.get('token'));
 
@@ -118,6 +126,21 @@ const Index = () => {
                                     value={newPassword}
                                 />
                             </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Confirm Password</span>
+                                </label>
+                                <input
+                                    type="password"
+                                    placeholder="Confirm your new password"
+                                    className="input input-bordered"
+                                    required
+                                    onChange={handleConfirmPasswordChange}
+                                    value={confirmPassword}
+                                />
+                            </div>
+
                             <div className="form-control mt-6">
                                 <button onClick={handleResetPassword} className="btn btn-primary">Submit</button>
                             </div>

@@ -65,14 +65,18 @@ const CreateUser = () => {
         credentials: 'include'
       });
 
+      const data = await response.json()
+
       if (response.ok) {
         // Handle success, maybe redirect or show a success message
         console.log('User created successfully');
         success('User created successfully')
+        window.location.reload();
+
       } else {
         // Handle error, maybe show an error message
         console.error('Failed to create user');
-        fail('Failed to create user ', response.message)
+        fail(data.message)
       }
     } catch (error) {
       console.error('Error:', error);
